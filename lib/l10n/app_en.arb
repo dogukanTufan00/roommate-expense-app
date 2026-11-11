@@ -1,0 +1,104 @@
+{
+  "@@locale": "en",
+  "appTitle": "Roommate Expenses",
+  "login": "Log in",
+  "register": "Sign up",
+  "name": "Full name",
+  "email": "Email",
+  "password": "Password",
+  "noAccount": "Don't have an account? Sign up",
+  "haveAccount": "Already have an account? Log in",
+  "registerSuccess": "Account created. You can log in now.",
+  "logout": "Log out",
+  "language": "Language",
+  "languageSystem": "Phone language",
+  "households": "My homes",
+  "noHouseholds": "You are not in any home yet. Create one, or ask a roommate to add you.",
+  "createHousehold": "New home",
+  "householdName": "Home name",
+  "rename": "Rename",
+  "delete": "Delete",
+  "cancel": "Cancel",
+  "save": "Save",
+  "add": "Add",
+  "deleteHouseholdConfirm": "Delete this home with all its expenses and payments? This cannot be undone.",
+  "tabExpenses": "Expenses",
+  "tabBalances": "Balances",
+  "tabMembers": "Members",
+  "addExpense": "Add expense",
+  "editExpense": "Edit expense",
+  "amount": "Amount (₺)",
+  "category": "Category",
+  "categoryRent": "Rent",
+  "categoryUtilities": "Bills",
+  "categoryGroceries": "Groceries",
+  "categoryOther": "Other",
+  "description": "Description (optional)",
+  "paidBy": "Paid by",
+  "date": "Date",
+  "recurring": "Repeats every month",
+  "noExpenses": "No expenses yet.",
+  "deleteExpenseConfirm": "Delete this expense?",
+  "paidByName": "Paid by {name}",
+  "@paidByName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "balancesTitle": "Balances",
+  "settlementsTitle": "Who pays whom",
+  "allSettled": "Everyone is settled up 🎉",
+  "getsBack": "gets back",
+  "owes": "owes",
+  "settled": "settled up",
+  "markAsPaid": "Mark as paid",
+  "markAsPaidConfirm": "Record that {from} paid {to} {amount}?",
+  "@markAsPaidConfirm": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentsTitle": "Payment history",
+  "noPayments": "No payments yet.",
+  "deletePaymentConfirm": "Delete this payment record?",
+  "addMember": "Add member",
+  "memberEmailHint": "Roommate's email (they need an account)",
+  "removeMember": "Remove from home",
+  "removeMemberConfirm": "Remove {name} from this home? Their past expenses and debts are kept.",
+  "@removeMemberConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "admin": "Admin",
+  "you": "you",
+  "fieldRequired": "This field is required",
+  "invalidEmail": "Enter a valid email",
+  "passwordTooShort": "Must be at least 8 characters",
+  "invalidAmount": "Enter an amount greater than 0",
+  "retry": "Try again",
+  "errorNetwork": "Cannot reach the server. Is the API running?",
+  "errorBadRequest": "Some fields are invalid.",
+  "errorUnauthorized": "Your session has expired. Please log in again.",
+  "errorWrongCredentials": "Wrong email or password.",
+  "errorForbidden": "You don't have permission to do this.",
+  "errorNotFound": "Not found. It may have been deleted.",
+  "errorEmailExists": "An account with this email already exists.",
+  "errorHouseholdFull": "This home is full (max 3 members).",
+  "errorAlreadyMember": "This person is already a member.",
+  "errorLastAdmin": "The last admin cannot leave the home.",
+  "errorNoSuchUser": "No account with this email.",
+  "errorUnknown": "Something went wrong."
+}
