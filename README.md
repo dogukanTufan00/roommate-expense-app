@@ -1,6 +1,6 @@
 **English** | [Türkçe](README.tr.md)
 
-# Roommate Expenses — Mobile App
+# Evce — Mobile App
 
 A Flutter Android client for the Shared Expense Tracking System REST API, which lets roommates record shared household costs and see who owes whom.
 The backend lives in [dogukanTufan00/shared-expense-tracking-system](https://github.com/dogukanTufan00/shared-expense-tracking-system) and must be running for the app to work.
@@ -22,7 +22,7 @@ The backend lives in [dogukanTufan00/shared-expense-tracking-system](https://git
 | Concern | Technology |
 |---|---|
 | Framework / language | Flutter / Dart |
-| UI | Material 3 (`useMaterial3`, teal seed color) |
+| UI | Material 3 with a custom warm theme (`lib/theme.dart`): terracotta, sage, mustard and cream palette, Nunito font, illustrations made with Gemini |
 | HTTP | `http` |
 | Local storage | `shared_preferences` (token and language) |
 | Localization | `intl` + `flutter_localizations`, generated with gen-l10n from ARB files |

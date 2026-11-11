@@ -17,7 +17,7 @@ class AppColors {
   // Main text color: a soft navy instead of pure black.
   static const Color ink = Color(0xFF3D405B);
   // Page background: a warm off-white.
-  static const Color cream = Color(0xFFFBF6EE);
+  static const Color cream = Color(0xFFFAF3E6);
   // Cards and input fields: a slightly lighter, paper-like white.
   static const Color paper = Color(0xFFFFFCF7);
   // Subtle borders and dividers.

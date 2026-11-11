@@ -1,6 +1,6 @@
 [English](README.md) | **Türkçe**
 
-# Ev Giderleri — Mobil Uygulama
+# Evce — Mobil Uygulama
 
 Ev arkadaşlarının ortak ev giderlerini kaydedip kimin kime ne kadar borçlu olduğunu görebildiği, Shared Expense Tracking System REST API'si için geliştirilmiş bir Flutter Android istemcisidir.
 Backend [dogukanTufan00/shared-expense-tracking-system](https://github.com/dogukanTufan00/shared-expense-tracking-system) deposunda yer alır ve uygulamanın çalışması için çalışır durumda olmalıdır.
@@ -22,7 +22,7 @@ Backend [dogukanTufan00/shared-expense-tracking-system](https://github.com/doguk
 | Konu | Teknoloji |
 |---|---|
 | Çatı / dil | Flutter / Dart |
-| Arayüz | Material 3 (`useMaterial3`, turkuaz tohum rengi) |
+| Arayüz | Material 3 ve özel sıcak tema (`lib/theme.dart`): terracotta, adaçayı yeşili, hardal ve krem paleti, Nunito fontu, Gemini ile üretilen illüstrasyonlar |
 | HTTP | `http` |
 | Yerel depolama | `shared_preferences` (belirteç ve dil seçimi) |
 | Yerelleştirme | `intl` + `flutter_localizations`; ARB dosyalarından gen-l10n ile üretilir |
