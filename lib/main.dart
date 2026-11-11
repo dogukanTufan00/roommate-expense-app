@@ -4,6 +4,7 @@ import 'package:roommate_expense_app/l10n/app_localizations.dart';
 import 'package:roommate_expense_app/screens/households_screen.dart';
 import 'package:roommate_expense_app/screens/login_screen.dart';
 import 'package:roommate_expense_app/session.dart';
+import 'package:roommate_expense_app/theme.dart';
 
 // Lets code outside the widget tree (the API client) open screens.
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -48,7 +49,7 @@ class _RoommateAppState extends State<RoommateApp> {
           locale: value, // null = follow the phone's language
           supportedLocales: AppLocalizations.supportedLocales,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
-          theme: ThemeData(colorSchemeSeed: Colors.teal, useMaterial3: true),
+          theme: buildAppTheme(),
           home: Session.isLoggedIn ? const HouseholdsScreen() : const LoginScreen(),
         );
       },

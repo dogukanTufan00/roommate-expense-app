@@ -3,6 +3,7 @@ import 'package:roommate_expense_app/api/api.dart';
 import 'package:roommate_expense_app/l10n/app_localizations.dart';
 import 'package:roommate_expense_app/models.dart';
 import 'package:roommate_expense_app/session.dart';
+import 'package:roommate_expense_app/utils/avatar.dart';
 import 'package:roommate_expense_app/utils/errors.dart';
 
 // Shows the members of one home. Admins can add and remove members.
@@ -200,7 +201,14 @@ class _MembersTabState extends State<MembersTab> {
     return Card(
       child: ListTile(
         leading: CircleAvatar(
-          child: Text(member.name.isEmpty ? '?' : member.name[0].toUpperCase()),
+          backgroundColor: avatarColor(member.userId),
+          child: Text(
+            initials(member.name),
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
         ),
         title: Text(name),
         subtitle: Text(member.email),
@@ -209,6 +217,11 @@ class _MembersTabState extends State<MembersTab> {
           children: [
             if (member.isAdmin)
               Chip(
+                avatar: const Icon(
+                  Icons.star_rounded,
+                  size: 16,
+                  color: Color(0xFFB7862A),
+                ),
                 label: Text(l10n.admin),
                 visualDensity: VisualDensity.compact,
               ),

@@ -10,7 +10,7 @@ class AppLocalizationsTr extends AppLocalizations {
   AppLocalizationsTr([String locale = 'tr']) : super(locale);
 
   @override
-  String get appTitle => 'Ev Giderleri';
+  String get appTitle => 'Evce';
 
   @override
   String get login => 'Giriş yap';
@@ -34,8 +34,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get haveAccount => 'Zaten hesabın var mı? Giriş yap';
 
   @override
-  String get registerSuccess =>
-      'Hesabın oluşturuldu. Şimdi giriş yapabilirsin.';
+  String get registerSuccess => 'Aramıza hoş geldin! Şimdi giriş yapabilirsin.';
 
   @override
   String get logout => 'Çıkış yap';
@@ -51,7 +50,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get noHouseholds =>
-      'Henüz bir evin yok. Yeni bir ev oluştur ya da ev arkadaşından seni eklemesini iste.';
+      'Bir ev kur ve ev arkadaşlarını davet et ya da ev arkadaşından seni eklemesini iste.';
 
   @override
   String get createHousehold => 'Yeni ev';
@@ -124,7 +123,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get recurring => 'Her ay tekrarlanır';
 
   @override
-  String get noExpenses => 'Henüz gider yok.';
+  String get noExpenses => 'Kira günü gelince burası dolar 🙂';
 
   @override
   String get deleteExpenseConfirm => 'Bu gider silinsin mi?';
@@ -141,7 +140,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get settlementsTitle => 'Kim kime ödemeli';
 
   @override
-  String get allSettled => 'Herkes ödeşmiş 🎉';
+  String get allSettled => 'Hesaplar temiz, kimse kimseye borçlu değil 🎉';
 
   @override
   String get getsBack => 'alacaklı';
@@ -164,7 +163,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get paymentsTitle => 'Ödeme geçmişi';
 
   @override
-  String get noPayments => 'Henüz ödeme yok.';
+  String get noPayments =>
+      'Henüz ödeme yok. Kapatılan borçlar burada görünecek.';
 
   @override
   String get deletePaymentConfirm => 'Bu ödeme kaydı silinsin mi?';
@@ -240,4 +240,26 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get errorUnknown => 'Bir şeyler ters gitti.';
+
+  @override
+  String get loginTagline => 'Ortak ev, adil hesap.';
+
+  @override
+  String get summaryTitle => 'Senin durumun';
+
+  @override
+  String get summaryGetsBack => 'Ev arkadaşların sana borçlu';
+
+  @override
+  String get summaryOwes => 'Ev arkadaşlarına borçlusun';
+
+  @override
+  String get summarySettled =>
+      'Hesabın temiz. Kimseye borcun yok, kimsenin sana borcu yok.';
+
+  @override
+  String get noHouseholdsTitle => 'Henüz bir evin yok';
+
+  @override
+  String get noExpensesTitle => 'Henüz gider yok';
 }

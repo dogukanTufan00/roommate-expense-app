@@ -5,7 +5,9 @@ import 'package:roommate_expense_app/models.dart';
 import 'package:roommate_expense_app/screens/household_screen.dart';
 import 'package:roommate_expense_app/screens/login_screen.dart';
 import 'package:roommate_expense_app/session.dart';
+import 'package:roommate_expense_app/theme.dart';
 import 'package:roommate_expense_app/utils/errors.dart';
+import 'package:roommate_expense_app/widgets/illustration.dart';
 import 'package:roommate_expense_app/widgets/language_menu_button.dart';
 
 // The home page after login: the list of homes the user belongs to.
@@ -155,24 +157,34 @@ class _HouseholdsScreenState extends State<HouseholdsScreen> {
 
     // ListView even when empty, so pull-to-refresh still works.
     if (_households.isEmpty) {
+      final theme = Theme.of(context);
       return RefreshIndicator(
         onRefresh: _load,
         child: ListView(
+          padding: const EdgeInsets.all(32),
           children: [
-            const SizedBox(height: 120),
-            Icon(
-              Icons.home_outlined,
-              size: 72,
-              color: Theme.of(context).colorScheme.outline,
-            ),
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32),
-              child: Text(
-                l10n.noHouseholds,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
+            const SizedBox(height: 80),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Illustration(
+                  'empty-homes.png',
+                  fallbackIcon: Icons.house_rounded,
+                  height: 180,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  l10n.noHouseholdsTitle,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  l10n.noHouseholds,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted),
+                ),
+              ],
             ),
           ],
         ),
@@ -183,15 +195,26 @@ class _HouseholdsScreenState extends State<HouseholdsScreen> {
       onRefresh: _load,
       child: ListView.builder(
         // Bottom padding leaves room so the floating button does not hide the last card.
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
+        padding: const EdgeInsets.fromLTRB(0, 8, 0, 96),
         itemCount: _households.length,
         itemBuilder: (context, index) {
           final household = _households[index];
           return Card(
             child: ListTile(
-              leading: const Icon(Icons.home),
-              title: Text(household.name),
-              trailing: const Icon(Icons.chevron_right),
+              leading: Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: AppColors.terracotta.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: const Icon(Icons.house_rounded, color: AppColors.terracotta),
+              ),
+              title: Text(
+                household.name,
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
+              trailing: const Icon(Icons.chevron_right_rounded, color: AppColors.muted),
               onTap: () => _openHousehold(household),
             ),
           );

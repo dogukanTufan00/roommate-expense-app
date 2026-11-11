@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
-  /// **'Roommate Expenses'**
+  /// **'Evce'**
   String get appTitle;
 
   /// No description provided for @login.
@@ -149,7 +149,7 @@ abstract class AppLocalizations {
   /// No description provided for @registerSuccess.
   ///
   /// In en, this message translates to:
-  /// **'Account created. You can log in now.'**
+  /// **'Welcome aboard! You can log in now.'**
   String get registerSuccess;
 
   /// No description provided for @logout.
@@ -179,7 +179,7 @@ abstract class AppLocalizations {
   /// No description provided for @noHouseholds.
   ///
   /// In en, this message translates to:
-  /// **'You are not in any home yet. Create one, or ask a roommate to add you.'**
+  /// **'Create a home and invite your roommates, or ask a roommate to add you.'**
   String get noHouseholds;
 
   /// No description provided for @createHousehold.
@@ -323,7 +323,7 @@ abstract class AppLocalizations {
   /// No description provided for @noExpenses.
   ///
   /// In en, this message translates to:
-  /// **'No expenses yet.'**
+  /// **'Rent day will fill this up soon 🙂'**
   String get noExpenses;
 
   /// No description provided for @deleteExpenseConfirm.
@@ -353,7 +353,7 @@ abstract class AppLocalizations {
   /// No description provided for @allSettled.
   ///
   /// In en, this message translates to:
-  /// **'Everyone is settled up 🎉'**
+  /// **'All square, nobody owes anybody 🎉'**
   String get allSettled;
 
   /// No description provided for @getsBack.
@@ -395,7 +395,7 @@ abstract class AppLocalizations {
   /// No description provided for @noPayments.
   ///
   /// In en, this message translates to:
-  /// **'No payments yet.'**
+  /// **'No payments yet. Settled debts will show up here.'**
   String get noPayments;
 
   /// No description provided for @deletePaymentConfirm.
@@ -541,6 +541,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong.'**
   String get errorUnknown;
+
+  /// No description provided for @loginTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared home, fair shares.'**
+  String get loginTagline;
+
+  /// No description provided for @summaryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your balance'**
+  String get summaryTitle;
+
+  /// No description provided for @summaryGetsBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Your roommates owe you'**
+  String get summaryGetsBack;
+
+  /// No description provided for @summaryOwes.
+  ///
+  /// In en, this message translates to:
+  /// **'You owe your roommates'**
+  String get summaryOwes;
+
+  /// No description provided for @summarySettled.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re all square. Nobody owes you, you owe nobody.'**
+  String get summarySettled;
+
+  /// No description provided for @noHouseholdsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No home yet'**
+  String get noHouseholdsTitle;
+
+  /// No description provided for @noExpensesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No expenses yet'**
+  String get noExpensesTitle;
 }
 
 class _AppLocalizationsDelegate

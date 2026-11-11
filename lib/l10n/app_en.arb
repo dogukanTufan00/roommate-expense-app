@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "appTitle": "Roommate Expenses",
+  "appTitle": "Evce",
   "login": "Log in",
   "register": "Sign up",
   "name": "Full name",
@@ -8,12 +8,12 @@
   "password": "Password",
   "noAccount": "Don't have an account? Sign up",
   "haveAccount": "Already have an account? Log in",
-  "registerSuccess": "Account created. You can log in now.",
+  "registerSuccess": "Welcome aboard! You can log in now.",
   "logout": "Log out",
   "language": "Language",
   "languageSystem": "Phone language",
   "households": "My homes",
-  "noHouseholds": "You are not in any home yet. Create one, or ask a roommate to add you.",
+  "noHouseholds": "Create a home and invite your roommates, or ask a roommate to add you.",
   "createHousehold": "New home",
   "householdName": "Home name",
   "rename": "Rename",
@@ -37,7 +37,7 @@
   "paidBy": "Paid by",
   "date": "Date",
   "recurring": "Repeats every month",
-  "noExpenses": "No expenses yet.",
+  "noExpenses": "Rent day will fill this up soon 🙂",
   "deleteExpenseConfirm": "Delete this expense?",
   "paidByName": "Paid by {name}",
   "@paidByName": {
@@ -49,7 +49,7 @@
   },
   "balancesTitle": "Balances",
   "settlementsTitle": "Who pays whom",
-  "allSettled": "Everyone is settled up 🎉",
+  "allSettled": "All square, nobody owes anybody 🎉",
   "getsBack": "gets back",
   "owes": "owes",
   "settled": "settled up",
@@ -69,7 +69,7 @@
     }
   },
   "paymentsTitle": "Payment history",
-  "noPayments": "No payments yet.",
+  "noPayments": "No payments yet. Settled debts will show up here.",
   "deletePaymentConfirm": "Delete this payment record?",
   "addMember": "Add member",
   "memberEmailHint": "Roommate's email (they need an account)",
@@ -100,5 +100,12 @@
   "errorAlreadyMember": "This person is already a member.",
   "errorLastAdmin": "The last admin cannot leave the home.",
   "errorNoSuchUser": "No account with this email.",
-  "errorUnknown": "Something went wrong."
+  "errorUnknown": "Something went wrong.",
+  "loginTagline": "Shared home, fair shares.",
+  "summaryTitle": "Your balance",
+  "summaryGetsBack": "Your roommates owe you",
+  "summaryOwes": "You owe your roommates",
+  "summarySettled": "You're all square. Nobody owes you, you owe nobody.",
+  "noHouseholdsTitle": "No home yet",
+  "noExpensesTitle": "No expenses yet"
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:roommate_expense_app/l10n/app_localizations.dart';
+import 'package:roommate_expense_app/theme.dart';
 
 // The category codes sent to the API. These must match the API's ExpenseCategory enum.
 const List<String> expenseCategories = ['RENT', 'UTILITIES', 'GROCERIES', 'OTHER'];
@@ -29,5 +30,19 @@ IconData categoryIcon(String category) {
       return Icons.shopping_cart;
     default:
       return Icons.category;
+  }
+}
+
+// The color used for an expense's category, so categories are easy to tell apart.
+Color categoryColor(String category) {
+  switch (category) {
+    case 'RENT':
+      return const Color(0xFF8E7DBE);
+    case 'UTILITIES':
+      return AppColors.mustard;
+    case 'GROCERIES':
+      return AppColors.sage;
+    default:
+      return const Color(0xFF9AA0B5);
   }
 }

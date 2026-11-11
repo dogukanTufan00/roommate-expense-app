@@ -254,7 +254,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(categoryIcon(category), size: 20),
+                        Icon(categoryIcon(category), size: 20, color: categoryColor(category)),
                         const SizedBox(width: 8),
                         Text(categoryLabel(l10n, category)),
                       ],
@@ -296,15 +296,18 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
               onChanged: (value) => setState(() => _recurring = value),
             ),
             const SizedBox(height: 24),
-            FilledButton(
-              onPressed: _saving ? null : _save,
-              child: _saving
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : Text(l10n.save),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton(
+                onPressed: _saving ? null : _save,
+                child: _saving
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : Text(l10n.save),
+              ),
             ),
           ],
         ),

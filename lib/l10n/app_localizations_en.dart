@@ -10,7 +10,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'Roommate Expenses';
+  String get appTitle => 'Evce';
 
   @override
   String get login => 'Log in';
@@ -34,7 +34,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get haveAccount => 'Already have an account? Log in';
 
   @override
-  String get registerSuccess => 'Account created. You can log in now.';
+  String get registerSuccess => 'Welcome aboard! You can log in now.';
 
   @override
   String get logout => 'Log out';
@@ -50,7 +50,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noHouseholds =>
-      'You are not in any home yet. Create one, or ask a roommate to add you.';
+      'Create a home and invite your roommates, or ask a roommate to add you.';
 
   @override
   String get createHousehold => 'New home';
@@ -123,7 +123,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recurring => 'Repeats every month';
 
   @override
-  String get noExpenses => 'No expenses yet.';
+  String get noExpenses => 'Rent day will fill this up soon 🙂';
 
   @override
   String get deleteExpenseConfirm => 'Delete this expense?';
@@ -140,7 +140,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settlementsTitle => 'Who pays whom';
 
   @override
-  String get allSettled => 'Everyone is settled up 🎉';
+  String get allSettled => 'All square, nobody owes anybody 🎉';
 
   @override
   String get getsBack => 'gets back';
@@ -163,7 +163,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paymentsTitle => 'Payment history';
 
   @override
-  String get noPayments => 'No payments yet.';
+  String get noPayments => 'No payments yet. Settled debts will show up here.';
 
   @override
   String get deletePaymentConfirm => 'Delete this payment record?';
@@ -239,4 +239,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorUnknown => 'Something went wrong.';
+
+  @override
+  String get loginTagline => 'Shared home, fair shares.';
+
+  @override
+  String get summaryTitle => 'Your balance';
+
+  @override
+  String get summaryGetsBack => 'Your roommates owe you';
+
+  @override
+  String get summaryOwes => 'You owe your roommates';
+
+  @override
+  String get summarySettled =>
+      'You\'re all square. Nobody owes you, you owe nobody.';
+
+  @override
+  String get noHouseholdsTitle => 'No home yet';
+
+  @override
+  String get noExpensesTitle => 'No expenses yet';
 }

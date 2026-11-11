@@ -3,8 +3,11 @@ import 'package:roommate_expense_app/api/api.dart';
 import 'package:roommate_expense_app/l10n/app_localizations.dart';
 import 'package:roommate_expense_app/models.dart';
 import 'package:roommate_expense_app/session.dart';
+import 'package:roommate_expense_app/theme.dart';
+import 'package:roommate_expense_app/utils/avatar.dart';
 import 'package:roommate_expense_app/utils/errors.dart';
 import 'package:roommate_expense_app/utils/format.dart';
+import 'package:roommate_expense_app/widgets/illustration.dart';
 
 // The "Balances" tab: who owes whom, the suggested payments and the payment history.
 // It is shown inside another screen's TabBarView, so it returns a body, not a Scaffold.
@@ -175,6 +178,14 @@ class _BalancesTabState extends State<BalancesTab> {
     await _refresh();
   }
 
+  // My net balance. If I am not in the balance list, it is 0.
+  double get _myNet {
+    for (final b in _balances) {
+      if (b.userId == _myUserId) return b.netBalance;
+    }
+    return 0;
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -211,18 +222,33 @@ class _BalancesTabState extends State<BalancesTab> {
       child: ListView(
         // Lets pull to refresh work even when the list is short.
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(vertical: 16),
         children: [
+          _summaryCard(l10n),
+
           _sectionTitle(theme, l10n.balancesTitle),
           ..._balances.map((b) => _balanceCard(b, l10n)),
 
           _sectionTitle(theme, l10n.settlementsTitle),
           if (_settlements.isEmpty)
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Center(
-                  child: Text(l10n.allSettled, textAlign: TextAlign.center),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Illustration(
+                      'all-settled.png',
+                      fallbackIcon: Icons.celebration_rounded,
+                      height: 140,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      l10n.allSettled,
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.titleMedium,
+                    ),
+                  ],
                 ),
               ),
             )
@@ -232,7 +258,7 @@ class _BalancesTabState extends State<BalancesTab> {
           _sectionTitle(theme, l10n.paymentsTitle),
           if (_payments.isEmpty)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Text(
                 l10n.noPayments,
                 style: theme.textTheme.bodyMedium?.copyWith(color: Colors.grey),
@@ -245,10 +271,93 @@ class _BalancesTabState extends State<BalancesTab> {
     );
   }
 
+  // The hero card at the top: my overall position in one glance.
+  Widget _summaryCard(AppLocalizations l10n) {
+    final theme = Theme.of(context);
+    final net = _myNet;
+    final amount = formatMoney(context, net.abs());
+
+    final Color background;
+    final Color amountColor;
+    final String line;
+    if (net.abs() < 0.005) {
+      background = AppColors.mustard.withValues(alpha: 0.20);
+      amountColor = AppColors.ink;
+      line = l10n.summarySettled;
+    } else if (net > 0) {
+      background = AppColors.getsBack.withValues(alpha: 0.12);
+      amountColor = AppColors.getsBack;
+      line = l10n.summaryGetsBack;
+    } else {
+      background = AppColors.owes.withValues(alpha: 0.10);
+      amountColor = AppColors.owes;
+      line = l10n.summaryOwes;
+    }
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: background,
+        borderRadius: BorderRadius.circular(24),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.summaryTitle,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: AppColors.muted,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            amount,
+            style: theme.textTheme.headlineLarge?.copyWith(
+              fontSize: 34,
+              fontWeight: FontWeight.w800,
+              color: amountColor,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            line,
+            style: theme.textTheme.bodyLarge?.copyWith(
+              color: AppColors.ink,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _sectionTitle(ThemeData theme, String text) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(4, 16, 4, 8),
-      child: Text(text, style: theme.textTheme.titleMedium),
+      padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+      child: Text(
+        text,
+        style: theme.textTheme.titleMedium?.copyWith(
+          fontWeight: FontWeight.w800,
+          color: AppColors.ink,
+        ),
+      ),
+    );
+  }
+
+  // A round avatar with the person's initials, in the color chosen for that person.
+  Widget _personAvatar(int userId, String name, {double radius = 20}) {
+    return CircleAvatar(
+      radius: radius,
+      backgroundColor: avatarColor(userId),
+      child: Text(
+        initials(name),
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
     );
   }
 
@@ -263,20 +372,18 @@ class _BalancesTabState extends State<BalancesTab> {
     final Color color;
     if (b.netBalance.abs() < 0.005) {
       label = l10n.settled;
-      color = Colors.grey;
+      color = AppColors.muted;
     } else if (b.netBalance > 0) {
       label = l10n.getsBack;
-      color = Colors.green.shade700;
+      color = AppColors.getsBack;
     } else {
       label = l10n.owes;
-      color = theme.colorScheme.error;
+      color = AppColors.owes;
     }
-
-    final initial = b.name.isEmpty ? '?' : b.name[0].toUpperCase();
 
     return Card(
       child: ListTile(
-        leading: CircleAvatar(child: Text(initial)),
+        leading: _personAvatar(b.userId, b.name),
         title: Text(isMe ? '${b.name} (${l10n.you})' : b.name),
         trailing: Column(
           mainAxisSize: MainAxisSize.min,
@@ -288,11 +395,34 @@ class _BalancesTabState extends State<BalancesTab> {
             ),
             Text(
               label,
-              style: theme.textTheme.bodySmall?.copyWith(color: color),
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: color,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  // One person in a settlement: an avatar with the name under it.
+  Widget _settlementPerson(int userId, String name) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _personAvatar(userId, name),
+        const SizedBox(height: 4),
+        Text(
+          name,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+        ),
+      ],
     );
   }
 
@@ -305,11 +435,28 @@ class _BalancesTabState extends State<BalancesTab> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('${s.fromName} → ${s.toName}', style: theme.textTheme.titleSmall),
-            const SizedBox(height: 4),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: _settlementPerson(s.fromUserId, s.fromName)),
+                const Padding(
+                  padding: EdgeInsets.only(top: 8),
+                  child: Icon(
+                    Icons.arrow_forward_rounded,
+                    color: AppColors.muted,
+                  ),
+                ),
+                Expanded(child: _settlementPerson(s.toUserId, s.toName)),
+              ],
+            ),
+            const SizedBox(height: 12),
             Text(
               formatMoney(context, s.amount),
-              style: theme.textTheme.headlineSmall,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.headlineSmall?.copyWith(
+                color: AppColors.ink,
+                fontWeight: FontWeight.w800,
+              ),
             ),
             const SizedBox(height: 8),
             Align(
@@ -328,7 +475,7 @@ class _BalancesTabState extends State<BalancesTab> {
   Widget _paymentCard(Payment p, AppLocalizations l10n) {
     return Card(
       child: ListTile(
-        leading: const Icon(Icons.payments),
+        leading: _personAvatar(p.fromUserId, p.fromUserName),
         title: Text('${p.fromUserName} → ${p.toUserName}'),
         subtitle: Text(formatDate(context, p.paidAt)),
         trailing: Row(

@@ -3,9 +3,11 @@ import 'package:roommate_expense_app/api/api.dart';
 import 'package:roommate_expense_app/l10n/app_localizations.dart';
 import 'package:roommate_expense_app/models.dart';
 import 'package:roommate_expense_app/screens/expense_form_screen.dart';
+import 'package:roommate_expense_app/theme.dart';
 import 'package:roommate_expense_app/utils/category.dart';
 import 'package:roommate_expense_app/utils/errors.dart';
 import 'package:roommate_expense_app/utils/format.dart';
+import 'package:roommate_expense_app/widgets/illustration.dart';
 
 // The expenses list of one home. It is one tab inside the home screen.
 class ExpensesTab extends StatefulWidget {
@@ -104,6 +106,7 @@ class _ExpensesTabState extends State<ExpensesTab> {
 
     // ListView keeps pull-to-refresh working even when the list is empty.
     if (expenses.isEmpty) {
+      final theme = Theme.of(context);
       return RefreshIndicator(
         onRefresh: _load,
         child: LayoutBuilder(
@@ -112,13 +115,30 @@ class _ExpensesTabState extends State<ExpensesTab> {
               SizedBox(
                 height: constraints.maxHeight,
                 child: Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.receipt_long, size: 64),
-                      const SizedBox(height: 12),
-                      Text(l10n.noExpenses),
-                    ],
+                  child: Padding(
+                    padding: const EdgeInsets.all(32),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Illustration(
+                          'empty-expenses.png',
+                          fallbackIcon: Icons.receipt_long_rounded,
+                          height: 180,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          l10n.noExpensesTitle,
+                          textAlign: TextAlign.center,
+                          style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          l10n.noExpenses,
+                          textAlign: TextAlign.center,
+                          style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -130,41 +150,52 @@ class _ExpensesTabState extends State<ExpensesTab> {
 
     return RefreshIndicator(
       onRefresh: _load,
-      child: ListView.separated(
-        // Bottom padding so the floating button does not cover the last item.
-        padding: const EdgeInsets.only(bottom: 88),
+      child: ListView.builder(
+        // Top and bottom padding: the floating button must not cover the last card.
+        padding: const EdgeInsets.only(top: 8, bottom: 88),
         itemCount: expenses.length,
-        separatorBuilder: (context, index) => const Divider(height: 1),
         itemBuilder: (context, index) {
           final e = expenses[index];
           final description = e.description ?? '';
+          final color = categoryColor(e.category);
 
-          return ListTile(
-            leading: CircleAvatar(child: Icon(categoryIcon(e.category))),
-            title: Text(
-              description.isEmpty
-                  ? categoryLabel(l10n, e.category)
-                  : description,
-            ),
-            subtitle: Row(
-              children: [
-                Flexible(
-                  child: Text(
-                    '${l10n.paidByName(e.paidByName)} · ${formatDate(context, e.expenseDate)}',
-                    overflow: TextOverflow.ellipsis,
-                  ),
+          return Card(
+            child: ListTile(
+              leading: Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.18),
+                  borderRadius: BorderRadius.circular(14),
                 ),
-                if (e.recurring) ...[
-                  const SizedBox(width: 4),
-                  const Icon(Icons.repeat, size: 16),
+                child: Icon(categoryIcon(e.category), color: color),
+              ),
+              title: Text(
+                description.isEmpty
+                    ? categoryLabel(l10n, e.category)
+                    : description,
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
+              subtitle: Row(
+                children: [
+                  Flexible(
+                    child: Text(
+                      '${l10n.paidByName(e.paidByName)} · ${formatDate(context, e.expenseDate)}',
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  if (e.recurring) ...[
+                    const SizedBox(width: 4),
+                    const Icon(Icons.repeat, size: 16),
+                  ],
                 ],
-              ],
+              ),
+              trailing: Text(
+                formatMoney(context, e.amount),
+                style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.ink),
+              ),
+              onTap: () => _openForm(expense: e),
             ),
-            trailing: Text(
-              formatMoney(context, e.amount),
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            onTap: () => _openForm(expense: e),
           );
         },
       ),

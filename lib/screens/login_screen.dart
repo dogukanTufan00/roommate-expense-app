@@ -4,7 +4,9 @@ import 'package:roommate_expense_app/api/api_client.dart';
 import 'package:roommate_expense_app/l10n/app_localizations.dart';
 import 'package:roommate_expense_app/screens/households_screen.dart';
 import 'package:roommate_expense_app/screens/register_screen.dart';
+import 'package:roommate_expense_app/theme.dart';
 import 'package:roommate_expense_app/utils/errors.dart';
+import 'package:roommate_expense_app/widgets/illustration.dart';
 import 'package:roommate_expense_app/widgets/language_menu_button.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -61,7 +63,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(actions: const [LanguageMenuButton()]),
@@ -75,11 +76,25 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Icon(Icons.home_work, size: 72, color: theme.colorScheme.primary),
+                  const Illustration('login.png', fallbackIcon: Icons.home_work_rounded, height: 200),
                   const SizedBox(height: 16),
                   Text(
                     l10n.appTitle,
-                    style: theme.textTheme.headlineMedium,
+                    style: const TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.terracotta,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    l10n.loginTagline,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.muted,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 32),
@@ -114,15 +129,18 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                         ),
                         const SizedBox(height: 24),
-                        FilledButton(
-                          onPressed: _loading ? null : _submit,
-                          child: _loading
-                              ? const SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
-                                )
-                              : Text(l10n.login),
+                        SizedBox(
+                          width: double.infinity,
+                          child: FilledButton(
+                            onPressed: _loading ? null : _submit,
+                            child: _loading
+                                ? const SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                  )
+                                : Text(l10n.login),
+                          ),
                         ),
                         TextButton(
                           onPressed: _loading
