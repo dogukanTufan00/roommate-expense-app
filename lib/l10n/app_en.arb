@@ -362,5 +362,35 @@
   "paymentRecorded": "Payment recorded",
   "errorAttachmentType": "Only JPEG, PNG, WEBP images and PDF files can be attached.",
   "errorAttachmentLimit": "You can attach at most 5 files here. Delete one first.",
-  "errorAttachmentTooLarge": "This file is too large. The limit is 10 MB."
+  "errorAttachmentTooLarge": "This file is too large. The limit is 10 MB.",
+  "recurringExpenses": "Recurring expenses",
+  "recurringExplainer": "These expenses are added automatically every month. To stop one, open it and turn off 'Repeats every month'.",
+  "recurringEmpty": "No recurring expenses yet. Turn on 'Repeats every month' for rent or a bill and it will show up here.",
+  "recurringAutoHint": "Added automatically on day {day} of every month",
+  "@recurringAutoHint": {
+    "placeholders": {
+      "day": {"type": "int"}
+    }
+  },
+  "recurringDayInfo": "Every month, on day {day}",
+  "@recurringDayInfo": {
+    "placeholders": {
+      "day": {"type": "int"}
+    }
+  },
+  "recurringNextDate": "Next: {date}",
+  "@recurringNextDate": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "recurringAutoTag": "auto",
+  "recurringCheckNow": "Check now",
+  "recurringRunAdded": "{count, plural, =1{1 expense added} other{{count} expenses added}}",
+  "@recurringRunAdded": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "recurringRunNone": "Nothing to add right now"
 }

@@ -481,7 +481,19 @@ class _ExpensesTabState extends State<ExpensesTab> {
                 ),
                 if (e.recurring) ...[
                   const SizedBox(width: 4),
-                  const Icon(Icons.repeat, size: 16),
+                  const Icon(Icons.autorenew_rounded, size: 16, color: AppColors.muted),
+                ],
+                // Tiny muted tag on copies the server created by itself.
+                if (e.generatedFromId != null) ...[
+                  const SizedBox(width: 6),
+                  Text(
+                    l10n.recurringAutoTag,
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: AppColors.muted,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ],
                 // Paperclip and count when receipts are attached.
                 if (e.attachmentCount > 0) ...[

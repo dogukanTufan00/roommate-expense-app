@@ -218,6 +218,20 @@ class Api {
     await ApiClient.delete('/api/households/$householdId/expenses/$expenseId');
   }
 
+  // ---- Recurring expenses ----
+
+  // One row per monthly chain. Any member may read them.
+  static Future<List<RecurringExpense>> getRecurringExpenses(int householdId) async {
+    final data = await ApiClient.get('/api/households/$householdId/expenses/recurring');
+    return _parseList(data, RecurringExpense.fromJson);
+  }
+
+  // Admins only. Adds the months that are due now. Returns how many expenses were added.
+  static Future<int> runRecurringNow(int householdId) async {
+    final data = await ApiClient.post('/api/households/$householdId/expenses/recurring/run');
+    return (data as Map<String, dynamic>)['generated'] as int;
+  }
+
   // ---- Category split defaults ----
 
   // Only the categories that have a default are returned.

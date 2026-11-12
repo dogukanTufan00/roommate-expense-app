@@ -613,6 +613,15 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
               value: _recurring,
               onChanged: (value) => setState(() => _recurring = value),
             ),
+            // Shows the day the copies will be added on, from the chosen date.
+            if (_recurring)
+              Padding(
+                padding: const EdgeInsets.only(left: 4, right: 4, bottom: 8),
+                child: Text(
+                  l10n.recurringAutoHint(_date.day),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.muted),
+                ),
+              ),
             const SizedBox(height: 16),
             _buildSplitSection(l10n, members),
             const SizedBox(height: 24),

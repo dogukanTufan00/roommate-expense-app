@@ -685,4 +685,44 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get errorAttachmentTooLarge => 'Dosya çok büyük. Sınır 10 MB.';
+
+  @override
+  String get recurringExpenses => 'Tekrarlayan giderler';
+
+  @override
+  String get recurringExplainer =>
+      'Bu giderler her ay kendiliğinden eklenir. Durdurmak için gideri açıp \'Her ay tekrarlanır\'ı kapat.';
+
+  @override
+  String get recurringEmpty =>
+      'Henüz tekrarlayan gider yok. Kira ya da bir faturada \'Her ay tekrarlanır\'ı açarsan burada görünür.';
+
+  @override
+  String recurringAutoHint(int day) {
+    return 'Her ay, ayın $day. günü otomatik eklenir';
+  }
+
+  @override
+  String recurringDayInfo(int day) {
+    return 'Her ay, ayın $day. günü';
+  }
+
+  @override
+  String recurringNextDate(String date) {
+    return 'Sonraki: $date';
+  }
+
+  @override
+  String get recurringAutoTag => 'otomatik';
+
+  @override
+  String get recurringCheckNow => 'Şimdi kontrol et';
+
+  @override
+  String recurringRunAdded(int count) {
+    return '$count gider eklendi';
+  }
+
+  @override
+  String get recurringRunNone => 'Eklenecek gider yok';
 }

@@ -263,5 +263,35 @@
   "paymentRecorded": "Ödeme kaydedildi",
   "errorAttachmentType": "Yalnızca JPEG, PNG, WEBP görselleri ve PDF dosyaları eklenebilir.",
   "errorAttachmentLimit": "Buraya en fazla 5 dosya ekleyebilirsin. Önce birini silmelisin.",
-  "errorAttachmentTooLarge": "Dosya çok büyük. Sınır 10 MB."
+  "errorAttachmentTooLarge": "Dosya çok büyük. Sınır 10 MB.",
+  "recurringExpenses": "Tekrarlayan giderler",
+  "recurringExplainer": "Bu giderler her ay kendiliğinden eklenir. Durdurmak için gideri açıp 'Her ay tekrarlanır'ı kapat.",
+  "recurringEmpty": "Henüz tekrarlayan gider yok. Kira ya da bir faturada 'Her ay tekrarlanır'ı açarsan burada görünür.",
+  "recurringAutoHint": "Her ay, ayın {day}. günü otomatik eklenir",
+  "@recurringAutoHint": {
+    "placeholders": {
+      "day": {"type": "int"}
+    }
+  },
+  "recurringDayInfo": "Her ay, ayın {day}. günü",
+  "@recurringDayInfo": {
+    "placeholders": {
+      "day": {"type": "int"}
+    }
+  },
+  "recurringNextDate": "Sonraki: {date}",
+  "@recurringNextDate": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "recurringAutoTag": "otomatik",
+  "recurringCheckNow": "Şimdi kontrol et",
+  "recurringRunAdded": "{count} gider eklendi",
+  "@recurringRunAdded": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "recurringRunNone": "Eklenecek gider yok"
 }

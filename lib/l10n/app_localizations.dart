@@ -1279,6 +1279,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This file is too large. The limit is 10 MB.'**
   String get errorAttachmentTooLarge;
+
+  /// No description provided for @recurringExpenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring expenses'**
+  String get recurringExpenses;
+
+  /// No description provided for @recurringExplainer.
+  ///
+  /// In en, this message translates to:
+  /// **'These expenses are added automatically every month. To stop one, open it and turn off \'Repeats every month\'.'**
+  String get recurringExplainer;
+
+  /// No description provided for @recurringEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No recurring expenses yet. Turn on \'Repeats every month\' for rent or a bill and it will show up here.'**
+  String get recurringEmpty;
+
+  /// No description provided for @recurringAutoHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Added automatically on day {day} of every month'**
+  String recurringAutoHint(int day);
+
+  /// No description provided for @recurringDayInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Every month, on day {day}'**
+  String recurringDayInfo(int day);
+
+  /// No description provided for @recurringNextDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Next: {date}'**
+  String recurringNextDate(String date);
+
+  /// No description provided for @recurringAutoTag.
+  ///
+  /// In en, this message translates to:
+  /// **'auto'**
+  String get recurringAutoTag;
+
+  /// No description provided for @recurringCheckNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Check now'**
+  String get recurringCheckNow;
+
+  /// No description provided for @recurringRunAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 expense added} other{{count} expenses added}}'**
+  String recurringRunAdded(int count);
+
+  /// No description provided for @recurringRunNone.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to add right now'**
+  String get recurringRunNone;
 }
 
 class _AppLocalizationsDelegate

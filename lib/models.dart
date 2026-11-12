@@ -150,6 +150,10 @@ class Expense {
   final List<ExpenseShare> shares;
   // How many receipts or documents are attached. 0 when the API does not send it.
   final int attachmentCount;
+  // Set on copies the server made automatically: the id of the expense they came from. Null otherwise.
+  final int? generatedFromId;
+  // The day of the month this recurring chain repeats on. Null when the API does not send it.
+  final int? recurrenceDay;
 
   Expense({
     required this.id,
@@ -165,6 +169,8 @@ class Expense {
     this.splitType = 'EQUAL',
     this.shares = const [],
     this.attachmentCount = 0,
+    this.generatedFromId,
+    this.recurrenceDay,
   });
 
   factory Expense.fromJson(Map<String, dynamic> json) {
@@ -186,6 +192,8 @@ class Expense {
           ExpenseShare.fromJson(item as Map<String, dynamic>),
       ],
       attachmentCount: _countValue(json['attachmentCount']),
+      generatedFromId: json['generatedFromId'] as int?,
+      recurrenceDay: json['recurrenceDay'] as int?,
     );
   }
 }
@@ -367,6 +375,47 @@ class Attachment {
   }
 }
 
+// One monthly chain from GET /api/households/{id}/expenses/recurring. expenseId is the
+// latest expense of the chain, the one that carries the recurring flag.
+class RecurringExpense {
+  final int expenseId;
+  final String? description;
+  final String category;
+  final double amount;
+  final int paidByUserId;
+  final String paidByName;
+  // The day of the month the chain repeats on.
+  final int recurrenceDay;
+  final DateTime? lastDate;
+  final DateTime? nextDate;
+
+  RecurringExpense({
+    required this.expenseId,
+    required this.description,
+    required this.category,
+    required this.amount,
+    required this.paidByUserId,
+    required this.paidByName,
+    required this.recurrenceDay,
+    required this.lastDate,
+    required this.nextDate,
+  });
+
+  factory RecurringExpense.fromJson(Map<String, dynamic> json) {
+    return RecurringExpense(
+      expenseId: json['expenseId'] as int,
+      description: _optionalText(json['description']),
+      category: json['category'] as String,
+      amount: (json['amount'] as num).toDouble(),
+      paidByUserId: json['paidByUserId'] as int,
+      paidByName: json['paidByName'] as String,
+      recurrenceDay: (json['recurrenceDay'] as num).toInt(),
+      lastDate: _optionalDate(json['lastDate']),
+      nextDate: _optionalDate(json['nextDate']),
+    );
+  }
+}
+
 // Reads a count sent as a JSON number. Missing or odd values count as 0.
 int _countValue(Object? value) => value is num ? value.toInt() : 0;
 
@@ -402,4 +451,10 @@ class UserProfile {
 String? _optionalText(Object? value) {
   if (value is! String || value.trim().isEmpty) return null;
   return value;
+}
+
+// Blank or missing dates count as "not set".
+DateTime? _optionalDate(Object? value) {
+  final text = _optionalText(value);
+  return text == null ? null : DateTime.parse(text);
 }

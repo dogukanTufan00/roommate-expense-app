@@ -5,6 +5,7 @@ import 'package:roommate_expense_app/models.dart';
 import 'package:roommate_expense_app/screens/balances_tab.dart';
 import 'package:roommate_expense_app/screens/expenses_tab.dart';
 import 'package:roommate_expense_app/screens/members_tab.dart';
+import 'package:roommate_expense_app/screens/recurring_expenses_screen.dart';
 import 'package:roommate_expense_app/screens/split_defaults_screen.dart';
 import 'package:roommate_expense_app/utils/errors.dart';
 
@@ -19,7 +20,7 @@ class HouseholdScreen extends StatefulWidget {
 }
 
 // Menu actions in the app bar. A private enum keeps the menu code type-safe.
-enum _HouseholdMenuAction { splitDefaults, rename, delete }
+enum _HouseholdMenuAction { splitDefaults, recurring, rename, delete }
 
 class _HouseholdScreenState extends State<HouseholdScreen> {
   // Kept in the State so the title updates after a rename.
@@ -56,6 +57,15 @@ class _HouseholdScreenState extends State<HouseholdScreen> {
       context,
       MaterialPageRoute(
         builder: (_) => SplitDefaultsScreen(householdId: widget.household.id),
+      ),
+    );
+  }
+
+  void _openRecurring() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => RecurringExpensesScreen(householdId: widget.household.id),
       ),
     );
   }
@@ -114,6 +124,8 @@ class _HouseholdScreenState extends State<HouseholdScreen> {
                 switch (action) {
                   case _HouseholdMenuAction.splitDefaults:
                     _openSplitDefaults();
+                  case _HouseholdMenuAction.recurring:
+                    _openRecurring();
                   case _HouseholdMenuAction.rename:
                     _rename();
                   case _HouseholdMenuAction.delete:
@@ -128,6 +140,16 @@ class _HouseholdScreenState extends State<HouseholdScreen> {
                       const Icon(Icons.pie_chart_outline),
                       const SizedBox(width: 12),
                       Text(l10n.splitDefaults),
+                    ],
+                  ),
+                ),
+                PopupMenuItem(
+                  value: _HouseholdMenuAction.recurring,
+                  child: Row(
+                    children: [
+                      const Icon(Icons.autorenew),
+                      const SizedBox(width: 12),
+                      Text(l10n.recurringExpenses),
                     ],
                   ),
                 ),

@@ -691,4 +691,50 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get errorAttachmentTooLarge =>
       'This file is too large. The limit is 10 MB.';
+
+  @override
+  String get recurringExpenses => 'Recurring expenses';
+
+  @override
+  String get recurringExplainer =>
+      'These expenses are added automatically every month. To stop one, open it and turn off \'Repeats every month\'.';
+
+  @override
+  String get recurringEmpty =>
+      'No recurring expenses yet. Turn on \'Repeats every month\' for rent or a bill and it will show up here.';
+
+  @override
+  String recurringAutoHint(int day) {
+    return 'Added automatically on day $day of every month';
+  }
+
+  @override
+  String recurringDayInfo(int day) {
+    return 'Every month, on day $day';
+  }
+
+  @override
+  String recurringNextDate(String date) {
+    return 'Next: $date';
+  }
+
+  @override
+  String get recurringAutoTag => 'auto';
+
+  @override
+  String get recurringCheckNow => 'Check now';
+
+  @override
+  String recurringRunAdded(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count expenses added',
+      one: '1 expense added',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get recurringRunNone => 'Nothing to add right now';
 }
