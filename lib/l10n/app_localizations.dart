@@ -1339,6 +1339,240 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Nothing to add right now'**
   String get recurringRunNone;
+
+  /// No description provided for @tabStatement.
+  ///
+  /// In en, this message translates to:
+  /// **'Statement'**
+  String get tabStatement;
+
+  /// No description provided for @statementThisMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'This month'**
+  String get statementThisMonth;
+
+  /// No description provided for @statementPickRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a date range'**
+  String get statementPickRange;
+
+  /// No description provided for @statementPrevMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous month'**
+  String get statementPrevMonth;
+
+  /// No description provided for @statementNextMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Next month'**
+  String get statementNextMonth;
+
+  /// No description provided for @statementTotalSpent.
+  ///
+  /// In en, this message translates to:
+  /// **'Total spent'**
+  String get statementTotalSpent;
+
+  /// No description provided for @statementExpenseCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 expense} other{{count} expenses}}'**
+  String statementExpenseCount(int count);
+
+  /// No description provided for @statementPaymentCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 payment} other{{count} payments}}'**
+  String statementPaymentCount(int count);
+
+  /// No description provided for @statementExpenseNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of expenses'**
+  String get statementExpenseNumber;
+
+  /// No description provided for @statementPaymentNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of payments'**
+  String get statementPaymentNumber;
+
+  /// No description provided for @statementPaymentsTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Payments'**
+  String get statementPaymentsTotal;
+
+  /// No description provided for @statementDominantPayer.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} made {percent}% of this period\'s payments.'**
+  String statementDominantPayer(String name, String percent);
+
+  /// No description provided for @statementDominantPayerYou.
+  ///
+  /// In en, this message translates to:
+  /// **'You made {percent}% of this period\'s payments.'**
+  String statementDominantPayerYou(String percent);
+
+  /// No description provided for @statementWhoPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Who paid how much?'**
+  String get statementWhoPaid;
+
+  /// No description provided for @statementShareLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Share {share}'**
+  String statementShareLine(String share);
+
+  /// No description provided for @statementNetLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Difference {net}'**
+  String statementNetLine(String net);
+
+  /// No description provided for @statementLeftTag.
+  ///
+  /// In en, this message translates to:
+  /// **'(left)'**
+  String get statementLeftTag;
+
+  /// No description provided for @statementNoExpenses.
+  ///
+  /// In en, this message translates to:
+  /// **'No expenses in this period.'**
+  String get statementNoExpenses;
+
+  /// No description provided for @statementNoPayments.
+  ///
+  /// In en, this message translates to:
+  /// **'No payments in this period.'**
+  String get statementNoPayments;
+
+  /// No description provided for @statementCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Categories'**
+  String get statementCategories;
+
+  /// No description provided for @statementLastSixMonths.
+  ///
+  /// In en, this message translates to:
+  /// **'Last 6 months'**
+  String get statementLastSixMonths;
+
+  /// No description provided for @statementSharePdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Share as PDF'**
+  String get statementSharePdf;
+
+  /// No description provided for @statementPdfTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Evce — Account statement'**
+  String get statementPdfTitle;
+
+  /// No description provided for @statementPdfSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary'**
+  String get statementPdfSummary;
+
+  /// No description provided for @statementPdfPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Period: {period}'**
+  String statementPdfPeriod(String period);
+
+  /// No description provided for @statementPdfGenerated.
+  ///
+  /// In en, this message translates to:
+  /// **'Created on {date}'**
+  String statementPdfGenerated(String date);
+
+  /// No description provided for @statementPdfPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Page {page} of {total}'**
+  String statementPdfPage(int page, int total);
+
+  /// No description provided for @statementColMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Member'**
+  String get statementColMember;
+
+  /// No description provided for @statementColPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid'**
+  String get statementColPaid;
+
+  /// No description provided for @statementColShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get statementColShare;
+
+  /// No description provided for @statementColNet.
+  ///
+  /// In en, this message translates to:
+  /// **'Difference'**
+  String get statementColNet;
+
+  /// No description provided for @statementColFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get statementColFrom;
+
+  /// No description provided for @statementColTo.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get statementColTo;
+
+  /// No description provided for @statementColDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get statementColDate;
+
+  /// No description provided for @statementColDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get statementColDescription;
+
+  /// No description provided for @statementColCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get statementColCategory;
+
+  /// No description provided for @statementColPaidBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid by'**
+  String get statementColPaidBy;
+
+  /// No description provided for @statementColAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get statementColAmount;
+
+  /// No description provided for @statementColNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get statementColNote;
 }
 
 class _AppLocalizationsDelegate

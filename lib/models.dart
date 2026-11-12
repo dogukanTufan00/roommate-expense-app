@@ -416,6 +416,300 @@ class RecurringExpense {
   }
 }
 
+// ---- Statement (GET /api/households/{id}/statement) ----
+
+// One member's numbers for the statement period.
+class StatementMember {
+  final int userId;
+  final String name;
+  // False when the person has left the home since.
+  final bool active;
+  // What they paid for expenses.
+  final double paid;
+  // What they owe for their part of the expenses.
+  final double share;
+  // paid minus share. Positive: the home owes them. Negative: they owe the home.
+  final double net;
+  final double paymentsSent;
+  final double paymentsReceived;
+  // Their part of all money paid in the period, from 0 to 100.
+  final double paidPercent;
+
+  StatementMember({
+    required this.userId,
+    required this.name,
+    required this.active,
+    required this.paid,
+    required this.share,
+    required this.net,
+    required this.paymentsSent,
+    required this.paymentsReceived,
+    required this.paidPercent,
+  });
+
+  factory StatementMember.fromJson(Map<String, dynamic> json) {
+    return StatementMember(
+      userId: json['userId'] as int,
+      name: json['name'] as String,
+      active: json['active'] as bool? ?? true,
+      paid: _numValue(json['paid']),
+      share: _numValue(json['share']),
+      net: _numValue(json['net']),
+      paymentsSent: _numValue(json['paymentsSent']),
+      paymentsReceived: _numValue(json['paymentsReceived']),
+      paidPercent: _numValue(json['paidPercent']),
+    );
+  }
+}
+
+// The member who paid the most in the period. Null when nothing was paid.
+class DominantPayer {
+  final int userId;
+  final String name;
+  final double paidPercent;
+
+  DominantPayer({
+    required this.userId,
+    required this.name,
+    required this.paidPercent,
+  });
+
+  factory DominantPayer.fromJson(Map<String, dynamic> json) {
+    return DominantPayer(
+      userId: json['userId'] as int,
+      name: json['name'] as String,
+      paidPercent: _numValue(json['paidPercent']),
+    );
+  }
+}
+
+// The total of one category in the period.
+class StatementCategory {
+  // One of: RENT, UTILITIES, GROCERIES, OTHER
+  final String category;
+  final double total;
+  final int count;
+  // From 0 to 100.
+  final double percent;
+
+  StatementCategory({
+    required this.category,
+    required this.total,
+    required this.count,
+    required this.percent,
+  });
+
+  factory StatementCategory.fromJson(Map<String, dynamic> json) {
+    return StatementCategory(
+      category: json['category'] as String,
+      total: _numValue(json['total']),
+      count: _countValue(json['count']),
+      percent: _numValue(json['percent']),
+    );
+  }
+}
+
+// How much one member paid in one month of the trend.
+class TrendMemberPaid {
+  final int userId;
+  final String name;
+  final double paid;
+
+  TrendMemberPaid({required this.userId, required this.name, required this.paid});
+
+  factory TrendMemberPaid.fromJson(Map<String, dynamic> json) {
+    return TrendMemberPaid(
+      userId: json['userId'] as int,
+      name: json['name'] as String,
+      paid: _numValue(json['paid']),
+    );
+  }
+}
+
+// One month of the 6 month trend. month is the first day of that month.
+class TrendMonth {
+  final DateTime month;
+  final double total;
+  final List<TrendMemberPaid> perMember;
+
+  TrendMonth({required this.month, required this.total, required this.perMember});
+
+  factory TrendMonth.fromJson(Map<String, dynamic> json) {
+    final rawMembers = json['perMember'] as List<dynamic>? ?? const [];
+    return TrendMonth(
+      month: DateTime.parse(json['month'] as String),
+      total: _numValue(json['total']),
+      perMember: [
+        for (final item in rawMembers)
+          TrendMemberPaid.fromJson(item as Map<String, dynamic>),
+      ],
+    );
+  }
+}
+
+// One person's owed part of a statement expense.
+class StatementShare {
+  final String name;
+  final double owedAmount;
+
+  StatementShare({required this.name, required this.owedAmount});
+
+  factory StatementShare.fromJson(Map<String, dynamic> json) {
+    return StatementShare(
+      name: json['name'] as String,
+      owedAmount: _numValue(json['owedAmount']),
+    );
+  }
+}
+
+// An expense listed in the statement.
+class StatementExpense {
+  final int id;
+  final DateTime date;
+  final String? description;
+  // One of: RENT, UTILITIES, GROCERIES, OTHER
+  final String category;
+  final double amount;
+  final String paidByName;
+  // One of: EQUAL, PERCENT, AMOUNT
+  final String splitType;
+  final List<StatementShare> shares;
+
+  StatementExpense({
+    required this.id,
+    required this.date,
+    required this.description,
+    required this.category,
+    required this.amount,
+    required this.paidByName,
+    required this.splitType,
+    required this.shares,
+  });
+
+  factory StatementExpense.fromJson(Map<String, dynamic> json) {
+    final rawShares = json['shares'] as List<dynamic>? ?? const [];
+    return StatementExpense(
+      id: json['id'] as int,
+      date: DateTime.parse(json['date'] as String),
+      description: _optionalText(json['description']),
+      category: json['category'] as String,
+      amount: _numValue(json['amount']),
+      paidByName: json['paidByName'] as String,
+      splitType: json['splitType'] as String? ?? 'EQUAL',
+      shares: [
+        for (final item in rawShares)
+          StatementShare.fromJson(item as Map<String, dynamic>),
+      ],
+    );
+  }
+}
+
+// A payment listed in the statement. paidAt is converted to the phone's time zone.
+class StatementPayment {
+  final int id;
+  final DateTime paidAt;
+  final String fromName;
+  final String toName;
+  final double amount;
+  final String? note;
+
+  StatementPayment({
+    required this.id,
+    required this.paidAt,
+    required this.fromName,
+    required this.toName,
+    required this.amount,
+    required this.note,
+  });
+
+  factory StatementPayment.fromJson(Map<String, dynamic> json) {
+    return StatementPayment(
+      id: json['id'] as int,
+      paidAt: DateTime.parse(json['paidAt'] as String).toLocal(),
+      fromName: json['fromName'] as String,
+      toName: json['toName'] as String,
+      amount: _numValue(json['amount']),
+      note: _optionalText(json['note']),
+    );
+  }
+}
+
+// The whole statement of one home for one period. from and to are both inclusive.
+class Statement {
+  final DateTime from;
+  final DateTime to;
+  final String householdName;
+  final double totalExpenses;
+  final int expenseCount;
+  final double totalPayments;
+  final int paymentCount;
+  final List<StatementMember> members;
+  final DominantPayer? dominantPayer;
+  final List<StatementCategory> categories;
+  // Six months, oldest first.
+  final List<TrendMonth> trend;
+  final List<StatementExpense> expenses;
+  final List<StatementPayment> payments;
+
+  Statement({
+    required this.from,
+    required this.to,
+    required this.householdName,
+    required this.totalExpenses,
+    required this.expenseCount,
+    required this.totalPayments,
+    required this.paymentCount,
+    required this.members,
+    required this.dominantPayer,
+    required this.categories,
+    required this.trend,
+    required this.expenses,
+    required this.payments,
+  });
+
+  factory Statement.fromJson(Map<String, dynamic> json) {
+    final dominant = json['dominantPayer'];
+    return Statement(
+      from: DateTime.parse(json['from'] as String),
+      to: DateTime.parse(json['to'] as String),
+      householdName: json['householdName'] as String,
+      totalExpenses: _numValue(json['totalExpenses']),
+      expenseCount: _countValue(json['expenseCount']),
+      totalPayments: _numValue(json['totalPayments']),
+      paymentCount: _countValue(json['paymentCount']),
+      members: [
+        for (final item in _list(json['members']))
+          StatementMember.fromJson(item),
+      ],
+      dominantPayer: dominant is Map<String, dynamic>
+          ? DominantPayer.fromJson(dominant)
+          : null,
+      categories: [
+        for (final item in _list(json['categories']))
+          StatementCategory.fromJson(item),
+      ],
+      trend: [
+        for (final item in _list(json['trend'])) TrendMonth.fromJson(item),
+      ],
+      expenses: [
+        for (final item in _list(json['expenses'])) StatementExpense.fromJson(item),
+      ],
+      payments: [
+        for (final item in _list(json['payments'])) StatementPayment.fromJson(item),
+      ],
+    );
+  }
+
+  // Turns a JSON array into maps. A missing array counts as empty.
+  static List<Map<String, dynamic>> _list(Object? value) {
+    final items = value as List<dynamic>? ?? const [];
+    return [for (final item in items) item as Map<String, dynamic>];
+  }
+}
+
+// Reads a JSON number as a double. Missing or odd values count as 0.
+double _numValue(Object? value) => value is num ? value.toDouble() : 0;
+
 // Reads a count sent as a JSON number. Missing or odd values count as 0.
 int _countValue(Object? value) => value is num ? value.toInt() : 0;
 

@@ -392,5 +392,91 @@
       "count": {"type": "int"}
     }
   },
-  "recurringRunNone": "Nothing to add right now"
+  "recurringRunNone": "Nothing to add right now",
+  "tabStatement": "Statement",
+  "statementThisMonth": "This month",
+  "statementPickRange": "Choose a date range",
+  "statementPrevMonth": "Previous month",
+  "statementNextMonth": "Next month",
+  "statementTotalSpent": "Total spent",
+  "statementExpenseCount": "{count, plural, =1{1 expense} other{{count} expenses}}",
+  "@statementExpenseCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "statementPaymentCount": "{count, plural, =1{1 payment} other{{count} payments}}",
+  "@statementPaymentCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "statementExpenseNumber": "Number of expenses",
+  "statementPaymentNumber": "Number of payments",
+  "statementPaymentsTotal": "Payments",
+  "statementDominantPayer": "{name} made {percent}% of this period's payments.",
+  "@statementDominantPayer": {
+    "placeholders": {
+      "name": {"type": "String"},
+      "percent": {"type": "String"}
+    }
+  },
+  "statementDominantPayerYou": "You made {percent}% of this period's payments.",
+  "@statementDominantPayerYou": {
+    "placeholders": {
+      "percent": {"type": "String"}
+    }
+  },
+  "statementWhoPaid": "Who paid how much?",
+  "statementShareLine": "Share {share}",
+  "@statementShareLine": {
+    "placeholders": {
+      "share": {"type": "String"}
+    }
+  },
+  "statementNetLine": "Difference {net}",
+  "@statementNetLine": {
+    "placeholders": {
+      "net": {"type": "String"}
+    }
+  },
+  "statementLeftTag": "(left)",
+  "statementNoExpenses": "No expenses in this period.",
+  "statementNoPayments": "No payments in this period.",
+  "statementCategories": "Categories",
+  "statementLastSixMonths": "Last 6 months",
+  "statementSharePdf": "Share as PDF",
+  "statementPdfTitle": "Evce — Account statement",
+  "statementPdfSummary": "Summary",
+  "statementPdfPeriod": "Period: {period}",
+  "@statementPdfPeriod": {
+    "placeholders": {
+      "period": {"type": "String"}
+    }
+  },
+  "statementPdfGenerated": "Created on {date}",
+  "@statementPdfGenerated": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "statementPdfPage": "Page {page} of {total}",
+  "@statementPdfPage": {
+    "placeholders": {
+      "page": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "statementColMember": "Member",
+  "statementColPaid": "Paid",
+  "statementColShare": "Share",
+  "statementColNet": "Difference",
+  "statementColFrom": "From",
+  "statementColTo": "To",
+  "statementColDate": "Date",
+  "statementColDescription": "Description",
+  "statementColCategory": "Category",
+  "statementColPaidBy": "Paid by",
+  "statementColAmount": "Amount",
+  "statementColNote": "Note"
 }

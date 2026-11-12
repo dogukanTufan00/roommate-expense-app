@@ -725,4 +725,139 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get recurringRunNone => 'Eklenecek gider yok';
+
+  @override
+  String get tabStatement => 'Döküm';
+
+  @override
+  String get statementThisMonth => 'Bu ay';
+
+  @override
+  String get statementPickRange => 'Tarih aralığı seç';
+
+  @override
+  String get statementPrevMonth => 'Önceki ay';
+
+  @override
+  String get statementNextMonth => 'Sonraki ay';
+
+  @override
+  String get statementTotalSpent => 'Toplam harcama';
+
+  @override
+  String statementExpenseCount(int count) {
+    return '$count gider';
+  }
+
+  @override
+  String statementPaymentCount(int count) {
+    return '$count ödeme';
+  }
+
+  @override
+  String get statementExpenseNumber => 'Gider sayısı';
+
+  @override
+  String get statementPaymentNumber => 'Ödeme sayısı';
+
+  @override
+  String get statementPaymentsTotal => 'Ödemeler';
+
+  @override
+  String statementDominantPayer(String name, String percent) {
+    return 'Bu dönem ödemelerin %$percent\'ünü $name yaptı.';
+  }
+
+  @override
+  String statementDominantPayerYou(String percent) {
+    return 'Bu dönem ödemelerin %$percent\'ünü sen yaptın.';
+  }
+
+  @override
+  String get statementWhoPaid => 'Kim ne kadar ödedi?';
+
+  @override
+  String statementShareLine(String share) {
+    return 'Payı $share';
+  }
+
+  @override
+  String statementNetLine(String net) {
+    return 'Fark $net';
+  }
+
+  @override
+  String get statementLeftTag => '(ayrıldı)';
+
+  @override
+  String get statementNoExpenses => 'Bu dönemde gider yok.';
+
+  @override
+  String get statementNoPayments => 'Bu dönemde ödeme yok.';
+
+  @override
+  String get statementCategories => 'Kategoriler';
+
+  @override
+  String get statementLastSixMonths => 'Son 6 ay';
+
+  @override
+  String get statementSharePdf => 'PDF olarak paylaş';
+
+  @override
+  String get statementPdfTitle => 'Evce — Hesap Dökümü';
+
+  @override
+  String get statementPdfSummary => 'Özet';
+
+  @override
+  String statementPdfPeriod(String period) {
+    return 'Dönem: $period';
+  }
+
+  @override
+  String statementPdfGenerated(String date) {
+    return 'Oluşturulma: $date';
+  }
+
+  @override
+  String statementPdfPage(int page, int total) {
+    return 'Sayfa $page / $total';
+  }
+
+  @override
+  String get statementColMember => 'Üye';
+
+  @override
+  String get statementColPaid => 'Ödedi';
+
+  @override
+  String get statementColShare => 'Payı';
+
+  @override
+  String get statementColNet => 'Fark';
+
+  @override
+  String get statementColFrom => 'Kimden';
+
+  @override
+  String get statementColTo => 'Kime';
+
+  @override
+  String get statementColDate => 'Tarih';
+
+  @override
+  String get statementColDescription => 'Açıklama';
+
+  @override
+  String get statementColCategory => 'Kategori';
+
+  @override
+  String get statementColPaidBy => 'Ödeyen';
+
+  @override
+  String get statementColAmount => 'Tutar';
+
+  @override
+  String get statementColNote => 'Not';
 }

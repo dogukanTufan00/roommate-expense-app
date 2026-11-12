@@ -737,4 +737,151 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get recurringRunNone => 'Nothing to add right now';
+
+  @override
+  String get tabStatement => 'Statement';
+
+  @override
+  String get statementThisMonth => 'This month';
+
+  @override
+  String get statementPickRange => 'Choose a date range';
+
+  @override
+  String get statementPrevMonth => 'Previous month';
+
+  @override
+  String get statementNextMonth => 'Next month';
+
+  @override
+  String get statementTotalSpent => 'Total spent';
+
+  @override
+  String statementExpenseCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count expenses',
+      one: '1 expense',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String statementPaymentCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count payments',
+      one: '1 payment',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get statementExpenseNumber => 'Number of expenses';
+
+  @override
+  String get statementPaymentNumber => 'Number of payments';
+
+  @override
+  String get statementPaymentsTotal => 'Payments';
+
+  @override
+  String statementDominantPayer(String name, String percent) {
+    return '$name made $percent% of this period\'s payments.';
+  }
+
+  @override
+  String statementDominantPayerYou(String percent) {
+    return 'You made $percent% of this period\'s payments.';
+  }
+
+  @override
+  String get statementWhoPaid => 'Who paid how much?';
+
+  @override
+  String statementShareLine(String share) {
+    return 'Share $share';
+  }
+
+  @override
+  String statementNetLine(String net) {
+    return 'Difference $net';
+  }
+
+  @override
+  String get statementLeftTag => '(left)';
+
+  @override
+  String get statementNoExpenses => 'No expenses in this period.';
+
+  @override
+  String get statementNoPayments => 'No payments in this period.';
+
+  @override
+  String get statementCategories => 'Categories';
+
+  @override
+  String get statementLastSixMonths => 'Last 6 months';
+
+  @override
+  String get statementSharePdf => 'Share as PDF';
+
+  @override
+  String get statementPdfTitle => 'Evce — Account statement';
+
+  @override
+  String get statementPdfSummary => 'Summary';
+
+  @override
+  String statementPdfPeriod(String period) {
+    return 'Period: $period';
+  }
+
+  @override
+  String statementPdfGenerated(String date) {
+    return 'Created on $date';
+  }
+
+  @override
+  String statementPdfPage(int page, int total) {
+    return 'Page $page of $total';
+  }
+
+  @override
+  String get statementColMember => 'Member';
+
+  @override
+  String get statementColPaid => 'Paid';
+
+  @override
+  String get statementColShare => 'Share';
+
+  @override
+  String get statementColNet => 'Difference';
+
+  @override
+  String get statementColFrom => 'From';
+
+  @override
+  String get statementColTo => 'To';
+
+  @override
+  String get statementColDate => 'Date';
+
+  @override
+  String get statementColDescription => 'Description';
+
+  @override
+  String get statementColCategory => 'Category';
+
+  @override
+  String get statementColPaidBy => 'Paid by';
+
+  @override
+  String get statementColAmount => 'Amount';
+
+  @override
+  String get statementColNote => 'Note';
 }

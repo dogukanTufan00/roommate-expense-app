@@ -43,6 +43,8 @@ dependencies:
   file_picker: ^13.3.3
   open_filex: ^5.0.0
   path_provider: ^2.1.6
+  pdf: ^3.13.1
+  printing: ^5.15.1
 
 dev_dependencies:
   flutter_test:
@@ -85,6 +87,9 @@ flutter:
   # Illustrations and other images live here.
   assets:
     - assets/images/
+    # The PDF statement loads these with rootBundle, because the PDF library needs the font bytes.
+    - assets/fonts/Nunito-Regular.ttf
+    - assets/fonts/Nunito-Bold.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

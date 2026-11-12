@@ -293,5 +293,91 @@
       "count": {"type": "int"}
     }
   },
-  "recurringRunNone": "Eklenecek gider yok"
+  "recurringRunNone": "Eklenecek gider yok",
+  "tabStatement": "Döküm",
+  "statementThisMonth": "Bu ay",
+  "statementPickRange": "Tarih aralığı seç",
+  "statementPrevMonth": "Önceki ay",
+  "statementNextMonth": "Sonraki ay",
+  "statementTotalSpent": "Toplam harcama",
+  "statementExpenseCount": "{count} gider",
+  "@statementExpenseCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "statementPaymentCount": "{count} ödeme",
+  "@statementPaymentCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "statementExpenseNumber": "Gider sayısı",
+  "statementPaymentNumber": "Ödeme sayısı",
+  "statementPaymentsTotal": "Ödemeler",
+  "statementDominantPayer": "Bu dönem ödemelerin %{percent}'ünü {name} yaptı.",
+  "@statementDominantPayer": {
+    "placeholders": {
+      "name": {"type": "String"},
+      "percent": {"type": "String"}
+    }
+  },
+  "statementDominantPayerYou": "Bu dönem ödemelerin %{percent}'ünü sen yaptın.",
+  "@statementDominantPayerYou": {
+    "placeholders": {
+      "percent": {"type": "String"}
+    }
+  },
+  "statementWhoPaid": "Kim ne kadar ödedi?",
+  "statementShareLine": "Payı {share}",
+  "@statementShareLine": {
+    "placeholders": {
+      "share": {"type": "String"}
+    }
+  },
+  "statementNetLine": "Fark {net}",
+  "@statementNetLine": {
+    "placeholders": {
+      "net": {"type": "String"}
+    }
+  },
+  "statementLeftTag": "(ayrıldı)",
+  "statementNoExpenses": "Bu dönemde gider yok.",
+  "statementNoPayments": "Bu dönemde ödeme yok.",
+  "statementCategories": "Kategoriler",
+  "statementLastSixMonths": "Son 6 ay",
+  "statementSharePdf": "PDF olarak paylaş",
+  "statementPdfTitle": "Evce — Hesap Dökümü",
+  "statementPdfSummary": "Özet",
+  "statementPdfPeriod": "Dönem: {period}",
+  "@statementPdfPeriod": {
+    "placeholders": {
+      "period": {"type": "String"}
+    }
+  },
+  "statementPdfGenerated": "Oluşturulma: {date}",
+  "@statementPdfGenerated": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "statementPdfPage": "Sayfa {page} / {total}",
+  "@statementPdfPage": {
+    "placeholders": {
+      "page": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "statementColMember": "Üye",
+  "statementColPaid": "Ödedi",
+  "statementColShare": "Payı",
+  "statementColNet": "Fark",
+  "statementColFrom": "Kimden",
+  "statementColTo": "Kime",
+  "statementColDate": "Tarih",
+  "statementColDescription": "Açıklama",
+  "statementColCategory": "Kategori",
+  "statementColPaidBy": "Ödeyen",
+  "statementColAmount": "Tutar",
+  "statementColNote": "Not"
 }

@@ -7,9 +7,10 @@ import 'package:roommate_expense_app/screens/expenses_tab.dart';
 import 'package:roommate_expense_app/screens/members_tab.dart';
 import 'package:roommate_expense_app/screens/recurring_expenses_screen.dart';
 import 'package:roommate_expense_app/screens/split_defaults_screen.dart';
+import 'package:roommate_expense_app/screens/statement_tab.dart';
 import 'package:roommate_expense_app/utils/errors.dart';
 
-// One home, with three tabs: expenses, balances and members.
+// One home, with four tabs: expenses, balances, statement and members.
 class HouseholdScreen extends StatefulWidget {
   const HouseholdScreen({super.key, required this.household});
 
@@ -114,7 +115,7 @@ class _HouseholdScreenState extends State<HouseholdScreen> {
 
     // DefaultTabController gives the TabBar and TabBarView one shared tab index.
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           title: Text(_name),
@@ -183,6 +184,7 @@ class _HouseholdScreenState extends State<HouseholdScreen> {
                 icon: const Icon(Icons.account_balance_wallet),
                 text: l10n.tabBalances,
               ),
+              Tab(icon: const Icon(Icons.insights_rounded), text: l10n.tabStatement),
               Tab(icon: const Icon(Icons.group), text: l10n.tabMembers),
             ],
           ),
@@ -192,6 +194,7 @@ class _HouseholdScreenState extends State<HouseholdScreen> {
           children: [
             ExpensesTab(householdId: id),
             BalancesTab(householdId: id),
+            StatementTab(householdId: id),
             MembersTab(householdId: id),
           ],
         ),

@@ -9,6 +9,9 @@ import 'package:roommate_expense_app/session.dart';
 // for example "2026-11-10T12:00:00".
 final DateFormat _apiDateFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
+// Plain dates for query parameters, for example "2026-11-01".
+final DateFormat _dateOnlyFormat = DateFormat('yyyy-MM-dd');
+
 // Rounds money to 2 decimals, for example 12.345 -> 12.35.
 double _round2(double value) => (value * 100).round() / 100;
 
@@ -386,6 +389,25 @@ class Api {
   // The uploader, the payer or the sender, or an admin may delete. Otherwise 403.
   static Future<void> deleteAttachment(int householdId, int attachmentId) async {
     await ApiClient.delete('/api/households/$householdId/attachments/$attachmentId');
+  }
+
+  // ---- Statement ----
+
+  // from and to are both inclusive and are sent as plain dates. Leave both null for the current month.
+  static Future<Statement> getStatement(
+    int householdId, {
+    DateTime? from,
+    DateTime? to,
+  }) async {
+    final query = [
+      if (from != null) 'from=${_dateOnlyFormat.format(from)}',
+      if (to != null) 'to=${_dateOnlyFormat.format(to)}',
+    ];
+    final suffix = query.isEmpty ? '' : '?${query.join('&')}';
+    final data = await ApiClient.get(
+      '/api/households/$householdId/statement$suffix',
+    );
+    return Statement.fromJson(data as Map<String, dynamic>);
   }
 
   // ---- Profile ----
