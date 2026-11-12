@@ -148,6 +148,8 @@ class Expense {
   final String splitType;
   // Who shares the expense and how much each person owes. Empty if the API sent none.
   final List<ExpenseShare> shares;
+  // How many receipts or documents are attached. 0 when the API does not send it.
+  final int attachmentCount;
 
   Expense({
     required this.id,
@@ -162,6 +164,7 @@ class Expense {
     required this.createdAt,
     this.splitType = 'EQUAL',
     this.shares = const [],
+    this.attachmentCount = 0,
   });
 
   factory Expense.fromJson(Map<String, dynamic> json) {
@@ -182,6 +185,7 @@ class Expense {
         for (final item in rawShares)
           ExpenseShare.fromJson(item as Map<String, dynamic>),
       ],
+      attachmentCount: _countValue(json['attachmentCount']),
     );
   }
 }
@@ -288,6 +292,8 @@ class Payment {
   final DateTime paidAt;
   // Optional note, up to 200 characters. Null when there is none.
   final String? note;
+  // How many receipts (dekont) are attached. 0 when the API does not send it.
+  final int attachmentCount;
 
   Payment({
     required this.id,
@@ -299,6 +305,7 @@ class Payment {
     required this.amount,
     required this.paidAt,
     this.note,
+    this.attachmentCount = 0,
   });
 
   factory Payment.fromJson(Map<String, dynamic> json) {
@@ -312,9 +319,56 @@ class Payment {
       amount: (json['amount'] as num).toDouble(),
       paidAt: DateTime.parse(json['paidAt'] as String),
       note: _optionalText(json['note']),
+      attachmentCount: _countValue(json['attachmentCount']),
     );
   }
 }
+
+// A receipt or document attached to an expense or a payment.
+class Attachment {
+  final int id;
+  final int? expenseId;
+  final int? paymentId;
+  final String originalFilename;
+  // The file type, for example "image/jpeg" or "application/pdf".
+  final String contentType;
+  final int sizeBytes;
+  final int uploadedById;
+  final String uploadedByName;
+  final DateTime createdAt;
+
+  Attachment({
+    required this.id,
+    required this.expenseId,
+    required this.paymentId,
+    required this.originalFilename,
+    required this.contentType,
+    required this.sizeBytes,
+    required this.uploadedById,
+    required this.uploadedByName,
+    required this.createdAt,
+  });
+
+  bool get isImage => contentType.startsWith('image/');
+  bool get isPdf => contentType == 'application/pdf';
+
+  factory Attachment.fromJson(Map<String, dynamic> json) {
+    return Attachment(
+      id: json['id'] as int,
+      expenseId: json['expenseId'] as int?,
+      paymentId: json['paymentId'] as int?,
+      originalFilename: json['originalFilename'] as String,
+      contentType: json['contentType'] as String,
+      sizeBytes: (json['sizeBytes'] as num).toInt(),
+      uploadedById: json['uploadedById'] as int,
+      uploadedByName: json['uploadedByName'] as String,
+      createdAt: DateTime.parse(json['createdAt'] as String),
+    );
+  }
+}
+
+// Reads a count sent as a JSON number. Missing or odd values count as 0.
+int _countValue(Object? value) => value is num ? value.toInt() : 0;
 
 // The logged in user's own profile, from GET /api/users/me.
 class UserProfile {

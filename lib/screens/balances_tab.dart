@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:roommate_expense_app/api/api.dart';
+import 'package:roommate_expense_app/api/api_client.dart';
 import 'package:roommate_expense_app/l10n/app_localizations.dart';
 import 'package:roommate_expense_app/models.dart';
 import 'package:roommate_expense_app/session.dart';
@@ -9,6 +10,7 @@ import 'package:roommate_expense_app/utils/errors.dart';
 import 'package:roommate_expense_app/utils/format.dart';
 import 'package:roommate_expense_app/utils/iban.dart';
 import 'package:roommate_expense_app/utils/split.dart';
+import 'package:roommate_expense_app/widgets/attachments_section.dart';
 import 'package:roommate_expense_app/widgets/illustration.dart';
 
 // The "Balances" tab: who owes whom, the suggested payments and the payment history.
@@ -112,9 +114,8 @@ class _BalancesTabState extends State<BalancesTab> {
   }
 
   void _showError(Object e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(errorMessage(context, e))),
-    );
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(errorMessage(context, e))));
   }
 
   // Shows a yes/no dialog. Returns true only if the user taps the confirm button.
@@ -154,8 +155,9 @@ class _BalancesTabState extends State<BalancesTab> {
     );
     if (edit == null || !mounted) return;
 
+    final Payment created;
     try {
-      await Api.createPayment(
+      created = await Api.createPayment(
         widget.householdId,
         s.fromUserId,
         s.toUserId,
@@ -167,6 +169,34 @@ class _BalancesTabState extends State<BalancesTab> {
       _showError(e);
       return;
     }
+    // Upload the receipts picked in the dialog. One failed upload must not undo the payment,
+    // so failures are only counted and reported.
+    var failed = 0;
+    for (final file in edit.files) {
+      try {
+        await Api.uploadPaymentAttachment(widget.householdId, created.id, file);
+      } catch (_) {
+        failed++;
+      }
+    }
+    if (!mounted) return;
+    final l10n = AppLocalizations.of(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          failed == 0
+              ? l10n.paymentRecorded
+              : l10n.paymentAttachmentsUploadFailed(failed),
+        ),
+        // If nothing was attached (or something failed), offer it once more right here.
+        action: edit.files.isEmpty || failed > 0
+            ? SnackBarAction(
+                label: l10n.attachReceipt,
+                onPressed: () => _openPaymentAttachments(created),
+              )
+            : null,
+      ),
+    );
     // The payment changes the balances, so reload everything.
     await _refresh();
   }
@@ -192,6 +222,99 @@ class _BalancesTabState extends State<BalancesTab> {
   // The original sender of a payment, or an admin, may edit or delete it.
   bool _canEditPayment(Payment p) => p.fromUserId == _myUserId || _myIsAdmin;
 
+  // The uploader, the sender of the payment, or an admin may delete one of its receipts.
+  bool _canDeleteReceipt(Payment p, Attachment attachment) {
+    return attachment.uploadedById == _myUserId ||
+        p.fromUserId == _myUserId ||
+        _myIsAdmin;
+  }
+
+  // Details sheet of one payment: who paid whom, amount, date, note, the receipts (dekont), and
+  // Edit / Delete for the sender or an admin. Any member may view and add receipts.
+  // The rows are refreshed when the sheet closes (counts, or after an edit/delete).
+  Future<void> _openPaymentAttachments(Payment p) async {
+    final l10n = AppLocalizations.of(context);
+    final canEdit = _canEditPayment(p);
+    final note = p.note;
+    // Edit and delete open their own dialogs, so the sheet closes first and says which one.
+    final action = await showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (sheetContext) => SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                l10n.paymentFromTo(p.fromUserName, p.toUserName),
+                style: const TextStyle(fontWeight: FontWeight.w800),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                formatMoney(context, p.amount),
+                style: const TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              Text(
+                formatDate(context, p.paidAt),
+                style: const TextStyle(color: AppColors.muted),
+              ),
+              if (note != null) ...[
+                const SizedBox(height: 8),
+                Text(note, style: const TextStyle(fontStyle: FontStyle.italic)),
+              ],
+              const SizedBox(height: 16),
+              AttachmentsSection(
+                householdId: widget.householdId,
+                paymentId: p.id,
+                canDelete: (attachment) => _canDeleteReceipt(p, attachment),
+              ),
+              if (canEdit) ...[
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        icon: const Icon(Icons.edit_outlined),
+                        label: Text(l10n.edit),
+                        onPressed: () => Navigator.pop(sheetContext, 'edit'),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        icon: const Icon(Icons.delete_outline),
+                        label: Text(l10n.delete),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColors.owes,
+                          side: const BorderSide(color: AppColors.owes),
+                        ),
+                        onPressed: () => Navigator.pop(sheetContext, 'delete'),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+    if (!mounted) return;
+    if (action == 'edit') {
+      await _editPayment(p);
+    } else if (action == 'delete') {
+      await _deletePayment(p);
+    } else {
+      await _refresh();
+    }
+  }
+
   Future<void> _editPayment(Payment p) async {
     final l10n = AppLocalizations.of(context);
     // The settlements already include this payment, so its old amount is added back.
@@ -199,10 +322,8 @@ class _BalancesTabState extends State<BalancesTab> {
         _owedHundredths(p.fromUserId, p.toUserId) + toHundredths(p.amount);
     final edit = await showDialog<_PaymentEdit>(
       context: context,
-      builder: (_) => _EditPaymentDialog(
-        payment: p,
-        owedHundredths: owedForEdit,
-      ),
+      builder: (_) =>
+          _EditPaymentDialog(payment: p, owedHundredths: owedForEdit),
     );
     if (edit == null || !mounted) return;
 
@@ -221,9 +342,8 @@ class _BalancesTabState extends State<BalancesTab> {
       return;
     }
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(l10n.paymentUpdated)),
-    );
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(l10n.paymentUpdated)));
     await _refresh();
   }
 
@@ -271,10 +391,7 @@ class _BalancesTabState extends State<BalancesTab> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
-              FilledButton(
-                onPressed: _retry,
-                child: Text(l10n.retry),
-              ),
+              FilledButton(onPressed: _retry, child: Text(l10n.retry)),
             ],
           ),
         ),
@@ -482,9 +599,8 @@ class _BalancesTabState extends State<BalancesTab> {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+          style: Theme.of(context).textTheme.bodySmall
+              ?.copyWith(fontWeight: FontWeight.w700),
         ),
       ],
     );
@@ -556,7 +672,9 @@ class _BalancesTabState extends State<BalancesTab> {
               Text(
                 l10n.addIbanHint,
                 textAlign: TextAlign.center,
-                style: theme.textTheme.bodySmall?.copyWith(color: AppColors.muted),
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: AppColors.muted,
+                ),
               ),
             const SizedBox(height: 8),
             Align(
@@ -574,46 +692,70 @@ class _BalancesTabState extends State<BalancesTab> {
 
   Widget _paymentCard(Payment p, AppLocalizations l10n) {
     final theme = Theme.of(context);
-    final canEdit = _canEditPayment(p);
     final note = p.note;
 
+    final muted = theme.textTheme.bodySmall?.copyWith(color: AppColors.muted);
+
+    // A quiet row: who paid whom and the amount on top, date / note / receipt count below.
+    // The actions (receipts, edit, delete) live in the details sheet that opens on tap; three
+    // icon buttons in the row left too little room and the names wrapped letter by letter.
     return Card(
-      child: ListTile(
-        leading: _personAvatar(p.fromUserId, p.fromUserName),
-        title: Text('${p.fromUserName} → ${p.toUserName}'),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(formatDate(context, p.paidAt)),
-            if (note != null)
-              Text(
-                note,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: AppColors.muted,
-                  fontStyle: FontStyle.italic,
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () => _openPaymentAttachments(p),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+          child: Row(
+            children: [
+              _personAvatar(p.fromUserId, p.fromUserName),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${p.fromUserName} → ${p.toUserName}',
+                      style: theme.textTheme.titleMedium,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 2),
+                    Row(
+                      children: [
+                        Text(formatDate(context, p.paidAt), style: muted),
+                        if (p.attachmentCount > 0) ...[
+                          const SizedBox(width: 8),
+                          const Icon(
+                            Icons.attach_file_rounded,
+                            size: 14,
+                            color: AppColors.muted,
+                          ),
+                          Text(
+                            '${p.attachmentCount}',
+                            style: muted?.copyWith(fontWeight: FontWeight.w700),
+                          ),
+                        ],
+                      ],
+                    ),
+                    if (note != null)
+                      Text(
+                        note,
+                        style: muted?.copyWith(fontStyle: FontStyle.italic),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                  ],
                 ),
               ),
-          ],
-        ),
-        onTap: canEdit ? () => _editPayment(p) : null,
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(formatMoney(context, p.amount)),
-            if (canEdit) ...[
-              IconButton(
-                tooltip: l10n.edit,
-                icon: const Icon(Icons.edit_outlined),
-                onPressed: () => _editPayment(p),
-              ),
-              IconButton(
-                tooltip: l10n.delete,
-                icon: const Icon(Icons.delete_outline),
-                onPressed: () => _deletePayment(p),
+              const SizedBox(width: 8),
+              Text(
+                formatMoney(context, p.amount),
+                style: theme.textTheme.titleSmall?.copyWith(
+                  color: AppColors.ink,
+                ),
               ),
             ],
-          ],
+          ),
         ),
       ),
     );
@@ -667,15 +809,25 @@ Future<bool> _confirmOverpayment(
 
 // The values the edit dialog returns. The note is null when it is empty.
 class _PaymentEdit {
-  const _PaymentEdit({required this.amount, required this.note});
+  const _PaymentEdit({
+    required this.amount,
+    required this.note,
+    this.files = const [],
+  });
 
   final double amount;
   final String? note;
+  // Receipts (dekont) picked in the "record payment" dialog. They are uploaded right after the
+  // payment is created, because a file needs the new payment's id.
+  final List<UploadFile> files;
 }
 
 // Edits the amount and the note of a payment. Who paid whom stays fixed.
 class _EditPaymentDialog extends StatefulWidget {
-  const _EditPaymentDialog({required this.payment, required this.owedHundredths});
+  const _EditPaymentDialog({
+    required this.payment,
+    required this.owedHundredths,
+  });
 
   final Payment payment;
   // What the sender may still owe the receiver, in hundredths. Includes this payment's old amount.
@@ -718,9 +870,8 @@ class _EditPaymentDialogState extends State<_EditPaymentDialog> {
       if (!ok || !mounted) return;
     }
     final note = _noteController.text.trim();
-    Navigator.of(context).pop(
-      _PaymentEdit(amount: amount, note: note.isEmpty ? null : note),
-    );
+    Navigator.of(context)
+        .pop(_PaymentEdit(amount: amount, note: note.isEmpty ? null : note));
   }
 
   @override
@@ -746,7 +897,9 @@ class _EditPaymentDialogState extends State<_EditPaymentDialog> {
             const SizedBox(height: 16),
             TextFormField(
               controller: _amountController,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
               decoration: InputDecoration(
                 labelText: l10n.amount,
                 helperText: widget.owedHundredths > 0
@@ -757,7 +910,9 @@ class _EditPaymentDialogState extends State<_EditPaymentDialog> {
               ),
               validator: (value) {
                 final amount = parseDecimal(value ?? '');
-                if (amount == null || amount <= 0 || !hasAtMostTwoDecimals(amount)) {
+                if (amount == null ||
+                    amount <= 0 ||
+                    !hasAtMostTwoDecimals(amount)) {
                   return l10n.invalidAmount;
                 }
                 return null;
@@ -780,10 +935,7 @@ class _EditPaymentDialogState extends State<_EditPaymentDialog> {
           onPressed: () => Navigator.of(context).pop(),
           child: Text(l10n.cancel),
         ),
-        FilledButton(
-          onPressed: _submit,
-          child: Text(l10n.save),
-        ),
+        FilledButton(onPressed: _submit, child: Text(l10n.save)),
       ],
     );
   }
@@ -792,7 +944,10 @@ class _EditPaymentDialogState extends State<_EditPaymentDialog> {
 // The confirm dialog for "mark as paid". The amount starts at the settlement amount and can be
 // changed, and there is an optional note. It returns a _PaymentEdit, or null if cancelled.
 class _MarkAsPaidDialog extends StatefulWidget {
-  const _MarkAsPaidDialog({required this.settlement, required this.owedHundredths});
+  const _MarkAsPaidDialog({
+    required this.settlement,
+    required this.owedHundredths,
+  });
 
   final Settlement settlement;
   // What the payer owes the receiver right now, in hundredths. Used for the suggestion.
@@ -809,6 +964,7 @@ class _MarkAsPaidDialogState extends State<_MarkAsPaidDialog> {
     text: numberText(widget.settlement.amount),
   );
   final _noteController = TextEditingController();
+  final List<UploadFile> _files = [];
 
   @override
   void dispose() {
@@ -835,7 +991,11 @@ class _MarkAsPaidDialogState extends State<_MarkAsPaidDialog> {
     final note = _noteController.text.trim();
     Navigator.pop(
       context,
-      _PaymentEdit(amount: amount, note: note.isEmpty ? null : note),
+      _PaymentEdit(
+        amount: amount,
+        note: note.isEmpty ? null : note,
+        files: _files,
+      ),
     );
   }
 
@@ -845,43 +1005,59 @@ class _MarkAsPaidDialogState extends State<_MarkAsPaidDialog> {
     final settlement = widget.settlement;
 
     return AlertDialog(
-      content: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(l10n.markAsPaidConfirm(settlement.fromName, settlement.toName)),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _amountController,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              decoration: InputDecoration(
-                labelText: l10n.amount,
-                helperText: widget.owedHundredths > 0
-                    ? l10n.suggestedAmount(
-                        formatMoney(context, widget.owedHundredths / 100),
-                      )
-                    : null,
+      // Scrollable: with receipt thumbnails and the keyboard open the dialog can get tall.
+      content: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                l10n.markAsPaidConfirm(settlement.fromName, settlement.toName),
               ),
-              validator: (value) {
-                final amount = parseDecimal(value ?? '');
-                if (amount == null || amount <= 0 || !hasAtMostTwoDecimals(amount)) {
-                  return l10n.invalidAmount;
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _noteController,
-              maxLength: 200,
-              decoration: InputDecoration(
-                labelText: l10n.paymentNote,
-                hintText: l10n.paymentNoteHint,
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _amountController,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                decoration: InputDecoration(
+                  labelText: l10n.amount,
+                  helperText: widget.owedHundredths > 0
+                      ? l10n.suggestedAmount(
+                          formatMoney(context, widget.owedHundredths / 100),
+                        )
+                      : null,
+                ),
+                validator: (value) {
+                  final amount = parseDecimal(value ?? '');
+                  if (amount == null ||
+                      amount <= 0 ||
+                      !hasAtMostTwoDecimals(amount)) {
+                    return l10n.invalidAmount;
+                  }
+                  return null;
+                },
               ),
-            ),
-          ],
+              const SizedBox(height: 16),
+              TextField(
+                controller: _noteController,
+                maxLength: 200,
+                decoration: InputDecoration(
+                  labelText: l10n.paymentNote,
+                  hintText: l10n.paymentNoteHint,
+                ),
+              ),
+              const SizedBox(height: 8),
+              // Receipts (dekont) can be picked right here; they upload after the payment is saved.
+              PendingAttachmentsSection(
+                files: _files,
+                onAdded: (file) => setState(() => _files.add(file)),
+                onRemoved: (index) => setState(() => _files.removeAt(index)),
+              ),
+            ],
+          ),
         ),
       ),
       actions: [
@@ -889,10 +1065,7 @@ class _MarkAsPaidDialogState extends State<_MarkAsPaidDialog> {
           onPressed: () => Navigator.pop(context),
           child: Text(l10n.cancel),
         ),
-        TextButton(
-          onPressed: _submit,
-          child: Text(l10n.markAsPaid),
-        ),
+        TextButton(onPressed: _submit, child: Text(l10n.markAsPaid)),
       ],
     );
   }

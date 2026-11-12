@@ -232,5 +232,36 @@
   "filterPaidByMe": "Benim ödediklerim",
   "filterInMyShare": "Payım olanlar",
   "noExpensesMatchFilter": "Bu filtreye uyan gider yok",
-  "clearFilter": "Filtreyi temizle"
+  "clearFilter": "Filtreyi temizle",
+  "attachmentsTitle": "Fiş ve belgeler",
+  "attachmentAdd": "Ekle",
+  "attachmentMaxHint": "En fazla 5 dosya",
+  "attachmentTakePhoto": "Fotoğraf çek",
+  "attachmentPickGallery": "Galeriden seç",
+  "attachmentPickPdf": "PDF seç",
+  "attachmentEmpty": "Henüz fiş yok",
+  "attachmentDeleteConfirm": "Bu dosya silinsin mi?",
+  "attachmentByline": "{name} ekledi · {date}",
+  "@attachmentByline": {
+    "placeholders": {
+      "name": {"type": "String"},
+      "date": {"type": "String"}
+    }
+  },
+  "attachmentNoApp": "Bu telefonda dosyayı açabilecek bir uygulama yok.",
+  "attachmentCannotOpen": "Dosya açılamadı.",
+  "attachmentsPendingHint": "Gideri kaydettiğinde dosyalar yüklenecek.",
+  "attachmentsUploadFailed": "{count} dosya yüklenemedi. Gideri düzenleyip tekrar ekleyebilirsin.",
+  "@attachmentsUploadFailed": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "paymentReceipts": "Dekontlar",
+  "attachReceipt": "Dekont ekle",
+  "paymentAttachmentsUploadFailed": "Ödeme kaydedildi ama {count} dosya yüklenemedi.",
+  "paymentRecorded": "Ödeme kaydedildi",
+  "errorAttachmentType": "Yalnızca JPEG, PNG, WEBP görselleri ve PDF dosyaları eklenebilir.",
+  "errorAttachmentLimit": "Buraya en fazla 5 dosya ekleyebilirsin. Önce birini silmelisin.",
+  "errorAttachmentTooLarge": "Dosya çok büyük. Sınır 10 MB."
 }

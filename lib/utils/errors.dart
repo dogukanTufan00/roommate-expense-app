@@ -21,6 +21,8 @@ String errorMessage(BuildContext context, Object error) {
     if (message.contains('Current password is incorrect')) {
       return l10n.errorWrongCurrentPassword;
     }
+    // Checked before the split keywords: the file type message is about attachments.
+    if (message.contains('Only JPEG')) return l10n.errorAttachmentType;
     // Split errors from the API. The keywords are a best guess at the English messages.
     final lower = message.toLowerCase();
     if (lower.contains('share') ||
@@ -45,7 +47,11 @@ String errorMessage(BuildContext context, Object error) {
     return l10n.errorNotFound;
   }
 
+  if (status == 413) return l10n.errorAttachmentTooLarge;
+
   if (status == 409) {
+    // "at most 5 attachments" is the only 409 that mentions attachments.
+    if (message.contains('attachments')) return l10n.errorAttachmentLimit;
     if (message.contains('already exists') || message.contains('Email')) {
       return l10n.errorEmailExists;
     }

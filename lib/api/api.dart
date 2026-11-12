@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:intl/intl.dart';
 import 'package:roommate_expense_app/api/api_client.dart';
 import 'package:roommate_expense_app/models.dart';
@@ -312,6 +314,64 @@ class Api {
 
   static Future<void> deletePayment(int householdId, int paymentId) async {
     await ApiClient.delete('/api/households/$householdId/payments/$paymentId');
+  }
+
+  // ---- Attachments (receipts, documents and payment proofs) ----
+
+  static Future<List<Attachment>> getExpenseAttachments(
+    int householdId,
+    int expenseId,
+  ) async {
+    final data = await ApiClient.get(
+      '/api/households/$householdId/expenses/$expenseId/attachments',
+    );
+    return _parseList(data, Attachment.fromJson);
+  }
+
+  static Future<Attachment> uploadExpenseAttachment(
+    int householdId,
+    int expenseId,
+    UploadFile file,
+  ) async {
+    final data = await ApiClient.uploadFile(
+      '/api/households/$householdId/expenses/$expenseId/attachments',
+      file,
+    );
+    return Attachment.fromJson(data as Map<String, dynamic>);
+  }
+
+  static Future<List<Attachment>> getPaymentAttachments(
+    int householdId,
+    int paymentId,
+  ) async {
+    final data = await ApiClient.get(
+      '/api/households/$householdId/payments/$paymentId/attachments',
+    );
+    return _parseList(data, Attachment.fromJson);
+  }
+
+  static Future<Attachment> uploadPaymentAttachment(
+    int householdId,
+    int paymentId,
+    UploadFile file,
+  ) async {
+    final data = await ApiClient.uploadFile(
+      '/api/households/$householdId/payments/$paymentId/attachments',
+      file,
+    );
+    return Attachment.fromJson(data as Map<String, dynamic>);
+  }
+
+  // The raw file bytes. Needs the login token, so it cannot be opened as a plain URL.
+  static Future<Uint8List> downloadAttachment(int householdId, int attachmentId) {
+    return ApiClient.getBytes(
+      '/api/households/$householdId/attachments/$attachmentId/file',
+    );
+  }
+
+  // The uploader, the payer or the sender, or an admin may delete. Otherwise 403.
+  static Future<void> deleteAttachment(int householdId, int attachmentId) async {
+    await ApiClient.delete('/api/households/$householdId/attachments/$attachmentId');
   }
 
   // ---- Profile ----

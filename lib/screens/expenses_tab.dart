@@ -73,9 +73,8 @@ class _ExpensesTabState extends State<ExpensesTab> {
         setState(() => _loadError = errorMessage(context, e));
       } else {
         // The list is already on screen: a short message is enough.
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(errorMessage(context, e))),
-        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(errorMessage(context, e))));
       }
     }
   }
@@ -188,7 +187,13 @@ class _ExpensesTabState extends State<ExpensesTab> {
   // Splits the expenses into months. The newest expense comes first, so the months do too.
   List<_MonthGroup> _groupByMonth(List<Expense> expenses) {
     final sorted = [...expenses]
-      ..sort((a, b) => b.expenseDate.compareTo(a.expenseDate));
+      // Newest date first. Expenses on the same day have equal dates (the form picks a day, not
+      // a time), so without a tie-breaker their order looked random; the most recently added
+      // one goes first.
+      ..sort((a, b) {
+        final byDate = b.expenseDate.compareTo(a.expenseDate);
+        return byDate != 0 ? byDate : b.createdAt.compareTo(a.createdAt);
+      });
 
     final groups = <_MonthGroup>[];
     for (final e in sorted) {
@@ -273,13 +278,17 @@ class _ExpensesTabState extends State<ExpensesTab> {
                         Text(
                           l10n.noExpensesTitle,
                           textAlign: TextAlign.center,
-                          style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+                          style: theme.textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
                         const SizedBox(height: 8),
                         Text(
                           l10n.noExpenses,
                           textAlign: TextAlign.center,
-                          style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted),
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: AppColors.muted,
+                          ),
                         ),
                       ],
                     ),
@@ -345,7 +354,11 @@ class _ExpensesTabState extends State<ExpensesTab> {
       ),
       for (final category in expenseCategories)
         FilterChip(
-          avatar: Icon(categoryIcon(category), size: 18, color: categoryColor(category)),
+          avatar: Icon(
+            categoryIcon(category),
+            size: 18,
+            color: categoryColor(category),
+          ),
           label: Text(categoryLabel(l10n, category)),
           selected: _categoryFilter == category,
           onSelected: (_) => _toggleCategoryFilter(category),
@@ -451,9 +464,7 @@ class _ExpensesTabState extends State<ExpensesTab> {
           child: Icon(categoryIcon(e.category), color: color),
         ),
         title: Text(
-          description.isEmpty
-              ? categoryLabel(l10n, e.category)
-              : description,
+          description.isEmpty ? categoryLabel(l10n, e.category) : description,
           style: const TextStyle(fontWeight: FontWeight.w700),
         ),
         subtitle: Column(
@@ -472,21 +483,40 @@ class _ExpensesTabState extends State<ExpensesTab> {
                   const SizedBox(width: 4),
                   const Icon(Icons.repeat, size: 16),
                 ],
+                // Paperclip and count when receipts are attached.
+                if (e.attachmentCount > 0) ...[
+                  const SizedBox(width: 8),
+                  const Icon(
+                    Icons.attach_file_rounded,
+                    size: 16,
+                    color: AppColors.muted,
+                  ),
+                  const SizedBox(width: 2),
+                  Text(
+                    '${e.attachmentCount}',
+                    style: const TextStyle(
+                      color: AppColors.muted,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
               ],
             ),
             if (splitLine != null)
               Text(
                 splitLine,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColors.muted,
-                    ),
+                style: Theme.of(context).textTheme.bodySmall
+                    ?.copyWith(color: AppColors.muted),
               ),
           ],
         ),
         trailing: Text(
           formatMoney(context, e.amount),
-          style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.ink),
+          style: const TextStyle(
+            fontWeight: FontWeight.w800,
+            color: AppColors.ink,
+          ),
         ),
         onTap: () => _openForm(expense: e),
       ),

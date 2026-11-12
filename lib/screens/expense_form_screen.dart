@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:roommate_expense_app/api/api.dart';
+import 'package:roommate_expense_app/api/api_client.dart';
 import 'package:roommate_expense_app/l10n/app_localizations.dart';
 import 'package:roommate_expense_app/models.dart';
 import 'package:roommate_expense_app/session.dart';
@@ -8,6 +9,7 @@ import 'package:roommate_expense_app/utils/category.dart';
 import 'package:roommate_expense_app/utils/errors.dart';
 import 'package:roommate_expense_app/utils/format.dart';
 import 'package:roommate_expense_app/utils/split.dart';
+import 'package:roommate_expense_app/widgets/attachments_section.dart';
 
 // Parses "12,50" and "12.50" the same way.
 double? _parseAmount(String text) {
@@ -63,6 +65,15 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
 
   // True while saving or deleting. Disables the buttons.
   bool _saving = false;
+
+  // The logged in user's id and admin flag, from the member list. Used for attachment rights.
+  int? _myUserId;
+  bool _myIsAdmin = false;
+
+  // Create only: receipts picked before the expense exists. Uploaded right after it is saved.
+  final List<UploadFile> _pendingFiles = [];
+  // Edit only: an attachment was added or deleted, so the list must refresh when the form closes.
+  bool _attachmentsChanged = false;
 
   @override
   void initState() {
@@ -120,6 +131,12 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
         _loadError = null;
         _paidByUserId = _defaultPayer(members);
         _applyMembers(members);
+        for (final m in members) {
+          if (m.email == Session.email) {
+            _myUserId = m.userId;
+            _myIsAdmin = m.isAdmin;
+          }
+        }
       });
       if (widget.expense == null) _loadSplitDefaults();
     } catch (e) {
@@ -265,6 +282,13 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
   // Edit only: the split was not touched, so the stored split is kept.
   bool get _keepsStoredSplit => widget.expense != null && !_splitTouched;
 
+  // Edit only: the uploader, the payer, or an admin may delete an attachment.
+  bool _canDeleteAttachment(Attachment attachment) {
+    return _myIsAdmin ||
+        attachment.uploadedById == _myUserId ||
+        widget.expense?.paidByUserId == _myUserId;
+  }
+
   // Edit only: an AMOUNT split whose amount changed. The API rejects that unless the
   // shares are sent, so the user must adjust the split first.
   bool get _amountNeedsAdjust {
@@ -385,12 +409,23 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
     setState(() => _saving = true);
     try {
       final expense = widget.expense;
+      var failedUploads = 0;
       if (expense == null) {
-        await Api.createExpense(widget.householdId, input);
+        final created = await Api.createExpense(widget.householdId, input);
+        failedUploads = await _uploadPendingFiles(created.id);
       } else {
         await Api.updateExpense(widget.householdId, expense.id, input);
       }
       if (!mounted) return;
+      if (failedUploads > 0) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context).attachmentsUploadFailed(failedUploads),
+            ),
+          ),
+        );
+      }
       Navigator.pop(context, true);
     } catch (e) {
       if (!mounted) return;
@@ -399,6 +434,19 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
         SnackBar(content: Text(errorMessage(context, e))),
       );
     }
+  }
+
+  // Create only: uploads the receipts picked before saving. Returns how many failed.
+  Future<int> _uploadPendingFiles(int expenseId) async {
+    var failed = 0;
+    for (final file in _pendingFiles) {
+      try {
+        await Api.uploadExpenseAttachment(widget.householdId, expenseId, file);
+      } catch (_) {
+        failed++;
+      }
+    }
+    return failed;
   }
 
   Future<void> _confirmDelete() async {
@@ -440,19 +488,27 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
     final l10n = AppLocalizations.of(context);
     final isEdit = widget.expense != null;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(isEdit ? l10n.editExpense : l10n.addExpense),
-        actions: [
-          if (isEdit)
-            IconButton(
-              icon: const Icon(Icons.delete_outline),
-              tooltip: l10n.delete,
-              onPressed: _saving ? null : _confirmDelete,
-            ),
-        ],
+    // Editing can add or delete receipts. Closing the form then reports a change,
+    // so the expenses list refreshes its attachment counts.
+    return PopScope(
+      canPop: !_attachmentsChanged,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) Navigator.pop(context, true);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(isEdit ? l10n.editExpense : l10n.addExpense),
+          actions: [
+            if (isEdit)
+              IconButton(
+                icon: const Icon(Icons.delete_outline),
+                tooltip: l10n.delete,
+                onPressed: _saving ? null : _confirmDelete,
+              ),
+          ],
+        ),
+        body: _buildBody(l10n),
       ),
-      body: _buildBody(l10n),
     );
   }
 
@@ -559,6 +615,22 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
             ),
             const SizedBox(height: 16),
             _buildSplitSection(l10n, members),
+            const SizedBox(height: 24),
+            if (widget.expense case final expense?)
+              AttachmentsSection(
+                key: ValueKey(expense.id),
+                householdId: widget.householdId,
+                expenseId: expense.id,
+                canDelete: _canDeleteAttachment,
+                onChanged: () => setState(() => _attachmentsChanged = true),
+              )
+            else
+              PendingAttachmentsSection(
+                files: _pendingFiles,
+                enabled: !_saving,
+                onAdded: (file) => setState(() => _pendingFiles.add(file)),
+                onRemoved: (index) => setState(() => _pendingFiles.removeAt(index)),
+              ),
             const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,

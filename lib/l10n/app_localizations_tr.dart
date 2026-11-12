@@ -615,4 +615,74 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get clearFilter => 'Filtreyi temizle';
+
+  @override
+  String get attachmentsTitle => 'Fiş ve belgeler';
+
+  @override
+  String get attachmentAdd => 'Ekle';
+
+  @override
+  String get attachmentMaxHint => 'En fazla 5 dosya';
+
+  @override
+  String get attachmentTakePhoto => 'Fotoğraf çek';
+
+  @override
+  String get attachmentPickGallery => 'Galeriden seç';
+
+  @override
+  String get attachmentPickPdf => 'PDF seç';
+
+  @override
+  String get attachmentEmpty => 'Henüz fiş yok';
+
+  @override
+  String get attachmentDeleteConfirm => 'Bu dosya silinsin mi?';
+
+  @override
+  String attachmentByline(String name, String date) {
+    return '$name ekledi · $date';
+  }
+
+  @override
+  String get attachmentNoApp =>
+      'Bu telefonda dosyayı açabilecek bir uygulama yok.';
+
+  @override
+  String get attachmentCannotOpen => 'Dosya açılamadı.';
+
+  @override
+  String get attachmentsPendingHint =>
+      'Gideri kaydettiğinde dosyalar yüklenecek.';
+
+  @override
+  String attachmentsUploadFailed(int count) {
+    return '$count dosya yüklenemedi. Gideri düzenleyip tekrar ekleyebilirsin.';
+  }
+
+  @override
+  String get paymentReceipts => 'Dekontlar';
+
+  @override
+  String get attachReceipt => 'Dekont ekle';
+
+  @override
+  String paymentAttachmentsUploadFailed(int count) {
+    return 'Ödeme kaydedildi ama $count dosya yüklenemedi.';
+  }
+
+  @override
+  String get paymentRecorded => 'Ödeme kaydedildi';
+
+  @override
+  String get errorAttachmentType =>
+      'Yalnızca JPEG, PNG, WEBP görselleri ve PDF dosyaları eklenebilir.';
+
+  @override
+  String get errorAttachmentLimit =>
+      'Buraya en fazla 5 dosya ekleyebilirsin. Önce birini silmelisin.';
+
+  @override
+  String get errorAttachmentTooLarge => 'Dosya çok büyük. Sınır 10 MB.';
 }

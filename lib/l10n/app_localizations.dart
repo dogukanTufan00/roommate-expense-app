@@ -1159,6 +1159,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Clear filter'**
   String get clearFilter;
+
+  /// No description provided for @attachmentsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Receipts & documents'**
+  String get attachmentsTitle;
+
+  /// No description provided for @attachmentAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get attachmentAdd;
+
+  /// No description provided for @attachmentMaxHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Up to 5 files'**
+  String get attachmentMaxHint;
+
+  /// No description provided for @attachmentTakePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take photo'**
+  String get attachmentTakePhoto;
+
+  /// No description provided for @attachmentPickGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get attachmentPickGallery;
+
+  /// No description provided for @attachmentPickPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose PDF'**
+  String get attachmentPickPdf;
+
+  /// No description provided for @attachmentEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No receipts yet'**
+  String get attachmentEmpty;
+
+  /// No description provided for @attachmentDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this file?'**
+  String get attachmentDeleteConfirm;
+
+  /// No description provided for @attachmentByline.
+  ///
+  /// In en, this message translates to:
+  /// **'Added by {name} · {date}'**
+  String attachmentByline(String name, String date);
+
+  /// No description provided for @attachmentNoApp.
+  ///
+  /// In en, this message translates to:
+  /// **'No app on this phone can open this file.'**
+  String get attachmentNoApp;
+
+  /// No description provided for @attachmentCannotOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'The file could not be opened.'**
+  String get attachmentCannotOpen;
+
+  /// No description provided for @attachmentsPendingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Files are uploaded when you save the expense.'**
+  String get attachmentsPendingHint;
+
+  /// No description provided for @attachmentsUploadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} file(s) could not be uploaded. You can add them again from the expense.'**
+  String attachmentsUploadFailed(int count);
+
+  /// No description provided for @paymentReceipts.
+  ///
+  /// In en, this message translates to:
+  /// **'Receipts'**
+  String get paymentReceipts;
+
+  /// No description provided for @attachReceipt.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach receipt'**
+  String get attachReceipt;
+
+  /// No description provided for @paymentAttachmentsUploadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment recorded, but {count} file(s) could not be uploaded.'**
+  String paymentAttachmentsUploadFailed(int count);
+
+  /// No description provided for @paymentRecorded.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment recorded'**
+  String get paymentRecorded;
+
+  /// No description provided for @errorAttachmentType.
+  ///
+  /// In en, this message translates to:
+  /// **'Only JPEG, PNG, WEBP images and PDF files can be attached.'**
+  String get errorAttachmentType;
+
+  /// No description provided for @errorAttachmentLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'You can attach at most 5 files here. Delete one first.'**
+  String get errorAttachmentLimit;
+
+  /// No description provided for @errorAttachmentTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'This file is too large. The limit is 10 MB.'**
+  String get errorAttachmentTooLarge;
 }
 
 class _AppLocalizationsDelegate

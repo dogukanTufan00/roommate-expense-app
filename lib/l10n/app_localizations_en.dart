@@ -621,4 +621,74 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get clearFilter => 'Clear filter';
+
+  @override
+  String get attachmentsTitle => 'Receipts & documents';
+
+  @override
+  String get attachmentAdd => 'Add';
+
+  @override
+  String get attachmentMaxHint => 'Up to 5 files';
+
+  @override
+  String get attachmentTakePhoto => 'Take photo';
+
+  @override
+  String get attachmentPickGallery => 'Choose from gallery';
+
+  @override
+  String get attachmentPickPdf => 'Choose PDF';
+
+  @override
+  String get attachmentEmpty => 'No receipts yet';
+
+  @override
+  String get attachmentDeleteConfirm => 'Delete this file?';
+
+  @override
+  String attachmentByline(String name, String date) {
+    return 'Added by $name · $date';
+  }
+
+  @override
+  String get attachmentNoApp => 'No app on this phone can open this file.';
+
+  @override
+  String get attachmentCannotOpen => 'The file could not be opened.';
+
+  @override
+  String get attachmentsPendingHint =>
+      'Files are uploaded when you save the expense.';
+
+  @override
+  String attachmentsUploadFailed(int count) {
+    return '$count file(s) could not be uploaded. You can add them again from the expense.';
+  }
+
+  @override
+  String get paymentReceipts => 'Receipts';
+
+  @override
+  String get attachReceipt => 'Attach receipt';
+
+  @override
+  String paymentAttachmentsUploadFailed(int count) {
+    return 'Payment recorded, but $count file(s) could not be uploaded.';
+  }
+
+  @override
+  String get paymentRecorded => 'Payment recorded';
+
+  @override
+  String get errorAttachmentType =>
+      'Only JPEG, PNG, WEBP images and PDF files can be attached.';
+
+  @override
+  String get errorAttachmentLimit =>
+      'You can attach at most 5 files here. Delete one first.';
+
+  @override
+  String get errorAttachmentTooLarge =>
+      'This file is too large. The limit is 10 MB.';
 }

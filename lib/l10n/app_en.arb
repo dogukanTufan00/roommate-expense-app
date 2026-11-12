@@ -330,5 +330,37 @@
   "filterPaidByMe": "Paid by me",
   "filterInMyShare": "Where I have a share",
   "noExpensesMatchFilter": "No expenses match this filter",
-  "clearFilter": "Clear filter"
+  "clearFilter": "Clear filter",
+  "attachmentsTitle": "Receipts & documents",
+  "attachmentAdd": "Add",
+  "attachmentMaxHint": "Up to 5 files",
+  "attachmentTakePhoto": "Take photo",
+  "attachmentPickGallery": "Choose from gallery",
+  "attachmentPickPdf": "Choose PDF",
+  "attachmentEmpty": "No receipts yet",
+  "attachmentDeleteConfirm": "Delete this file?",
+  "attachmentByline": "Added by {name} · {date}",
+  "@attachmentByline": {
+    "placeholders": {
+      "name": {"type": "String"},
+      "date": {"type": "String"}
+    }
+  },
+  "attachmentNoApp": "No app on this phone can open this file.",
+  "attachmentCannotOpen": "The file could not be opened.",
+  "attachmentsPendingHint": "Files are uploaded when you save the expense.",
+  "attachmentsUploadFailed": "{count} file(s) could not be uploaded. You can add them again from the expense.",
+  "@attachmentsUploadFailed": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "paymentReceipts": "Receipts",
+  "attachReceipt": "Attach receipt",
+  "paymentAttachmentsUploadFailed": "Payment recorded, but {count} file(s) could not be uploaded.",
+  "@paymentAttachmentsUploadFailed": {"placeholders": {"count": {"type": "int"}}},
+  "paymentRecorded": "Payment recorded",
+  "errorAttachmentType": "Only JPEG, PNG, WEBP images and PDF files can be attached.",
+  "errorAttachmentLimit": "You can attach at most 5 files here. Delete one first.",
+  "errorAttachmentTooLarge": "This file is too large. The limit is 10 MB."
 }
