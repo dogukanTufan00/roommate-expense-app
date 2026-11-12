@@ -50,7 +50,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noHouseholds =>
-      'Create a home and invite your roommates, or ask a roommate to add you.';
+      'Create a home and invite your roommates, or wait for an invitation.';
 
   @override
   String get createHousehold => 'New home';
@@ -169,7 +169,62 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deletePaymentConfirm => 'Delete this payment record?';
 
   @override
-  String get addMember => 'Add member';
+  String get inviteMember => 'Invite';
+
+  @override
+  String get inviteMemberHint =>
+      'Invitation will be sent. They join the home once they accept.';
+
+  @override
+  String get inviteMemberEmailHint =>
+      'Roommate\'s email (they need an account)';
+
+  @override
+  String get inviteSent => 'Invitation sent';
+
+  @override
+  String get pendingInvitesTitle => 'Pending invitations';
+
+  @override
+  String get awaitingResponse => 'Waiting for reply';
+
+  @override
+  String get cancelInvitation => 'Cancel invitation';
+
+  @override
+  String cancelInvitationConfirm(String name) {
+    return 'Cancel the invitation for $name?';
+  }
+
+  @override
+  String get invitationCancelled => 'Invitation cancelled';
+
+  @override
+  String get incomingInvitesTitle => 'You\'ve been invited';
+
+  @override
+  String invitedYou(String inviter) {
+    return '$inviter invited you to a home';
+  }
+
+  @override
+  String get acceptInvitation => 'Accept';
+
+  @override
+  String get declineInvitation => 'Decline';
+
+  @override
+  String declineInvitationConfirm(String household) {
+    return 'Decline the invitation to $household?';
+  }
+
+  @override
+  String welcomeToHousehold(String household) {
+    return 'Welcome to $household!';
+  }
+
+  @override
+  String get invitationDeclined => 'Invitation declined';
 
   @override
   String get memberEmailHint => 'Roommate\'s email (they need an account)';
@@ -180,6 +235,16 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String removeMemberConfirm(String name) {
     return 'Remove $name from this home? Their past expenses and debts are kept.';
+  }
+
+  @override
+  String removeMemberOwesWarning(String name, String amount) {
+    return 'Heads up: $name hasn\'t settled up and still owes $amount. If you remove them, the debt stays in the balances and you can record their payment later.';
+  }
+
+  @override
+  String removeMemberGetsBackWarning(String name, String amount) {
+    return 'Heads up: $name hasn\'t settled up and is still owed $amount. If you remove them, it stays in the balances and you can record your payment to them later.';
   }
 
   @override
@@ -226,10 +291,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errorEmailExists => 'An account with this email already exists.';
 
   @override
-  String get errorHouseholdFull => 'This home is full (max 3 members).';
+  String get errorHouseholdFull =>
+      'This home is full (max 3 people, invitations included).';
 
   @override
   String get errorAlreadyMember => 'This person is already a member.';
+
+  @override
+  String get errorInvitationPending =>
+      'This person already has an open invitation to this home.';
+
+  @override
+  String get errorInvitationNotPending =>
+      'This invitation is no longer open. It may have been cancelled or answered.';
 
   @override
   String get errorLastAdmin => 'The last admin cannot leave the home.';

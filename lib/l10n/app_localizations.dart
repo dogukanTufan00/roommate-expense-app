@@ -179,7 +179,7 @@ abstract class AppLocalizations {
   /// No description provided for @noHouseholds.
   ///
   /// In en, this message translates to:
-  /// **'Create a home and invite your roommates, or ask a roommate to add you.'**
+  /// **'Create a home and invite your roommates, or wait for an invitation.'**
   String get noHouseholds;
 
   /// No description provided for @createHousehold.
@@ -404,11 +404,101 @@ abstract class AppLocalizations {
   /// **'Delete this payment record?'**
   String get deletePaymentConfirm;
 
-  /// No description provided for @addMember.
+  /// No description provided for @inviteMember.
   ///
   /// In en, this message translates to:
-  /// **'Add member'**
-  String get addMember;
+  /// **'Invite'**
+  String get inviteMember;
+
+  /// No description provided for @inviteMemberHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Invitation will be sent. They join the home once they accept.'**
+  String get inviteMemberHint;
+
+  /// No description provided for @inviteMemberEmailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Roommate\'s email (they need an account)'**
+  String get inviteMemberEmailHint;
+
+  /// No description provided for @inviteSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Invitation sent'**
+  String get inviteSent;
+
+  /// No description provided for @pendingInvitesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending invitations'**
+  String get pendingInvitesTitle;
+
+  /// No description provided for @awaitingResponse.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for reply'**
+  String get awaitingResponse;
+
+  /// No description provided for @cancelInvitation.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel invitation'**
+  String get cancelInvitation;
+
+  /// No description provided for @cancelInvitationConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel the invitation for {name}?'**
+  String cancelInvitationConfirm(String name);
+
+  /// No description provided for @invitationCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Invitation cancelled'**
+  String get invitationCancelled;
+
+  /// No description provided for @incomingInvitesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve been invited'**
+  String get incomingInvitesTitle;
+
+  /// No description provided for @invitedYou.
+  ///
+  /// In en, this message translates to:
+  /// **'{inviter} invited you to a home'**
+  String invitedYou(String inviter);
+
+  /// No description provided for @acceptInvitation.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept'**
+  String get acceptInvitation;
+
+  /// No description provided for @declineInvitation.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get declineInvitation;
+
+  /// No description provided for @declineInvitationConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline the invitation to {household}?'**
+  String declineInvitationConfirm(String household);
+
+  /// No description provided for @welcomeToHousehold.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to {household}!'**
+  String welcomeToHousehold(String household);
+
+  /// No description provided for @invitationDeclined.
+  ///
+  /// In en, this message translates to:
+  /// **'Invitation declined'**
+  String get invitationDeclined;
 
   /// No description provided for @memberEmailHint.
   ///
@@ -427,6 +517,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove {name} from this home? Their past expenses and debts are kept.'**
   String removeMemberConfirm(String name);
+
+  /// No description provided for @removeMemberOwesWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Heads up: {name} hasn\'t settled up and still owes {amount}. If you remove them, the debt stays in the balances and you can record their payment later.'**
+  String removeMemberOwesWarning(String name, String amount);
+
+  /// No description provided for @removeMemberGetsBackWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Heads up: {name} hasn\'t settled up and is still owed {amount}. If you remove them, it stays in the balances and you can record your payment to them later.'**
+  String removeMemberGetsBackWarning(String name, String amount);
 
   /// No description provided for @admin.
   ///
@@ -515,7 +617,7 @@ abstract class AppLocalizations {
   /// No description provided for @errorHouseholdFull.
   ///
   /// In en, this message translates to:
-  /// **'This home is full (max 3 members).'**
+  /// **'This home is full (max 3 people, invitations included).'**
   String get errorHouseholdFull;
 
   /// No description provided for @errorAlreadyMember.
@@ -523,6 +625,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This person is already a member.'**
   String get errorAlreadyMember;
+
+  /// No description provided for @errorInvitationPending.
+  ///
+  /// In en, this message translates to:
+  /// **'This person already has an open invitation to this home.'**
+  String get errorInvitationPending;
+
+  /// No description provided for @errorInvitationNotPending.
+  ///
+  /// In en, this message translates to:
+  /// **'This invitation is no longer open. It may have been cancelled or answered.'**
+  String get errorInvitationNotPending;
 
   /// No description provided for @errorLastAdmin.
   ///

@@ -13,7 +13,7 @@
   "language": "Dil",
   "languageSystem": "Telefonun dili",
   "households": "Evlerim",
-  "noHouseholds": "Bir ev kur ve ev arkadaşlarını davet et ya da ev arkadaşından seni eklemesini iste.",
+  "noHouseholds": "Bir ev kur ve ev arkadaşlarını davet et ya da bir davet gelmesini bekle.",
   "createHousehold": "Yeni ev",
   "householdName": "Ev adı",
   "rename": "Yeniden adlandır",
@@ -51,10 +51,55 @@
   "paymentsTitle": "Ödeme geçmişi",
   "noPayments": "Henüz ödeme yok. Kapatılan borçlar burada görünecek.",
   "deletePaymentConfirm": "Bu ödeme kaydı silinsin mi?",
-  "addMember": "Üye ekle",
+  "inviteMember": "Davet et",
+  "inviteMemberHint": "Davet gönderilecek; kabul edince eve katılacak.",
+  "inviteMemberEmailHint": "Ev arkadaşının e-postası (hesabı olmalı)",
+  "inviteSent": "Davet gönderildi",
+  "pendingInvitesTitle": "Bekleyen davetler",
+  "awaitingResponse": "Yanıt bekleniyor",
+  "cancelInvitation": "Daveti iptal et",
+  "cancelInvitationConfirm": "{name} için gönderilen davet iptal edilsin mi?",
+  "@cancelInvitationConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "invitationCancelled": "Davet iptal edildi",
+  "incomingInvitesTitle": "Sana davet var",
+  "invitedYou": "{inviter} seni bir eve davet etti",
+  "@invitedYou": {
+    "placeholders": {
+      "inviter": {
+        "type": "String"
+      }
+    }
+  },
+  "acceptInvitation": "Kabul et",
+  "declineInvitation": "Reddet",
+  "declineInvitationConfirm": "{household} davetini reddetmek istediğinden emin misin?",
+  "@declineInvitationConfirm": {
+    "placeholders": {
+      "household": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeToHousehold": "{household} artık senin de evin, hoş geldin!",
+  "@welcomeToHousehold": {
+    "placeholders": {
+      "household": {
+        "type": "String"
+      }
+    }
+  },
+  "invitationDeclined": "Davet reddedildi",
   "memberEmailHint": "Ev arkadaşının e-postası (hesabı olmalı)",
   "removeMember": "Evden çıkar",
   "removeMemberConfirm": "{name} evden çıkarılsın mı? Geçmiş giderleri ve borçları korunur.",
+  "removeMemberOwesWarning": "Dikkat: {name} henüz ödeşmedi, eve {amount} borcu var. Çıkarsan da borcu bakiyede kalır; ödeme yapınca kaydedebilirsin.",
+  "removeMemberGetsBackWarning": "Dikkat: {name} henüz ödeşmedi, evden {amount} alacağı var. Çıkarsan da alacağı bakiyede kalır; ona ödeme yapınca kaydedebilirsin.",
   "admin": "Yönetici",
   "you": "sen",
   "fieldRequired": "Bu alan zorunlu",
@@ -69,8 +114,10 @@
   "errorForbidden": "Bu işlem için yetkin yok.",
   "errorNotFound": "Bulunamadı, silinmiş olabilir.",
   "errorEmailExists": "Bu e-postayla zaten bir hesap var.",
-  "errorHouseholdFull": "Ev dolu (en fazla 3 kişi).",
+  "errorHouseholdFull": "Ev dolu (davetler dahil en fazla 3 kişi).",
   "errorAlreadyMember": "Bu kişi zaten evin üyesi.",
+  "errorInvitationPending": "Bu kişinin bu evle ilgili bekleyen bir daveti zaten var.",
+  "errorInvitationNotPending": "Bu davet artık açık değil. İptal edilmiş ya da yanıtlanmış olabilir.",
   "errorLastAdmin": "Evin son yöneticisi evden çıkamaz.",
   "errorNoSuchUser": "Bu e-postayla kayıtlı hesap yok.",
   "errorUnknown": "Bir şeyler ters gitti.",

@@ -13,7 +13,7 @@
   "language": "Language",
   "languageSystem": "Phone language",
   "households": "My homes",
-  "noHouseholds": "Create a home and invite your roommates, or ask a roommate to add you.",
+  "noHouseholds": "Create a home and invite your roommates, or wait for an invitation.",
   "createHousehold": "New home",
   "householdName": "Home name",
   "rename": "Rename",
@@ -71,7 +71,50 @@
   "paymentsTitle": "Payment history",
   "noPayments": "No payments yet. Settled debts will show up here.",
   "deletePaymentConfirm": "Delete this payment record?",
-  "addMember": "Add member",
+  "inviteMember": "Invite",
+  "inviteMemberHint": "Invitation will be sent. They join the home once they accept.",
+  "inviteMemberEmailHint": "Roommate's email (they need an account)",
+  "inviteSent": "Invitation sent",
+  "pendingInvitesTitle": "Pending invitations",
+  "awaitingResponse": "Waiting for reply",
+  "cancelInvitation": "Cancel invitation",
+  "cancelInvitationConfirm": "Cancel the invitation for {name}?",
+  "@cancelInvitationConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "invitationCancelled": "Invitation cancelled",
+  "incomingInvitesTitle": "You've been invited",
+  "invitedYou": "{inviter} invited you to a home",
+  "@invitedYou": {
+    "placeholders": {
+      "inviter": {
+        "type": "String"
+      }
+    }
+  },
+  "acceptInvitation": "Accept",
+  "declineInvitation": "Decline",
+  "declineInvitationConfirm": "Decline the invitation to {household}?",
+  "@declineInvitationConfirm": {
+    "placeholders": {
+      "household": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeToHousehold": "Welcome to {household}!",
+  "@welcomeToHousehold": {
+    "placeholders": {
+      "household": {
+        "type": "String"
+      }
+    }
+  },
+  "invitationDeclined": "Invitation declined",
   "memberEmailHint": "Roommate's email (they need an account)",
   "removeMember": "Remove from home",
   "removeMemberConfirm": "Remove {name} from this home? Their past expenses and debts are kept.",
@@ -80,6 +123,20 @@
       "name": {
         "type": "String"
       }
+    }
+  },
+  "removeMemberOwesWarning": "Heads up: {name} hasn't settled up and still owes {amount}. If you remove them, the debt stays in the balances and you can record their payment later.",
+  "@removeMemberOwesWarning": {
+    "placeholders": {
+      "name": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+  "removeMemberGetsBackWarning": "Heads up: {name} hasn't settled up and is still owed {amount}. If you remove them, it stays in the balances and you can record your payment to them later.",
+  "@removeMemberGetsBackWarning": {
+    "placeholders": {
+      "name": {"type": "String"},
+      "amount": {"type": "String"}
     }
   },
   "admin": "Admin",
@@ -96,8 +153,10 @@
   "errorForbidden": "You don't have permission to do this.",
   "errorNotFound": "Not found. It may have been deleted.",
   "errorEmailExists": "An account with this email already exists.",
-  "errorHouseholdFull": "This home is full (max 3 members).",
+  "errorHouseholdFull": "This home is full (max 3 people, invitations included).",
   "errorAlreadyMember": "This person is already a member.",
+  "errorInvitationPending": "This person already has an open invitation to this home.",
+  "errorInvitationNotPending": "This invitation is no longer open. It may have been cancelled or answered.",
   "errorLastAdmin": "The last admin cannot leave the home.",
   "errorNoSuchUser": "No account with this email.",
   "errorUnknown": "Something went wrong.",

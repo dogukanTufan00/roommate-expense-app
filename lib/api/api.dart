@@ -118,16 +118,46 @@ class Api {
     return _parseList(data, Member.fromJson);
   }
 
-  static Future<Member> addMember(int householdId, String email) async {
-    final data = await ApiClient.post(
-      '/api/households/$householdId/members',
-      {'email': email},
-    );
-    return Member.fromJson(data as Map<String, dynamic>);
-  }
-
   static Future<void> removeMember(int householdId, int userId) async {
     await ApiClient.delete('/api/households/$householdId/members/$userId');
+  }
+
+  // ---- Invitations ----
+
+  // Admins only. The invitee has to accept before joining.
+  static Future<Invitation> inviteMember(int householdId, String email) async {
+    final data = await ApiClient.post(
+      '/api/households/$householdId/invitations',
+      {'email': email},
+    );
+    return Invitation.fromJson(data as Map<String, dynamic>);
+  }
+
+  // Pending invitations of one home. Any member can see them.
+  static Future<List<Invitation>> getHouseholdInvitations(int householdId) async {
+    final data = await ApiClient.get('/api/households/$householdId/invitations');
+    return _parseList(data, Invitation.fromJson);
+  }
+
+  // Admins only. Cancels a pending invitation.
+  static Future<void> cancelInvitation(int householdId, int invitationId) async {
+    await ApiClient.delete('/api/households/$householdId/invitations/$invitationId');
+  }
+
+  // My pending invitations, from every home.
+  static Future<List<Invitation>> getMyInvitations() async {
+    final data = await ApiClient.get('/api/invitations');
+    return _parseList(data, Invitation.fromJson);
+  }
+
+  // Accepting joins the home. Returns the home, as GET /api/households/{id} does.
+  static Future<Household> acceptInvitation(int invitationId) async {
+    final data = await ApiClient.post('/api/invitations/$invitationId/accept');
+    return Household.fromJson(data as Map<String, dynamic>);
+  }
+
+  static Future<void> declineInvitation(int invitationId) async {
+    await ApiClient.post('/api/invitations/$invitationId/decline');
   }
 
   // ---- Expenses ----

@@ -10,7 +10,7 @@ import 'package:roommate_expense_app/utils/errors.dart';
 import 'package:roommate_expense_app/widgets/illustration.dart';
 import 'package:roommate_expense_app/widgets/language_menu_button.dart';
 
-// The home page after login: the list of homes the user belongs to.
+// The home page after login: the invitations waiting for me, then the list of homes I belong to.
 class HouseholdsScreen extends StatefulWidget {
   const HouseholdsScreen({super.key});
 
@@ -20,6 +20,11 @@ class HouseholdsScreen extends StatefulWidget {
 
 class _HouseholdsScreenState extends State<HouseholdsScreen> {
   List<Household> _households = [];
+  List<Invitation> _invitations = [];
+
+  // Invitations with a request in progress. Their buttons are disabled meanwhile.
+  final Set<int> _busyInvitationIds = {};
+
   bool _loading = true;
   Object? _loadError;
 
@@ -29,19 +34,23 @@ class _HouseholdsScreenState extends State<HouseholdsScreen> {
     _load();
   }
 
-  // Loads the list. Errors are shown here, so callers can just await it.
+  // Loads homes and my invitations together. Errors are shown here, so callers can just await it.
   Future<void> _load() async {
     try {
-      final households = await Api.getHouseholds();
+      final results = await Future.wait<Object>([
+        Api.getHouseholds(),
+        Api.getMyInvitations(),
+      ]);
       if (!mounted) return;
       setState(() {
-        _households = households;
+        _households = results[0] as List<Household>;
+        _invitations = results[1] as List<Invitation>;
         _loadError = null;
         _loading = false;
       });
     } catch (e) {
       if (!mounted) return;
-      if (_households.isEmpty) {
+      if (_households.isEmpty && _invitations.isEmpty) {
         // First load failed: show the error with a retry button.
         setState(() {
           _loadError = e;
@@ -109,6 +118,74 @@ class _HouseholdsScreenState extends State<HouseholdsScreen> {
     }
   }
 
+  // Runs accept or decline. Then it shows the message and reloads, so the invitation
+  // disappears (and the new home appears after accepting). On failure the reload also
+  // helps: the invitation may be gone already.
+  Future<void> _respondToInvitation({
+    required Invitation invitation,
+    required Future<void> Function() request,
+    required String successMessage,
+  }) async {
+    setState(() => _busyInvitationIds.add(invitation.id));
+
+    var succeeded = false;
+    try {
+      await request();
+      succeeded = true;
+    } catch (e) {
+      if (mounted) _showError(e);
+    }
+    if (!mounted) return;
+
+    setState(() => _busyInvitationIds.remove(invitation.id));
+    if (succeeded) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(successMessage)),
+      );
+    }
+    await _load();
+  }
+
+  Future<void> _acceptInvitation(Invitation invitation) async {
+    final l10n = AppLocalizations.of(context);
+    await _respondToInvitation(
+      invitation: invitation,
+      request: () => Api.acceptInvitation(invitation.id),
+      successMessage: l10n.welcomeToHousehold(invitation.householdName),
+    );
+  }
+
+  Future<void> _declineInvitation(Invitation invitation) async {
+    final l10n = AppLocalizations.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.declineInvitation),
+        content: Text(l10n.declineInvitationConfirm(invitation.householdName)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            style: TextButton.styleFrom(
+              foregroundColor: Theme.of(dialogContext).colorScheme.error,
+            ),
+            child: Text(l10n.declineInvitation),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+
+    await _respondToInvitation(
+      invitation: invitation,
+      request: () => Api.declineInvitation(invitation.id),
+      successMessage: l10n.invitationDeclined,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -156,69 +233,147 @@ class _HouseholdsScreenState extends State<HouseholdsScreen> {
     }
 
     // ListView even when empty, so pull-to-refresh still works.
-    if (_households.isEmpty) {
-      final theme = Theme.of(context);
-      return RefreshIndicator(
-        onRefresh: _load,
-        child: ListView(
-          padding: const EdgeInsets.all(32),
+    return RefreshIndicator(
+      onRefresh: _load,
+      child: ListView(
+        // Bottom padding leaves room so the floating button does not hide the last card.
+        padding: const EdgeInsets.fromLTRB(0, 8, 0, 96),
+        children: [
+          if (_invitations.isNotEmpty) ..._buildInvitationSection(l10n),
+          // With invitations waiting, the invitations already explain what to do, so skip the empty state.
+          if (_households.isEmpty && _invitations.isEmpty) _buildEmptyState(l10n),
+          for (final household in _households) _buildHouseholdCard(household),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> _buildInvitationSection(AppLocalizations l10n) {
+    final theme = Theme.of(context);
+    return [
+      Padding(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+        child: Text(
+          l10n.incomingInvitesTitle,
+          style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+        ),
+      ),
+      for (final invitation in _invitations) _buildInvitationCard(invitation, l10n),
+    ];
+  }
+
+  // A warm, mustard-tinted card with the accept and decline buttons.
+  Widget _buildInvitationCard(Invitation invitation, AppLocalizations l10n) {
+    final busy = _busyInvitationIds.contains(invitation.id);
+
+    return Card(
+      color: AppColors.mustard.withValues(alpha: 0.18),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        side: BorderSide(color: AppColors.mustard.withValues(alpha: 0.7)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 80),
-            Column(
-              mainAxisSize: MainAxisSize.min,
+            Row(
               children: [
-                const Illustration(
-                  'empty-homes.png',
-                  fallbackIcon: Icons.house_rounded,
-                  height: 180,
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: AppColors.paper,
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: const Icon(Icons.mail_rounded, color: AppColors.terracotta),
                 ),
-                const SizedBox(height: 16),
-                Text(
-                  l10n.noHouseholdsTitle,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.invitedYou(invitation.invitedByName),
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      Text(
+                        invitation.householdName,
+                        style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 17),
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  l10n.noHouseholds,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                OutlinedButton(
+                  onPressed: busy ? null : () => _declineInvitation(invitation),
+                  child: Text(l10n.declineInvitation),
+                ),
+                const SizedBox(width: 8),
+                FilledButton(
+                  onPressed: busy ? null : () => _acceptInvitation(invitation),
+                  child: Text(l10n.acceptInvitation),
                 ),
               ],
             ),
           ],
         ),
-      );
-    }
+      ),
+    );
+  }
 
-    return RefreshIndicator(
-      onRefresh: _load,
-      child: ListView.builder(
-        // Bottom padding leaves room so the floating button does not hide the last card.
-        padding: const EdgeInsets.fromLTRB(0, 8, 0, 96),
-        itemCount: _households.length,
-        itemBuilder: (context, index) {
-          final household = _households[index];
-          return Card(
-            child: ListTile(
-              leading: Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: AppColors.terracotta.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: const Icon(Icons.house_rounded, color: AppColors.terracotta),
-              ),
-              title: Text(
-                household.name,
-                style: const TextStyle(fontWeight: FontWeight.w700),
-              ),
-              trailing: const Icon(Icons.chevron_right_rounded, color: AppColors.muted),
-              onTap: () => _openHousehold(household),
-            ),
-          );
-        },
+  Widget _buildEmptyState(AppLocalizations l10n) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(32, 80, 32, 0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Illustration(
+            'empty-homes.png',
+            fallbackIcon: Icons.house_rounded,
+            height: 180,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            l10n.noHouseholdsTitle,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            l10n.noHouseholds,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHouseholdCard(Household household) {
+    return Card(
+      child: ListTile(
+        leading: Container(
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            color: AppColors.terracotta.withValues(alpha: 0.12),
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: const Icon(Icons.house_rounded, color: AppColors.terracotta),
+        ),
+        title: Text(
+          household.name,
+          style: const TextStyle(fontWeight: FontWeight.w700),
+        ),
+        trailing: const Icon(Icons.chevron_right_rounded, color: AppColors.muted),
+        onTap: () => _openHousehold(household),
       ),
     );
   }

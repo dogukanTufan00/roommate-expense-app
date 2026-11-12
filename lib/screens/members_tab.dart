@@ -3,10 +3,13 @@ import 'package:roommate_expense_app/api/api.dart';
 import 'package:roommate_expense_app/l10n/app_localizations.dart';
 import 'package:roommate_expense_app/models.dart';
 import 'package:roommate_expense_app/session.dart';
+import 'package:roommate_expense_app/theme.dart';
 import 'package:roommate_expense_app/utils/avatar.dart';
 import 'package:roommate_expense_app/utils/errors.dart';
+import 'package:roommate_expense_app/utils/format.dart';
 
-// Shows the members of one home. Admins can add and remove members.
+// Shows the members of one home, plus the invitations that are still waiting for an answer.
+// Admins can invite and remove members and cancel invitations. Others see the lists only.
 // This is one tab inside the home screen, so it has its own Scaffold but no AppBar.
 class MembersTab extends StatefulWidget {
   const MembersTab({super.key, required this.householdId});
@@ -19,6 +22,7 @@ class MembersTab extends StatefulWidget {
 
 class _MembersTabState extends State<MembersTab> {
   List<Member> _members = [];
+  List<Invitation> _invitations = [];
 
   // true only during the first load. Later reloads keep the list on screen.
   bool _loading = true;
@@ -32,12 +36,17 @@ class _MembersTabState extends State<MembersTab> {
     _loadMembers();
   }
 
+  // Loads members and pending invitations together.
   Future<void> _loadMembers() async {
     try {
-      final members = await Api.getMembers(widget.householdId);
+      final results = await Future.wait<Object>([
+        Api.getMembers(widget.householdId),
+        Api.getHouseholdInvitations(widget.householdId),
+      ]);
       if (!mounted) return;
       setState(() {
-        _members = members;
+        _members = results[0] as List<Member>;
+        _invitations = results[1] as List<Invitation>;
         _loading = false;
         _loadErrorText = null;
       });
@@ -81,13 +90,57 @@ class _MembersTabState extends State<MembersTab> {
     );
   }
 
+  // Looks up this member's net balance so the remove dialog can warn about open debts.
+  // Returns null if the balances cannot be loaded; removing still works then, just without the warning.
+  Future<double?> _netBalanceOf(Member member) async {
+    try {
+      final balances = await Api.getBalances(widget.householdId);
+      for (final balance in balances) {
+        if (balance.userId == member.userId) return balance.netBalance;
+      }
+      return 0;
+    } catch (_) {
+      return null;
+    }
+  }
+
   Future<void> _removeMember(Member member) async {
     final l10n = AppLocalizations.of(context);
+
+    // Removing someone who still owes (or is owed) money is allowed: people do move out before
+    // settling up. Their balance stays visible and can still be settled later. But the admin
+    // should make that choice knowingly, so the dialog names the open amount.
+    final net = await _netBalanceOf(member);
+    if (!mounted) return;
+    String? warning;
+    if (net != null && net.abs() >= 0.01) {
+      final amount = formatMoney(context, net.abs());
+      warning = net < 0
+          ? l10n.removeMemberOwesWarning(member.name, amount)
+          : l10n.removeMemberGetsBackWarning(member.name, amount);
+    }
+
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: Text(l10n.removeMember),
-        content: Text(l10n.removeMemberConfirm(member.name)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (warning != null) ...[
+              Text(
+                warning,
+                style: const TextStyle(
+                  color: AppColors.owes,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 12),
+            ],
+            Text(l10n.removeMemberConfirm(member.name)),
+          ],
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, false),
@@ -124,23 +177,65 @@ class _MembersTabState extends State<MembersTab> {
     await _loadMembers();
   }
 
-  Future<void> _showAddMemberDialog() async {
+  Future<void> _showInviteDialog() async {
+    final l10n = AppLocalizations.of(context);
     // The dialog only collects the email. This screen calls the API,
     // so the dialog can close before the request finishes.
     final email = await showDialog<String>(
       context: context,
-      builder: (_) => const _AddMemberDialog(),
+      builder: (_) => const _InviteDialog(),
     );
     if (email == null || !mounted) return;
 
     try {
-      await Api.addMember(widget.householdId, email);
+      await Api.inviteMember(widget.householdId, email);
     } catch (e) {
       if (!mounted) return;
       _showError(e);
       return;
     }
     if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(l10n.inviteSent)),
+    );
+    await _loadMembers();
+  }
+
+  Future<void> _cancelInvitation(Invitation invitation) async {
+    final l10n = AppLocalizations.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.cancelInvitation),
+        content: Text(l10n.cancelInvitationConfirm(invitation.invitedUserName)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            style: TextButton.styleFrom(
+              foregroundColor: Theme.of(dialogContext).colorScheme.error,
+            ),
+            child: Text(l10n.cancelInvitation),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+
+    try {
+      await Api.cancelInvitation(widget.householdId, invitation.id);
+    } catch (e) {
+      if (!mounted) return;
+      _showError(e);
+      return;
+    }
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(l10n.invitationCancelled)),
+    );
     await _loadMembers();
   }
 
@@ -150,12 +245,12 @@ class _MembersTabState extends State<MembersTab> {
 
     return Scaffold(
       body: _buildBody(l10n),
-      // Only admins can add members.
+      // Only admins can invite members.
       floatingActionButton: _iAmAdmin
           ? FloatingActionButton.extended(
-              onPressed: _showAddMemberDialog,
+              onPressed: _showInviteDialog,
               icon: const Icon(Icons.person_add),
-              label: Text(l10n.addMember),
+              label: Text(l10n.inviteMember),
             )
           : null,
     );
@@ -183,14 +278,29 @@ class _MembersTabState extends State<MembersTab> {
       );
     }
 
+    final theme = Theme.of(context);
+
     return RefreshIndicator(
       onRefresh: _loadMembers,
-      child: ListView.builder(
+      child: ListView(
         // Extra bottom space so the last card is not hidden behind the FAB.
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 88),
-        itemCount: _members.length,
-        itemBuilder: (context, index) =>
-            _buildMemberCard(_members[index], l10n),
+        children: [
+          for (final member in _members) _buildMemberCard(member, l10n),
+          if (_invitations.isNotEmpty) ...[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 20, 16, 4),
+              child: Text(
+                l10n.pendingInvitesTitle,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ),
+            for (final invitation in _invitations)
+              _buildInvitationCard(invitation, l10n),
+          ],
+        ],
       ),
     );
   }
@@ -237,17 +347,56 @@ class _MembersTabState extends State<MembersTab> {
       ),
     );
   }
+
+  // An invitation that is still waiting for the invitee to answer.
+  Widget _buildInvitationCard(Invitation invitation, AppLocalizations l10n) {
+    return Card(
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: avatarColor(invitation.invitedUserId),
+          child: Text(
+            initials(invitation.invitedUserName),
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+        title: Text(invitation.invitedUserName),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(invitation.invitedUserEmail),
+            const SizedBox(height: 4),
+            Chip(
+              label: Text(l10n.awaitingResponse),
+              visualDensity: VisualDensity.compact,
+            ),
+          ],
+        ),
+        // Only admins can cancel. Everyone else sees the list read-only.
+        trailing: _iAmAdmin
+            ? IconButton(
+                icon: const Icon(Icons.close_rounded),
+                tooltip: l10n.cancelInvitation,
+                onPressed: () => _cancelInvitation(invitation),
+              )
+            : null,
+      ),
+    );
+  }
 }
 
-// Collects the email of the person to add. It returns the trimmed email, or null if cancelled.
-class _AddMemberDialog extends StatefulWidget {
-  const _AddMemberDialog();
+// Collects the email of the person to invite. It returns the trimmed email, or null if cancelled.
+class _InviteDialog extends StatefulWidget {
+  const _InviteDialog();
 
   @override
-  State<_AddMemberDialog> createState() => _AddMemberDialogState();
+  State<_InviteDialog> createState() => _InviteDialogState();
 }
 
-class _AddMemberDialogState extends State<_AddMemberDialog> {
+class _InviteDialogState extends State<_InviteDialog> {
   // Simple check. The API does the real validation.
   static final RegExp _emailPattern = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
 
@@ -271,22 +420,33 @@ class _AddMemberDialogState extends State<_AddMemberDialog> {
     final l10n = AppLocalizations.of(context);
 
     return AlertDialog(
-      title: Text(l10n.addMember),
-      content: Form(
-        key: _formKey,
-        child: TextFormField(
-          controller: _emailController,
-          keyboardType: TextInputType.emailAddress,
-          autofocus: true,
-          decoration: InputDecoration(hintText: l10n.memberEmailHint),
-          onFieldSubmitted: (_) => _submit(),
-          validator: (value) {
-            final text = value?.trim() ?? '';
-            if (text.isEmpty) return l10n.fieldRequired;
-            if (!_emailPattern.hasMatch(text)) return l10n.invalidEmail;
-            return null;
-          },
-        ),
+      title: Text(l10n.inviteMember),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.inviteMemberHint,
+            style: TextStyle(color: AppColors.muted),
+          ),
+          const SizedBox(height: 16),
+          Form(
+            key: _formKey,
+            child: TextFormField(
+              controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
+              autofocus: true,
+              decoration: InputDecoration(hintText: l10n.inviteMemberEmailHint),
+              onFieldSubmitted: (_) => _submit(),
+              validator: (value) {
+                final text = value?.trim() ?? '';
+                if (text.isEmpty) return l10n.fieldRequired;
+                if (!_emailPattern.hasMatch(text)) return l10n.invalidEmail;
+                return null;
+              },
+            ),
+          ),
+        ],
       ),
       actions: [
         TextButton(
@@ -295,7 +455,7 @@ class _AddMemberDialogState extends State<_AddMemberDialog> {
         ),
         FilledButton(
           onPressed: _submit,
-          child: Text(l10n.add),
+          child: Text(l10n.inviteMember),
         ),
       ],
     );

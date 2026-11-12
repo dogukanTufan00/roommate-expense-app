@@ -56,6 +56,49 @@ class Member {
   bool get isAdmin => role == 'ADMIN';
 }
 
+// An invitation to join a home. The invitee must accept it before joining.
+class Invitation {
+  final int id;
+  final int householdId;
+  final String householdName;
+  final int invitedUserId;
+  final String invitedUserName;
+  final String invitedUserEmail;
+  final int invitedById;
+  final String invitedByName;
+  // The API sends PENDING for open invitations.
+  final String status;
+  final DateTime createdAt;
+
+  Invitation({
+    required this.id,
+    required this.householdId,
+    required this.householdName,
+    required this.invitedUserId,
+    required this.invitedUserName,
+    required this.invitedUserEmail,
+    required this.invitedById,
+    required this.invitedByName,
+    required this.status,
+    required this.createdAt,
+  });
+
+  factory Invitation.fromJson(Map<String, dynamic> json) {
+    return Invitation(
+      id: json['id'] as int,
+      householdId: json['householdId'] as int,
+      householdName: json['householdName'] as String,
+      invitedUserId: json['invitedUserId'] as int,
+      invitedUserName: json['invitedUserName'] as String,
+      invitedUserEmail: json['invitedUserEmail'] as String,
+      invitedById: json['invitedById'] as int,
+      invitedByName: json['invitedByName'] as String,
+      status: json['status'] as String,
+      createdAt: DateTime.parse(json['createdAt'] as String),
+    );
+  }
+}
+
 // One person's part of an expense, as returned by the API.
 class ExpenseShare {
   final int userId;

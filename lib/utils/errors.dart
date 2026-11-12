@@ -38,7 +38,16 @@ String errorMessage(BuildContext context, Object error) {
     if (message.contains('already exists') || message.contains('Email')) {
       return l10n.errorEmailExists;
     }
-    if (message.contains('maximum')) return l10n.errorHouseholdFull;
+    // Checked before "pending": the full-home message also mentions pending invitations.
+    if (message.contains('maximum') || message.contains('Household is full')) {
+      return l10n.errorHouseholdFull;
+    }
+    if (message.contains('no longer pending')) {
+      return l10n.errorInvitationNotPending;
+    }
+    if (message.contains('pending invitation')) {
+      return l10n.errorInvitationPending;
+    }
     if (message.contains('already an active member')) {
       return l10n.errorAlreadyMember;
     }

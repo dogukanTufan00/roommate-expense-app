@@ -50,7 +50,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get noHouseholds =>
-      'Bir ev kur ve ev arkadaşlarını davet et ya da ev arkadaşından seni eklemesini iste.';
+      'Bir ev kur ve ev arkadaşlarını davet et ya da bir davet gelmesini bekle.';
 
   @override
   String get createHousehold => 'Yeni ev';
@@ -170,7 +170,62 @@ class AppLocalizationsTr extends AppLocalizations {
   String get deletePaymentConfirm => 'Bu ödeme kaydı silinsin mi?';
 
   @override
-  String get addMember => 'Üye ekle';
+  String get inviteMember => 'Davet et';
+
+  @override
+  String get inviteMemberHint =>
+      'Davet gönderilecek; kabul edince eve katılacak.';
+
+  @override
+  String get inviteMemberEmailHint =>
+      'Ev arkadaşının e-postası (hesabı olmalı)';
+
+  @override
+  String get inviteSent => 'Davet gönderildi';
+
+  @override
+  String get pendingInvitesTitle => 'Bekleyen davetler';
+
+  @override
+  String get awaitingResponse => 'Yanıt bekleniyor';
+
+  @override
+  String get cancelInvitation => 'Daveti iptal et';
+
+  @override
+  String cancelInvitationConfirm(String name) {
+    return '$name için gönderilen davet iptal edilsin mi?';
+  }
+
+  @override
+  String get invitationCancelled => 'Davet iptal edildi';
+
+  @override
+  String get incomingInvitesTitle => 'Sana davet var';
+
+  @override
+  String invitedYou(String inviter) {
+    return '$inviter seni bir eve davet etti';
+  }
+
+  @override
+  String get acceptInvitation => 'Kabul et';
+
+  @override
+  String get declineInvitation => 'Reddet';
+
+  @override
+  String declineInvitationConfirm(String household) {
+    return '$household davetini reddetmek istediğinden emin misin?';
+  }
+
+  @override
+  String welcomeToHousehold(String household) {
+    return '$household artık senin de evin, hoş geldin!';
+  }
+
+  @override
+  String get invitationDeclined => 'Davet reddedildi';
 
   @override
   String get memberEmailHint => 'Ev arkadaşının e-postası (hesabı olmalı)';
@@ -181,6 +236,16 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String removeMemberConfirm(String name) {
     return '$name evden çıkarılsın mı? Geçmiş giderleri ve borçları korunur.';
+  }
+
+  @override
+  String removeMemberOwesWarning(String name, String amount) {
+    return 'Dikkat: $name henüz ödeşmedi, eve $amount borcu var. Çıkarsan da borcu bakiyede kalır; ödeme yapınca kaydedebilirsin.';
+  }
+
+  @override
+  String removeMemberGetsBackWarning(String name, String amount) {
+    return 'Dikkat: $name henüz ödeşmedi, evden $amount alacağı var. Çıkarsan da alacağı bakiyede kalır; ona ödeme yapınca kaydedebilirsin.';
   }
 
   @override
@@ -227,10 +292,18 @@ class AppLocalizationsTr extends AppLocalizations {
   String get errorEmailExists => 'Bu e-postayla zaten bir hesap var.';
 
   @override
-  String get errorHouseholdFull => 'Ev dolu (en fazla 3 kişi).';
+  String get errorHouseholdFull => 'Ev dolu (davetler dahil en fazla 3 kişi).';
 
   @override
   String get errorAlreadyMember => 'Bu kişi zaten evin üyesi.';
+
+  @override
+  String get errorInvitationPending =>
+      'Bu kişinin bu evle ilgili bekleyen bir daveti zaten var.';
+
+  @override
+  String get errorInvitationNotPending =>
+      'Bu davet artık açık değil. İptal edilmiş ya da yanıtlanmış olabilir.';
 
   @override
   String get errorLastAdmin => 'Evin son yöneticisi evden çıkamaz.';
