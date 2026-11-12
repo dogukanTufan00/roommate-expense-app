@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:roommate_expense_app/api/api.dart';
 import 'package:roommate_expense_app/l10n/app_localizations.dart';
 import 'package:roommate_expense_app/models.dart';
+import 'package:roommate_expense_app/push/push_service.dart';
 import 'package:roommate_expense_app/screens/household_screen.dart';
 import 'package:roommate_expense_app/screens/login_screen.dart';
+import 'package:roommate_expense_app/screens/notifications_screen.dart';
 import 'package:roommate_expense_app/screens/profile_screen.dart';
 import 'package:roommate_expense_app/session.dart';
 import 'package:roommate_expense_app/theme.dart';
@@ -26,6 +28,9 @@ class _HouseholdsScreenState extends State<HouseholdsScreen> {
   // Invitations with a request in progress. Their buttons are disabled meanwhile.
   final Set<int> _busyInvitationIds = {};
 
+  // Unread notifications, shown as the badge on the bell.
+  int _unreadCount = 0;
+
   bool _loading = true;
   Object? _loadError;
 
@@ -33,6 +38,18 @@ class _HouseholdsScreenState extends State<HouseholdsScreen> {
   void initState() {
     super.initState();
     _load();
+    // A push arrived while the app was open: refresh the bell badge.
+    PushService.notificationsChanged.addListener(_onPushReceived);
+  }
+
+  @override
+  void dispose() {
+    PushService.notificationsChanged.removeListener(_onPushReceived);
+    super.dispose();
+  }
+
+  void _onPushReceived() {
+    _loadUnreadCount();
   }
 
   // Loads homes and my invitations together. Errors are shown here, so callers can just await it.
@@ -49,6 +66,7 @@ class _HouseholdsScreenState extends State<HouseholdsScreen> {
         _loadError = null;
         _loading = false;
       });
+      await _loadUnreadCount();
     } catch (e) {
       if (!mounted) return;
       if (_households.isEmpty && _invitations.isEmpty) {
@@ -62,6 +80,17 @@ class _HouseholdsScreenState extends State<HouseholdsScreen> {
         setState(() => _loading = false);
         _showError(e);
       }
+    }
+  }
+
+  // Updates the bell badge. If this fails, the old number stays, so no error is shown.
+  Future<void> _loadUnreadCount() async {
+    try {
+      final count = await Api.getUnreadNotificationCount();
+      if (!mounted) return;
+      setState(() => _unreadCount = count);
+    } catch (_) {
+      return;
     }
   }
 
@@ -80,6 +109,7 @@ class _HouseholdsScreenState extends State<HouseholdsScreen> {
   }
 
   Future<void> _logout() async {
+    await PushService.unregisterOnLogout();
     await Session.clear();
     if (!mounted) return;
     // Remove every screen from the stack so "back" cannot return to the homes.
@@ -89,12 +119,14 @@ class _HouseholdsScreenState extends State<HouseholdsScreen> {
     );
   }
 
-  // The profile has its own data, so nothing needs reloading when it closes.
-  void _openProfile() {
-    Navigator.push(
+  // The profile does not change the notifications, but the badge is refreshed when it closes.
+  Future<void> _openProfile() async {
+    await Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => const ProfileScreen()),
     );
+    if (!mounted) return;
+    await _loadUnreadCount();
   }
 
   Future<void> _openHousehold(Household household) async {
@@ -104,6 +136,16 @@ class _HouseholdsScreenState extends State<HouseholdsScreen> {
     );
     if (!mounted) return;
     // The home may have been renamed or deleted while we were inside it.
+    await _load();
+  }
+
+  // Notifications can lead to invitations or other homes, so everything is reloaded on return.
+  Future<void> _openNotifications() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+    );
+    if (!mounted) return;
     await _load();
   }
 
@@ -203,6 +245,16 @@ class _HouseholdsScreenState extends State<HouseholdsScreen> {
       appBar: AppBar(
         title: Text(l10n.households),
         actions: [
+          Badge.count(
+            count: _unreadCount,
+            isLabelVisible: _unreadCount > 0,
+            backgroundColor: AppColors.terracotta,
+            child: IconButton(
+              icon: const Icon(Icons.notifications_outlined),
+              tooltip: l10n.notificationsTitle,
+              onPressed: _openNotifications,
+            ),
+          ),
           IconButton(
             icon: const Icon(Icons.person_outline),
             tooltip: l10n.profile,

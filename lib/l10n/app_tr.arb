@@ -379,5 +379,153 @@
   "statementColCategory": "Kategori",
   "statementColPaidBy": "Ödeyen",
   "statementColAmount": "Tutar",
-  "statementColNote": "Not"
+  "statementColNote": "Not",
+  "pushChannelName": "Evce bildirimleri",
+  "pushChannelDescription": "Yeni gider, ödeme ve davet bildirimleri",
+  "notificationsTitle": "Bildirimler",
+  "notificationsEmpty": "Henüz yeni bir şey yok. Ev arkadaşların gider ya da ödeme ekledikçe burada göreceksin.",
+  "notificationsMarkAllRead": "Tümünü okundu yap",
+  "notificationsGroupToday": "Bugün",
+  "notificationsGroupYesterday": "Dün",
+  "notificationsGroupEarlier": "Daha önce",
+  "notificationsJustNow": "Az önce",
+  "notificationsMinutesAgo": "{count} dk önce",
+  "@notificationsMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notificationsHoursAgo": "{count} sa önce",
+  "@notificationsHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notificationsNoAccess": "Bu eve artık erişimin yok.",
+  "notificationGenericTitle": "Bildirim",
+  "notificationExpenseTitle": "Yeni gider · {household}",
+  "@notificationExpenseTitle": {
+    "placeholders": {
+      "household": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationExpenseBody": "{actor}, {detail} için {amount} ekledi",
+  "@notificationExpenseBody": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationExpenseBodyNoDetail": "{actor}, {amount} tutarında gider ekledi",
+  "@notificationExpenseBodyNoDetail": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationPaymentTitle": "Ödeme · {household}",
+  "@notificationPaymentTitle": {
+    "placeholders": {
+      "household": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationPaymentBody": "{payer} → {receiver}: {amount} ödeme kaydedildi",
+  "@notificationPaymentBody": {
+    "placeholders": {
+      "payer": {
+        "type": "String"
+      },
+      "receiver": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationPaymentBodyNoTarget": "{actor} {amount} ödeme kaydetti",
+  "@notificationPaymentBodyNoTarget": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationInvitationTitle": "Yeni davet",
+  "notificationInvitationBody": "{actor} seni bir eve davet etti: {household}",
+  "@notificationInvitationBody": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "household": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationAcceptedTitle": "Yeni ev arkadaşı · {household}",
+  "@notificationAcceptedTitle": {
+    "placeholders": {
+      "household": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationAcceptedBody": "{actor} davetini kabul etti",
+  "@notificationAcceptedBody": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationRecurringTitle": "Tekrarlayan gider · {household}",
+  "@notificationRecurringTitle": {
+    "placeholders": {
+      "household": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationRecurringBody": "{detail} {amount} bu ay da eklendi",
+  "@notificationRecurringBody": {
+    "placeholders": {
+      "detail": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationRecurringBodyNoDetail": "{amount} tutarındaki gider bu ay da eklendi",
+  "@notificationRecurringBodyNoDetail": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  }
 }

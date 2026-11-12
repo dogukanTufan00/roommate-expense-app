@@ -1573,6 +1573,162 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Note'**
   String get statementColNote;
+
+  /// No description provided for @pushChannelName.
+  ///
+  /// In en, this message translates to:
+  /// **'Evce notifications'**
+  String get pushChannelName;
+
+  /// No description provided for @pushChannelDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Alerts for new expenses, payments and invitations'**
+  String get pushChannelDescription;
+
+  /// No description provided for @notificationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationsTitle;
+
+  /// No description provided for @notificationsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing new yet. When your roommates add expenses or payments, you\'ll see them here.'**
+  String get notificationsEmpty;
+
+  /// No description provided for @notificationsMarkAllRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark all as read'**
+  String get notificationsMarkAllRead;
+
+  /// No description provided for @notificationsGroupToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get notificationsGroupToday;
+
+  /// No description provided for @notificationsGroupYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get notificationsGroupYesterday;
+
+  /// No description provided for @notificationsGroupEarlier.
+  ///
+  /// In en, this message translates to:
+  /// **'Earlier'**
+  String get notificationsGroupEarlier;
+
+  /// No description provided for @notificationsJustNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Just now'**
+  String get notificationsJustNow;
+
+  /// No description provided for @notificationsMinutesAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} min ago'**
+  String notificationsMinutesAgo(int count);
+
+  /// No description provided for @notificationsHoursAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} h ago'**
+  String notificationsHoursAgo(int count);
+
+  /// No description provided for @notificationsNoAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'You no longer have access to this home.'**
+  String get notificationsNoAccess;
+
+  /// No description provided for @notificationGenericTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification'**
+  String get notificationGenericTitle;
+
+  /// No description provided for @notificationExpenseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New expense · {household}'**
+  String notificationExpenseTitle(String household);
+
+  /// No description provided for @notificationExpenseBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} added {amount} for {detail}'**
+  String notificationExpenseBody(String actor, String amount, String detail);
+
+  /// No description provided for @notificationExpenseBodyNoDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} added an expense of {amount}'**
+  String notificationExpenseBodyNoDetail(String actor, String amount);
+
+  /// No description provided for @notificationPaymentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment · {household}'**
+  String notificationPaymentTitle(String household);
+
+  /// No description provided for @notificationPaymentBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{payer} paid {receiver} {amount}'**
+  String notificationPaymentBody(String payer, String receiver, String amount);
+
+  /// No description provided for @notificationPaymentBodyNoTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} recorded a payment of {amount}'**
+  String notificationPaymentBodyNoTarget(String actor, String amount);
+
+  /// No description provided for @notificationInvitationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New invitation'**
+  String get notificationInvitationTitle;
+
+  /// No description provided for @notificationInvitationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} invited you to {household}'**
+  String notificationInvitationBody(String actor, String household);
+
+  /// No description provided for @notificationAcceptedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New roommate · {household}'**
+  String notificationAcceptedTitle(String household);
+
+  /// No description provided for @notificationAcceptedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} accepted the invitation'**
+  String notificationAcceptedBody(String actor);
+
+  /// No description provided for @notificationRecurringTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring expense · {household}'**
+  String notificationRecurringTitle(String household);
+
+  /// No description provided for @notificationRecurringBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{detail} {amount} was added for this month too'**
+  String notificationRecurringBody(String detail, String amount);
+
+  /// No description provided for @notificationRecurringBodyNoDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'A recurring expense of {amount} was added for this month too'**
+  String notificationRecurringBodyNoDetail(String amount);
 }
 
 class _AppLocalizationsDelegate

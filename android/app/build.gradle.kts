@@ -1,17 +1,27 @@
 plugins {
     id("com.android.application")
+    // Firebase needs android/app/google-services.json (see README, "Push notifications").
+    id("com.google.gms.google-services")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
 
 android {
     namespace = "com.dogukan_tufan.roommate_expense_app"
-    compileSdk = flutter.compileSdkVersion
+    // Android 17 (API 37). flutter_local_notifications and the AndroidX libraries it
+    // pulls in require compiling against 37, so this is above flutter.compileSdkVersion.
+    compileSdk {
+        version = release(37) {
+            minorApiLevel = 0
+        }
+    }
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        // Needed by flutter_local_notifications (java.time APIs on older Android versions).
+        isCoreLibraryDesugaringEnabled = true
     }
 
     defaultConfig {
@@ -42,6 +52,10 @@ kotlin {
     compilerOptions {
         jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
     }
+}
+
+dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }
 
 flutter {

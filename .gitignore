@@ -49,3 +49,6 @@ app.*.map.json
 
 # Kotlin compiler cache created by the Android build
 android/.kotlin/
+
+# Project-specific Firebase config; each developer downloads their own (see README, "Push notifications").
+android/app/google-services.json

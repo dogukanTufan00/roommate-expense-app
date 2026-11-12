@@ -430,6 +430,45 @@ class Api {
     });
   }
 
+  // ---- Notifications ----
+
+  // Latest first. Only the newest `limit` items are sent.
+  static Future<List<AppNotification>> getNotifications({int limit = 50}) async {
+    final data = await ApiClient.get('/api/notifications?limit=$limit');
+    return _parseList(data, AppNotification.fromJson);
+  }
+
+  // The badge number on the households screen.
+  static Future<int> getUnreadNotificationCount() async {
+    final data = await ApiClient.get('/api/notifications/unread-count');
+    return (data as Map<String, dynamic>)['count'] as int;
+  }
+
+  static Future<void> markNotificationRead(int notificationId) async {
+    await ApiClient.post('/api/notifications/$notificationId/read');
+  }
+
+  static Future<void> markAllNotificationsRead() async {
+    await ApiClient.post('/api/notifications/read-all');
+  }
+
+  // ---- Push devices ----
+
+  // Saves this phone's push token and app language ("tr" or "en"), so the server
+  // can send notifications in that language. Sent again when either one changes.
+  static Future<void> registerPushDevice(String token, String language) async {
+    await ApiClient.put('/api/users/me/devices', {
+      'token': token,
+      'language': language,
+    });
+  }
+
+  // Removes this phone's push token. Call it before logging out, while the token is still valid.
+  static Future<void> unregisterPushDevice(String token) async {
+    // The token goes in the body, not the URL, so it does not end up in server access logs.
+    await ApiClient.delete('/api/users/me/devices', {'token': token});
+  }
+
   // Turns a JSON array into a list of models.
   static List<T> _parseList<T>(
     dynamic data,

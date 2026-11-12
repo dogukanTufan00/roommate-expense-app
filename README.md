@@ -82,6 +82,16 @@ flutter run --release --dart-define=API_BASE_URL=http://localhost:8080
 
 `adb reverse` forwards the phone's `localhost:8080` to your computer, so no Wi-Fi, IP address or firewall setup is needed. Run the `adb reverse` command again after you reconnect the cable.
 
+## Push Notifications
+
+Push notifications use Firebase Cloud Messaging (`firebase_core`, `firebase_messaging`, `flutter_local_notifications`). The Android build applies the Google services plugin, so **the app does not build without a Firebase config file**, even if you do not use push. Setup, once per developer:
+
+1. Create a project in the [Firebase console](https://console.firebase.google.com).
+2. Add an Android app with the package name `com.dogukan_tufan.roommate_expense_app`.
+3. Download `google-services.json` and put it in `android/app/`.
+
+`android/app/google-services.json` is in `.gitignore`, because it is specific to each Firebase project. Every developer downloads their own copy and never commits it.
+
 ## Roadmap
 
 - Attach a receipt, bill or bank-transfer photo to an expense

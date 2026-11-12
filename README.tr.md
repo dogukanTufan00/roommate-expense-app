@@ -82,6 +82,16 @@ flutter run --release --dart-define=API_BASE_URL=http://localhost:8080
 
 `adb reverse`, telefondaki `localhost:8080` adresini bilgisayarınıza yönlendirir; bu nedenle Wi-Fi, IP adresi veya güvenlik duvarı ayarı gerekmez. Kabloyu yeniden taktıktan sonra `adb reverse` komutunu yeniden çalıştırın.
 
+## Push Bildirimleri
+
+Push bildirimleri Firebase Cloud Messaging ile çalışır (`firebase_core`, `firebase_messaging`, `flutter_local_notifications`). Android derlemesi Google services eklentisini uygular; bu nedenle **Firebase yapılandırma dosyası olmadan uygulama derlenmez**, push kullanmasanız bile. Her geliştirici bir kez şunları yapar:
+
+1. [Firebase konsolunda](https://console.firebase.google.com) bir proje oluşturun.
+2. Paket adı `com.dogukan_tufan.roommate_expense_app` olan bir Android uygulaması ekleyin.
+3. `google-services.json` dosyasını indirip `android/app/` klasörüne koyun.
+
+`android/app/google-services.json` dosyası `.gitignore` içindedir, çünkü her Firebase projesine özeldir. Her geliştirici kendi kopyasını indirir ve bu dosyayı asla commit etmez.
+
 ## Yol Haritası
 
 - Bir gidere fiş, fatura veya dekont fotoğrafı ekleme

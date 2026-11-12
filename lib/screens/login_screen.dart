@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:roommate_expense_app/api/api.dart';
 import 'package:roommate_expense_app/api/api_client.dart';
 import 'package:roommate_expense_app/l10n/app_localizations.dart';
+import 'package:roommate_expense_app/push/push_service.dart';
 import 'package:roommate_expense_app/screens/households_screen.dart';
 import 'package:roommate_expense_app/screens/register_screen.dart';
 import 'package:roommate_expense_app/theme.dart';
@@ -37,6 +38,8 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _loading = true);
     try {
       await Api.login(_emailController.text.trim(), _passwordController.text);
+      // Asks for the notification permission and registers this phone. Failures are logged only.
+      PushService.registerAfterLogin();
       if (!mounted) return;
 
       // Replace the login screen so "back" does not return to it.

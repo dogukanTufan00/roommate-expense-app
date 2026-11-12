@@ -55,7 +55,8 @@ class ApiClient {
   static Future<dynamic> patch(String path, Object? body) =>
       _send('PATCH', path, body);
 
-  static Future<dynamic> delete(String path) => _send('DELETE', path);
+  static Future<dynamic> delete(String path, [Object? body]) =>
+      _send('DELETE', path, body);
 
   // Sends one file as multipart/form-data, in the part named "file".
   // The body is built by hand so the part's Content-Type is exactly the file's type.
@@ -179,7 +180,7 @@ class ApiClient {
       case 'PATCH':
         return http.patch(uri, headers: headers, body: body);
       default:
-        return http.delete(uri, headers: headers);
+        return http.delete(uri, headers: headers, body: body);
     }
   }
 

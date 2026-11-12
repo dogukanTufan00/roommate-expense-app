@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:roommate_expense_app/api/api.dart';
 import 'package:roommate_expense_app/l10n/app_localizations.dart';
 import 'package:roommate_expense_app/models.dart';
+import 'package:roommate_expense_app/push/push_service.dart';
 import 'package:roommate_expense_app/screens/login_screen.dart';
 import 'package:roommate_expense_app/session.dart';
 import 'package:roommate_expense_app/theme.dart';
@@ -120,6 +121,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   // Same as the logout button on the homes screen.
   Future<void> _logout() async {
+    await PushService.unregisterOnLogout();
     await Session.clear();
     if (!mounted) return;
     Navigator.of(context).pushAndRemoveUntil(

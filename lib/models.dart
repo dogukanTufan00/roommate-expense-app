@@ -707,6 +707,82 @@ class Statement {
   }
 }
 
+// The kinds of notification the API sends. A kind the app does not know yet is unknown.
+enum NotificationType {
+  expenseAdded,
+  paymentRecorded,
+  invitationReceived,
+  invitationAccepted,
+  recurringExpenseAdded,
+  unknown;
+
+  static NotificationType fromApi(String value) => switch (value) {
+        'EXPENSE_ADDED' => expenseAdded,
+        'PAYMENT_RECORDED' => paymentRecorded,
+        'INVITATION_RECEIVED' => invitationReceived,
+        'INVITATION_ACCEPTED' => invitationAccepted,
+        'RECURRING_EXPENSE_ADDED' => recurringExpenseAdded,
+        _ => unknown,
+      };
+}
+
+// One item from GET /api/notifications. The server sends data only, so the app
+// writes the text in the current language (see utils/notification_text.dart).
+class AppNotification {
+  final int id;
+  final NotificationType type;
+  final int? householdId;
+  final String householdName;
+  // The person who caused it, for example who added the expense.
+  final String actorName;
+  // The other person, for example the receiver of a payment. Null for other types.
+  final String? targetName;
+  final double? amount;
+  // For example the expense description "Market". Null when there is none.
+  final String? detail;
+  final int? expenseId;
+  final int? paymentId;
+  final int? invitationId;
+  // Changed on the phone when the user reads it, so the list updates at once.
+  bool read;
+  // Converted to the phone's time zone.
+  final DateTime createdAt;
+
+  AppNotification({
+    required this.id,
+    required this.type,
+    required this.householdId,
+    required this.householdName,
+    required this.actorName,
+    required this.targetName,
+    required this.amount,
+    required this.detail,
+    required this.expenseId,
+    required this.paymentId,
+    required this.invitationId,
+    required this.read,
+    required this.createdAt,
+  });
+
+  factory AppNotification.fromJson(Map<String, dynamic> json) {
+    return AppNotification(
+      id: json['id'] as int,
+      type: NotificationType.fromApi(json['type'] as String? ?? ''),
+      householdId: json['householdId'] as int?,
+      householdName: json['householdName'] as String? ?? '',
+      actorName: json['actorName'] as String? ?? '',
+      targetName: _optionalText(json['targetName']),
+      amount: (json['amount'] as num?)?.toDouble(),
+      detail: _optionalText(json['detail']),
+      expenseId: json['expenseId'] as int?,
+      paymentId: json['paymentId'] as int?,
+      invitationId: json['invitationId'] as int?,
+      read: json['read'] as bool? ?? false,
+      createdAt: DateTime.parse(json['createdAt'] as String).toLocal(),
+    );
+  }
+}
+
 // Reads a JSON number as a double. Missing or odd values count as 0.
 double _numValue(Object? value) => value is num ? value.toDouble() : 0;
 

@@ -884,4 +884,112 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get statementColNote => 'Note';
+
+  @override
+  String get pushChannelName => 'Evce notifications';
+
+  @override
+  String get pushChannelDescription =>
+      'Alerts for new expenses, payments and invitations';
+
+  @override
+  String get notificationsTitle => 'Notifications';
+
+  @override
+  String get notificationsEmpty =>
+      'Nothing new yet. When your roommates add expenses or payments, you\'ll see them here.';
+
+  @override
+  String get notificationsMarkAllRead => 'Mark all as read';
+
+  @override
+  String get notificationsGroupToday => 'Today';
+
+  @override
+  String get notificationsGroupYesterday => 'Yesterday';
+
+  @override
+  String get notificationsGroupEarlier => 'Earlier';
+
+  @override
+  String get notificationsJustNow => 'Just now';
+
+  @override
+  String notificationsMinutesAgo(int count) {
+    return '$count min ago';
+  }
+
+  @override
+  String notificationsHoursAgo(int count) {
+    return '$count h ago';
+  }
+
+  @override
+  String get notificationsNoAccess => 'You no longer have access to this home.';
+
+  @override
+  String get notificationGenericTitle => 'Notification';
+
+  @override
+  String notificationExpenseTitle(String household) {
+    return 'New expense · $household';
+  }
+
+  @override
+  String notificationExpenseBody(String actor, String amount, String detail) {
+    return '$actor added $amount for $detail';
+  }
+
+  @override
+  String notificationExpenseBodyNoDetail(String actor, String amount) {
+    return '$actor added an expense of $amount';
+  }
+
+  @override
+  String notificationPaymentTitle(String household) {
+    return 'Payment · $household';
+  }
+
+  @override
+  String notificationPaymentBody(String payer, String receiver, String amount) {
+    return '$payer paid $receiver $amount';
+  }
+
+  @override
+  String notificationPaymentBodyNoTarget(String actor, String amount) {
+    return '$actor recorded a payment of $amount';
+  }
+
+  @override
+  String get notificationInvitationTitle => 'New invitation';
+
+  @override
+  String notificationInvitationBody(String actor, String household) {
+    return '$actor invited you to $household';
+  }
+
+  @override
+  String notificationAcceptedTitle(String household) {
+    return 'New roommate · $household';
+  }
+
+  @override
+  String notificationAcceptedBody(String actor) {
+    return '$actor accepted the invitation';
+  }
+
+  @override
+  String notificationRecurringTitle(String household) {
+    return 'Recurring expense · $household';
+  }
+
+  @override
+  String notificationRecurringBody(String detail, String amount) {
+    return '$detail $amount was added for this month too';
+  }
+
+  @override
+  String notificationRecurringBodyNoDetail(String amount) {
+    return 'A recurring expense of $amount was added for this month too';
+  }
 }

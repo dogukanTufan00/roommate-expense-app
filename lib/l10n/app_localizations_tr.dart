@@ -860,4 +860,112 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get statementColNote => 'Not';
+
+  @override
+  String get pushChannelName => 'Evce bildirimleri';
+
+  @override
+  String get pushChannelDescription =>
+      'Yeni gider, ödeme ve davet bildirimleri';
+
+  @override
+  String get notificationsTitle => 'Bildirimler';
+
+  @override
+  String get notificationsEmpty =>
+      'Henüz yeni bir şey yok. Ev arkadaşların gider ya da ödeme ekledikçe burada göreceksin.';
+
+  @override
+  String get notificationsMarkAllRead => 'Tümünü okundu yap';
+
+  @override
+  String get notificationsGroupToday => 'Bugün';
+
+  @override
+  String get notificationsGroupYesterday => 'Dün';
+
+  @override
+  String get notificationsGroupEarlier => 'Daha önce';
+
+  @override
+  String get notificationsJustNow => 'Az önce';
+
+  @override
+  String notificationsMinutesAgo(int count) {
+    return '$count dk önce';
+  }
+
+  @override
+  String notificationsHoursAgo(int count) {
+    return '$count sa önce';
+  }
+
+  @override
+  String get notificationsNoAccess => 'Bu eve artık erişimin yok.';
+
+  @override
+  String get notificationGenericTitle => 'Bildirim';
+
+  @override
+  String notificationExpenseTitle(String household) {
+    return 'Yeni gider · $household';
+  }
+
+  @override
+  String notificationExpenseBody(String actor, String amount, String detail) {
+    return '$actor, $detail için $amount ekledi';
+  }
+
+  @override
+  String notificationExpenseBodyNoDetail(String actor, String amount) {
+    return '$actor, $amount tutarında gider ekledi';
+  }
+
+  @override
+  String notificationPaymentTitle(String household) {
+    return 'Ödeme · $household';
+  }
+
+  @override
+  String notificationPaymentBody(String payer, String receiver, String amount) {
+    return '$payer → $receiver: $amount ödeme kaydedildi';
+  }
+
+  @override
+  String notificationPaymentBodyNoTarget(String actor, String amount) {
+    return '$actor $amount ödeme kaydetti';
+  }
+
+  @override
+  String get notificationInvitationTitle => 'Yeni davet';
+
+  @override
+  String notificationInvitationBody(String actor, String household) {
+    return '$actor seni bir eve davet etti: $household';
+  }
+
+  @override
+  String notificationAcceptedTitle(String household) {
+    return 'Yeni ev arkadaşı · $household';
+  }
+
+  @override
+  String notificationAcceptedBody(String actor) {
+    return '$actor davetini kabul etti';
+  }
+
+  @override
+  String notificationRecurringTitle(String household) {
+    return 'Tekrarlayan gider · $household';
+  }
+
+  @override
+  String notificationRecurringBody(String detail, String amount) {
+    return '$detail $amount bu ay da eklendi';
+  }
+
+  @override
+  String notificationRecurringBodyNoDetail(String amount) {
+    return '$amount tutarındaki gider bu ay da eklendi';
+  }
 }

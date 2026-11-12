@@ -478,5 +478,153 @@
   "statementColCategory": "Category",
   "statementColPaidBy": "Paid by",
   "statementColAmount": "Amount",
-  "statementColNote": "Note"
+  "statementColNote": "Note",
+  "pushChannelName": "Evce notifications",
+  "pushChannelDescription": "Alerts for new expenses, payments and invitations",
+  "notificationsTitle": "Notifications",
+  "notificationsEmpty": "Nothing new yet. When your roommates add expenses or payments, you'll see them here.",
+  "notificationsMarkAllRead": "Mark all as read",
+  "notificationsGroupToday": "Today",
+  "notificationsGroupYesterday": "Yesterday",
+  "notificationsGroupEarlier": "Earlier",
+  "notificationsJustNow": "Just now",
+  "notificationsMinutesAgo": "{count} min ago",
+  "@notificationsMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notificationsHoursAgo": "{count} h ago",
+  "@notificationsHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notificationsNoAccess": "You no longer have access to this home.",
+  "notificationGenericTitle": "Notification",
+  "notificationExpenseTitle": "New expense · {household}",
+  "@notificationExpenseTitle": {
+    "placeholders": {
+      "household": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationExpenseBody": "{actor} added {amount} for {detail}",
+  "@notificationExpenseBody": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationExpenseBodyNoDetail": "{actor} added an expense of {amount}",
+  "@notificationExpenseBodyNoDetail": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationPaymentTitle": "Payment · {household}",
+  "@notificationPaymentTitle": {
+    "placeholders": {
+      "household": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationPaymentBody": "{payer} paid {receiver} {amount}",
+  "@notificationPaymentBody": {
+    "placeholders": {
+      "payer": {
+        "type": "String"
+      },
+      "receiver": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationPaymentBodyNoTarget": "{actor} recorded a payment of {amount}",
+  "@notificationPaymentBodyNoTarget": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationInvitationTitle": "New invitation",
+  "notificationInvitationBody": "{actor} invited you to {household}",
+  "@notificationInvitationBody": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "household": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationAcceptedTitle": "New roommate · {household}",
+  "@notificationAcceptedTitle": {
+    "placeholders": {
+      "household": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationAcceptedBody": "{actor} accepted the invitation",
+  "@notificationAcceptedBody": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationRecurringTitle": "Recurring expense · {household}",
+  "@notificationRecurringTitle": {
+    "placeholders": {
+      "household": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationRecurringBody": "{detail} {amount} was added for this month too",
+  "@notificationRecurringBody": {
+    "placeholders": {
+      "detail": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationRecurringBodyNoDetail": "A recurring expense of {amount} was added for this month too",
+  "@notificationRecurringBodyNoDetail": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  }
 }

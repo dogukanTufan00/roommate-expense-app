@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:roommate_expense_app/api/api_client.dart';
 import 'package:roommate_expense_app/l10n/app_localizations.dart';
+import 'package:roommate_expense_app/push/push_service.dart';
 import 'package:roommate_expense_app/screens/households_screen.dart';
 import 'package:roommate_expense_app/screens/login_screen.dart';
 import 'package:roommate_expense_app/session.dart';
 import 'package:roommate_expense_app/theme.dart';
 
-// Lets code outside the widget tree (the API client) open screens.
+// Lets code outside the widget tree (the API client, push taps) open screens.
 final navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Session.load();
+  // Push setup is optional: it must never keep the app from starting.
+  await PushService.init().timeout(const Duration(seconds: 10), onTimeout: () {});
   runApp(const RoommateApp());
 }
 
