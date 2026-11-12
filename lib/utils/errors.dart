@@ -15,7 +15,17 @@ String errorMessage(BuildContext context, Object error) {
   final message = error.message;
 
   if (status == 0) return l10n.errorNetwork;
-  if (status == 400) return l10n.errorBadRequest;
+  if (status == 400) {
+    // Split errors from the API. The keywords are a best guess at the English messages.
+    final lower = message.toLowerCase();
+    if (lower.contains('share') ||
+        lower.contains('percent') ||
+        lower.contains('sum') ||
+        lower.contains('participant')) {
+      return l10n.errorInvalidSplit;
+    }
+    return l10n.errorBadRequest;
+  }
   if (status == 401) return l10n.errorUnauthorized;
   if (status == 403) return l10n.errorForbidden;
 

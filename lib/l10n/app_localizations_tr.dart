@@ -262,4 +262,87 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get noExpensesTitle => 'Henüz gider yok';
+
+  @override
+  String get splitTitle => 'Kimler paylaşıyor?';
+
+  @override
+  String get splitEqual => 'Eşit';
+
+  @override
+  String get splitPercent => 'Yüzde';
+
+  @override
+  String get splitAmount => 'Tutar';
+
+  @override
+  String splitRemainingPercent(String value) {
+    return 'Kalan: %$value';
+  }
+
+  @override
+  String splitRemainingAmount(String value) {
+    return 'Kalan: $value';
+  }
+
+  @override
+  String get splitNotBalanced =>
+      'Paylar tam olarak tamamlanmadan kaydedemezsin.';
+
+  @override
+  String get splitNoneSelected => 'En az bir kişi seçili kalmalı.';
+
+  @override
+  String get splitInvalidValue => 'Geçerli bir değer gir (en fazla 2 ondalık).';
+
+  @override
+  String get splitDefaultApplied =>
+      'Evin varsayılan oranı uygulandı. İstersen değiştirebilirsin.';
+
+  @override
+  String splitFormerMembers(String names) {
+    return '$names evden ayrıldı, paylaşımdan çıkarıldı. Kaydetmeden önce payları yeniden dağıtmalısın.';
+  }
+
+  @override
+  String yourShare(String amount) {
+    return 'Payın: $amount';
+  }
+
+  @override
+  String get notInSplit => 'Sana pay düşmüyor';
+
+  @override
+  String get customAmounts => 'Özel tutarlar';
+
+  @override
+  String get splitDefaults => 'Varsayılan oranlar';
+
+  @override
+  String get splitDefaultsIntro =>
+      'Burada belirlediğin oran, o kategoride gider eklerken otomatik gelir. Sadece aynı kişiler evde yaşadığı sürece geçerli.';
+
+  @override
+  String get splitDefaultsReadOnly =>
+      'Oranları yalnızca yönetici değiştirebilir.';
+
+  @override
+  String get splitEqualSplit => 'Eşit bölünür';
+
+  @override
+  String get removeDefault => 'Varsayılanı kaldır';
+
+  @override
+  String get errorInvalidSplit =>
+      'Paylaşım geçerli değil. Payları kontrol edip tekrar dene.';
+
+  @override
+  String get movedOutTag => 'evden ayrıldı';
+
+  @override
+  String get changeSplit => 'Bölüşümü değiştir';
+
+  @override
+  String get splitAmountChanged =>
+      'Tutarı değiştirdin, o yüzden tutar bazlı bölüşümü de ayarlamalısın.';
 }

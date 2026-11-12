@@ -56,6 +56,31 @@ class Member {
   bool get isAdmin => role == 'ADMIN';
 }
 
+// One person's part of an expense, as returned by the API.
+class ExpenseShare {
+  final int userId;
+  final String name;
+  final double owedAmount;
+  // Only set when the expense split is PERCENT. Otherwise null.
+  final double? percent;
+
+  ExpenseShare({
+    required this.userId,
+    required this.name,
+    required this.owedAmount,
+    required this.percent,
+  });
+
+  factory ExpenseShare.fromJson(Map<String, dynamic> json) {
+    return ExpenseShare(
+      userId: json['userId'] as int,
+      name: json['name'] as String,
+      owedAmount: (json['owedAmount'] as num).toDouble(),
+      percent: (json['percent'] as num?)?.toDouble(),
+    );
+  }
+}
+
 class Expense {
   final int id;
   final int householdId;
@@ -68,6 +93,10 @@ class Expense {
   final bool recurring;
   final DateTime expenseDate;
   final DateTime createdAt;
+  // One of: EQUAL, PERCENT, AMOUNT. Old responses without it count as EQUAL.
+  final String splitType;
+  // Who shares the expense and how much each person owes. Empty if the API sent none.
+  final List<ExpenseShare> shares;
 
   Expense({
     required this.id,
@@ -80,9 +109,12 @@ class Expense {
     required this.recurring,
     required this.expenseDate,
     required this.createdAt,
+    this.splitType = 'EQUAL',
+    this.shares = const [],
   });
 
   factory Expense.fromJson(Map<String, dynamic> json) {
+    final rawShares = json['shares'] as List<dynamic>? ?? const [];
     return Expense(
       id: json['id'] as int,
       householdId: json['householdId'] as int,
@@ -94,6 +126,51 @@ class Expense {
       recurring: json['recurring'] as bool,
       expenseDate: DateTime.parse(json['expenseDate'] as String),
       createdAt: DateTime.parse(json['createdAt'] as String),
+      splitType: json['splitType'] as String? ?? 'EQUAL',
+      shares: [
+        for (final item in rawShares)
+          ExpenseShare.fromJson(item as Map<String, dynamic>),
+      ],
+    );
+  }
+}
+
+// One person's percent in a category's default split.
+class CategorySplitShare {
+  final int userId;
+  final String name;
+  final double percent;
+
+  CategorySplitShare({
+    required this.userId,
+    required this.name,
+    required this.percent,
+  });
+
+  factory CategorySplitShare.fromJson(Map<String, dynamic> json) {
+    return CategorySplitShare(
+      userId: json['userId'] as int,
+      name: json['name'] as String,
+      percent: (json['percent'] as num).toDouble(),
+    );
+  }
+}
+
+// The household's default ratio for one category, for example RENT.
+class CategorySplitDefault {
+  final String category;
+  final List<CategorySplitShare> shares;
+
+  CategorySplitDefault({required this.category, required this.shares});
+
+  factory CategorySplitDefault.fromJson(Map<String, dynamic> json) {
+    final rawShares = json['shares'] as List<dynamic>? ?? const [];
+    return CategorySplitDefault(
+      category: json['category'] as String,
+      shares: [
+        for (final item in rawShares)
+          CategorySplitShare.fromJson(item as Map<String, dynamic>),
+      ],
     );
   }
 }

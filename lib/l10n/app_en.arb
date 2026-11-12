@@ -107,5 +107,56 @@
   "summaryOwes": "You owe your roommates",
   "summarySettled": "You're all square. Nobody owes you, you owe nobody.",
   "noHouseholdsTitle": "No home yet",
-  "noExpensesTitle": "No expenses yet"
+  "noExpensesTitle": "No expenses yet",
+  "splitTitle": "Who shares this?",
+  "splitEqual": "Equal",
+  "splitPercent": "Percent",
+  "splitAmount": "Amount",
+  "splitRemainingPercent": "Remaining: %{value}",
+  "@splitRemainingPercent": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "splitRemainingAmount": "Remaining: {value}",
+  "@splitRemainingAmount": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "splitNotBalanced": "Shares must add up exactly before you can save.",
+  "splitNoneSelected": "At least one person must stay selected.",
+  "splitInvalidValue": "Enter a valid value (up to 2 decimals).",
+  "splitDefaultApplied": "The home's default ratio was applied. You can still change it.",
+  "splitFormerMembers": "{names} moved out and was removed from this split. Redistribute the shares to save.",
+  "@splitFormerMembers": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "yourShare": "Your share: {amount}",
+  "@yourShare": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "notInSplit": "Not part of this split",
+  "customAmounts": "Custom amounts",
+  "splitDefaults": "Default ratios",
+  "splitDefaultsIntro": "The ratio set here is pre-filled when you add an expense in that category. It only applies while the same people live in the house.",
+  "splitDefaultsReadOnly": "Only admins can change the ratios.",
+  "splitEqualSplit": "Split equally",
+  "removeDefault": "Remove default",
+  "errorInvalidSplit": "The split is not valid. Check the shares and try again.",
+  "movedOutTag": "moved out",
+  "changeSplit": "Change split",
+  "splitAmountChanged": "You changed the amount, so the amount split needs adjusting too."
 }

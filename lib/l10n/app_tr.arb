@@ -80,5 +80,56 @@
   "summaryOwes": "Ev arkadaşlarına borçlusun",
   "summarySettled": "Hesabın temiz. Kimseye borcun yok, kimsenin sana borcu yok.",
   "noHouseholdsTitle": "Henüz bir evin yok",
-  "noExpensesTitle": "Henüz gider yok"
+  "noExpensesTitle": "Henüz gider yok",
+  "splitTitle": "Kimler paylaşıyor?",
+  "splitEqual": "Eşit",
+  "splitPercent": "Yüzde",
+  "splitAmount": "Tutar",
+  "splitRemainingPercent": "Kalan: %{value}",
+  "@splitRemainingPercent": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "splitRemainingAmount": "Kalan: {value}",
+  "@splitRemainingAmount": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "splitNotBalanced": "Paylar tam olarak tamamlanmadan kaydedemezsin.",
+  "splitNoneSelected": "En az bir kişi seçili kalmalı.",
+  "splitInvalidValue": "Geçerli bir değer gir (en fazla 2 ondalık).",
+  "splitDefaultApplied": "Evin varsayılan oranı uygulandı. İstersen değiştirebilirsin.",
+  "splitFormerMembers": "{names} evden ayrıldı, paylaşımdan çıkarıldı. Kaydetmeden önce payları yeniden dağıtmalısın.",
+  "@splitFormerMembers": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "yourShare": "Payın: {amount}",
+  "@yourShare": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "notInSplit": "Sana pay düşmüyor",
+  "customAmounts": "Özel tutarlar",
+  "splitDefaults": "Varsayılan oranlar",
+  "splitDefaultsIntro": "Burada belirlediğin oran, o kategoride gider eklerken otomatik gelir. Sadece aynı kişiler evde yaşadığı sürece geçerli.",
+  "splitDefaultsReadOnly": "Oranları yalnızca yönetici değiştirebilir.",
+  "splitEqualSplit": "Eşit bölünür",
+  "removeDefault": "Varsayılanı kaldır",
+  "errorInvalidSplit": "Paylaşım geçerli değil. Payları kontrol edip tekrar dene.",
+  "movedOutTag": "evden ayrıldı",
+  "changeSplit": "Bölüşümü değiştir",
+  "splitAmountChanged": "Tutarı değiştirdin, o yüzden tutar bazlı bölüşümü de ayarlamalısın."
 }

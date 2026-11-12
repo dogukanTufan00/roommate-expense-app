@@ -5,6 +5,7 @@ import 'package:roommate_expense_app/models.dart';
 import 'package:roommate_expense_app/screens/balances_tab.dart';
 import 'package:roommate_expense_app/screens/expenses_tab.dart';
 import 'package:roommate_expense_app/screens/members_tab.dart';
+import 'package:roommate_expense_app/screens/split_defaults_screen.dart';
 import 'package:roommate_expense_app/utils/errors.dart';
 
 // One home, with three tabs: expenses, balances and members.
@@ -18,7 +19,7 @@ class HouseholdScreen extends StatefulWidget {
 }
 
 // Menu actions in the app bar. A private enum keeps the menu code type-safe.
-enum _HouseholdMenuAction { rename, delete }
+enum _HouseholdMenuAction { splitDefaults, rename, delete }
 
 class _HouseholdScreenState extends State<HouseholdScreen> {
   // Kept in the State so the title updates after a rename.
@@ -48,6 +49,15 @@ class _HouseholdScreenState extends State<HouseholdScreen> {
       if (!mounted) return;
       _showError(e);
     }
+  }
+
+  void _openSplitDefaults() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => SplitDefaultsScreen(householdId: widget.household.id),
+      ),
+    );
   }
 
   Future<void> _delete() async {
@@ -102,6 +112,8 @@ class _HouseholdScreenState extends State<HouseholdScreen> {
             PopupMenuButton<_HouseholdMenuAction>(
               onSelected: (action) {
                 switch (action) {
+                  case _HouseholdMenuAction.splitDefaults:
+                    _openSplitDefaults();
                   case _HouseholdMenuAction.rename:
                     _rename();
                   case _HouseholdMenuAction.delete:
@@ -109,6 +121,16 @@ class _HouseholdScreenState extends State<HouseholdScreen> {
                 }
               },
               itemBuilder: (_) => [
+                PopupMenuItem(
+                  value: _HouseholdMenuAction.splitDefaults,
+                  child: Row(
+                    children: [
+                      const Icon(Icons.pie_chart_outline),
+                      const SizedBox(width: 12),
+                      Text(l10n.splitDefaults),
+                    ],
+                  ),
+                ),
                 PopupMenuItem(
                   value: _HouseholdMenuAction.rename,
                   child: Row(

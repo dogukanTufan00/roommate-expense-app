@@ -3,6 +3,7 @@ import 'package:roommate_expense_app/api/api.dart';
 import 'package:roommate_expense_app/l10n/app_localizations.dart';
 import 'package:roommate_expense_app/models.dart';
 import 'package:roommate_expense_app/screens/expense_form_screen.dart';
+import 'package:roommate_expense_app/session.dart';
 import 'package:roommate_expense_app/theme.dart';
 import 'package:roommate_expense_app/utils/category.dart';
 import 'package:roommate_expense_app/utils/errors.dart';
@@ -23,6 +24,8 @@ class _ExpensesTabState extends State<ExpensesTab> {
   // null means "still loading".
   List<Expense>? _expenses;
   String? _loadError;
+  // The logged in user's id, for the "your share" line. Null if the members could not be loaded.
+  int? _myUserId;
 
   @override
   void initState() {
@@ -33,9 +36,11 @@ class _ExpensesTabState extends State<ExpensesTab> {
   Future<void> _load() async {
     try {
       final expenses = await Api.getExpenses(widget.householdId);
+      final myUserId = await _findMyUserId();
       if (!mounted) return;
       setState(() {
         _expenses = expenses;
+        _myUserId = myUserId;
         _loadError = null;
       });
     } catch (e) {
@@ -50,6 +55,52 @@ class _ExpensesTabState extends State<ExpensesTab> {
         );
       }
     }
+  }
+
+  // Finds the logged in user in the member list, the same way the members screen does.
+  // The list is only used for the split line, so a failure is not shown.
+  Future<int?> _findMyUserId() async {
+    try {
+      final members = await Api.getMembers(widget.householdId);
+      for (final member in members) {
+        if (member.email == Session.email) return member.userId;
+      }
+      return null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  // A short line about the split, for example "Payın: 173,34 ₺ · %60 / %40".
+  // Returns null when there is nothing to say (old expenses without shares).
+  String? _splitLine(BuildContext context, AppLocalizations l10n, Expense e) {
+    if (e.shares.isEmpty) return null;
+
+    final parts = <String>[];
+    final myUserId = _myUserId;
+    if (myUserId != null) {
+      ExpenseShare? mine;
+      for (final share in e.shares) {
+        if (share.userId == myUserId) mine = share;
+      }
+      parts.add(
+        mine == null
+            ? l10n.notInSplit
+            : l10n.yourShare(formatMoney(context, mine.owedAmount)),
+      );
+    }
+
+    if (e.splitType == 'PERCENT') {
+      parts.add(
+        e.shares
+            .map((s) => '%${formatPercent(context, s.percent ?? 0)}')
+            .join(' / '),
+      );
+    } else if (e.splitType == 'AMOUNT') {
+      parts.add(l10n.customAmounts);
+    }
+
+    return parts.isEmpty ? null : parts.join(' · ');
   }
 
   // Opens the form. A new expense has no expense; editing passes one.
@@ -158,6 +209,7 @@ class _ExpensesTabState extends State<ExpensesTab> {
           final e = expenses[index];
           final description = e.description ?? '';
           final color = categoryColor(e.category);
+          final splitLine = _splitLine(context, l10n, e);
 
           return Card(
             child: ListTile(
@@ -176,18 +228,32 @@ class _ExpensesTabState extends State<ExpensesTab> {
                     : description,
                 style: const TextStyle(fontWeight: FontWeight.w700),
               ),
-              subtitle: Row(
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Flexible(
-                    child: Text(
-                      '${l10n.paidByName(e.paidByName)} · ${formatDate(context, e.expenseDate)}',
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          '${l10n.paidByName(e.paidByName)} · ${formatDate(context, e.expenseDate)}',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      if (e.recurring) ...[
+                        const SizedBox(width: 4),
+                        const Icon(Icons.repeat, size: 16),
+                      ],
+                    ],
                   ),
-                  if (e.recurring) ...[
-                    const SizedBox(width: 4),
-                    const Icon(Icons.repeat, size: 16),
-                  ],
+                  if (splitLine != null)
+                    Text(
+                      splitLine,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: AppColors.muted,
+                          ),
+                    ),
                 ],
               ),
               trailing: Text(

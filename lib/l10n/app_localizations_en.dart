@@ -261,4 +261,86 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noExpensesTitle => 'No expenses yet';
+
+  @override
+  String get splitTitle => 'Who shares this?';
+
+  @override
+  String get splitEqual => 'Equal';
+
+  @override
+  String get splitPercent => 'Percent';
+
+  @override
+  String get splitAmount => 'Amount';
+
+  @override
+  String splitRemainingPercent(String value) {
+    return 'Remaining: %$value';
+  }
+
+  @override
+  String splitRemainingAmount(String value) {
+    return 'Remaining: $value';
+  }
+
+  @override
+  String get splitNotBalanced =>
+      'Shares must add up exactly before you can save.';
+
+  @override
+  String get splitNoneSelected => 'At least one person must stay selected.';
+
+  @override
+  String get splitInvalidValue => 'Enter a valid value (up to 2 decimals).';
+
+  @override
+  String get splitDefaultApplied =>
+      'The home\'s default ratio was applied. You can still change it.';
+
+  @override
+  String splitFormerMembers(String names) {
+    return '$names moved out and was removed from this split. Redistribute the shares to save.';
+  }
+
+  @override
+  String yourShare(String amount) {
+    return 'Your share: $amount';
+  }
+
+  @override
+  String get notInSplit => 'Not part of this split';
+
+  @override
+  String get customAmounts => 'Custom amounts';
+
+  @override
+  String get splitDefaults => 'Default ratios';
+
+  @override
+  String get splitDefaultsIntro =>
+      'The ratio set here is pre-filled when you add an expense in that category. It only applies while the same people live in the house.';
+
+  @override
+  String get splitDefaultsReadOnly => 'Only admins can change the ratios.';
+
+  @override
+  String get splitEqualSplit => 'Split equally';
+
+  @override
+  String get removeDefault => 'Remove default';
+
+  @override
+  String get errorInvalidSplit =>
+      'The split is not valid. Check the shares and try again.';
+
+  @override
+  String get movedOutTag => 'moved out';
+
+  @override
+  String get changeSplit => 'Change split';
+
+  @override
+  String get splitAmountChanged =>
+      'You changed the amount, so the amount split needs adjusting too.';
 }

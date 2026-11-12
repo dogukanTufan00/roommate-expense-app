@@ -583,6 +583,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No expenses yet'**
   String get noExpensesTitle;
+
+  /// No description provided for @splitTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Who shares this?'**
+  String get splitTitle;
+
+  /// No description provided for @splitEqual.
+  ///
+  /// In en, this message translates to:
+  /// **'Equal'**
+  String get splitEqual;
+
+  /// No description provided for @splitPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'Percent'**
+  String get splitPercent;
+
+  /// No description provided for @splitAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get splitAmount;
+
+  /// No description provided for @splitRemainingPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining: %{value}'**
+  String splitRemainingPercent(String value);
+
+  /// No description provided for @splitRemainingAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining: {value}'**
+  String splitRemainingAmount(String value);
+
+  /// No description provided for @splitNotBalanced.
+  ///
+  /// In en, this message translates to:
+  /// **'Shares must add up exactly before you can save.'**
+  String get splitNotBalanced;
+
+  /// No description provided for @splitNoneSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'At least one person must stay selected.'**
+  String get splitNoneSelected;
+
+  /// No description provided for @splitInvalidValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid value (up to 2 decimals).'**
+  String get splitInvalidValue;
+
+  /// No description provided for @splitDefaultApplied.
+  ///
+  /// In en, this message translates to:
+  /// **'The home\'s default ratio was applied. You can still change it.'**
+  String get splitDefaultApplied;
+
+  /// No description provided for @splitFormerMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'{names} moved out and was removed from this split. Redistribute the shares to save.'**
+  String splitFormerMembers(String names);
+
+  /// No description provided for @yourShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Your share: {amount}'**
+  String yourShare(String amount);
+
+  /// No description provided for @notInSplit.
+  ///
+  /// In en, this message translates to:
+  /// **'Not part of this split'**
+  String get notInSplit;
+
+  /// No description provided for @customAmounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom amounts'**
+  String get customAmounts;
+
+  /// No description provided for @splitDefaults.
+  ///
+  /// In en, this message translates to:
+  /// **'Default ratios'**
+  String get splitDefaults;
+
+  /// No description provided for @splitDefaultsIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'The ratio set here is pre-filled when you add an expense in that category. It only applies while the same people live in the house.'**
+  String get splitDefaultsIntro;
+
+  /// No description provided for @splitDefaultsReadOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Only admins can change the ratios.'**
+  String get splitDefaultsReadOnly;
+
+  /// No description provided for @splitEqualSplit.
+  ///
+  /// In en, this message translates to:
+  /// **'Split equally'**
+  String get splitEqualSplit;
+
+  /// No description provided for @removeDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove default'**
+  String get removeDefault;
+
+  /// No description provided for @errorInvalidSplit.
+  ///
+  /// In en, this message translates to:
+  /// **'The split is not valid. Check the shares and try again.'**
+  String get errorInvalidSplit;
+
+  /// No description provided for @movedOutTag.
+  ///
+  /// In en, this message translates to:
+  /// **'moved out'**
+  String get movedOutTag;
+
+  /// No description provided for @changeSplit.
+  ///
+  /// In en, this message translates to:
+  /// **'Change split'**
+  String get changeSplit;
+
+  /// No description provided for @splitAmountChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'You changed the amount, so the amount split needs adjusting too.'**
+  String get splitAmountChanged;
 }
 
 class _AppLocalizationsDelegate

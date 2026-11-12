@@ -12,6 +12,13 @@ String formatMoney(BuildContext context, double amount) {
   ).format(amount);
 }
 
+// Formats a percent number for the current language, without a % sign.
+// Turkish gives "33,5", English gives "33.5". At most 2 decimals.
+String formatPercent(BuildContext context, double value) {
+  final localeTag = Localizations.localeOf(context).toLanguageTag();
+  return NumberFormat('#,##0.##', localeTag).format(value);
+}
+
 // Formats a date for the current language, for example "10 Kas 2026" or "10 Nov 2026".
 String formatDate(BuildContext context, DateTime date) {
   final localeTag = Localizations.localeOf(context).toLanguageTag();

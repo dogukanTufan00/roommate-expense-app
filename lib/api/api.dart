@@ -10,6 +10,22 @@ final DateFormat _apiDateFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss");
 // Rounds money to 2 decimals, for example 12.345 -> 12.35.
 double _round2(double value) => (value * 100).round() / 100;
 
+// One participant in an expense split. value is the percent (PERCENT) or the
+// amount (AMOUNT). It is null for EQUAL, where the API ignores it.
+class ShareInput {
+  final int userId;
+  final double? value;
+
+  ShareInput({required this.userId, required this.value});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'userId': userId,
+      'value': value == null ? null : _round2(value!),
+    };
+  }
+}
+
 // The data needed to create or update an expense.
 class ExpenseInput {
   final int paidByUserId;
@@ -19,6 +35,10 @@ class ExpenseInput {
   final String? description;
   final bool recurring;
   final DateTime expenseDate;
+  // One of: EQUAL, PERCENT, AMOUNT. Null on edit means "keep the stored split".
+  final String? splitType;
+  // The participants. Null on edit means "keep the stored split". Omitted from the JSON.
+  final List<ShareInput>? shares;
 
   ExpenseInput({
     required this.paidByUserId,
@@ -27,10 +47,12 @@ class ExpenseInput {
     required this.description,
     required this.recurring,
     required this.expenseDate,
+    required this.splitType,
+    required this.shares,
   });
 
   Map<String, dynamic> toJson() {
-    return {
+    final json = <String, dynamic>{
       'paidByUserId': paidByUserId,
       'amount': _round2(amount),
       'category': category,
@@ -38,6 +60,12 @@ class ExpenseInput {
       'recurring': recurring,
       'expenseDate': _apiDateFormat.format(expenseDate),
     };
+    // Sending neither splitType nor shares tells the API to keep the stored split.
+    if (splitType != null) json['splitType'] = splitType;
+    if (shares != null) {
+      json['shares'] = [for (final share in shares!) share.toJson()];
+    }
+    return json;
   }
 }
 
@@ -134,6 +162,37 @@ class Api {
 
   static Future<void> deleteExpense(int householdId, int expenseId) async {
     await ApiClient.delete('/api/households/$householdId/expenses/$expenseId');
+  }
+
+  // ---- Category split defaults ----
+
+  // Only the categories that have a default are returned.
+  static Future<List<CategorySplitDefault>> getSplitDefaults(int householdId) async {
+    final data = await ApiClient.get('/api/households/$householdId/split-defaults');
+    return _parseList(data, CategorySplitDefault.fromJson);
+  }
+
+  // percents maps userId to percent. Admins only. The API checks that the total is 100.
+  static Future<CategorySplitDefault> saveSplitDefault(
+    int householdId,
+    String category,
+    Map<int, double> percents,
+  ) async {
+    final data = await ApiClient.put(
+      '/api/households/$householdId/split-defaults/$category',
+      {
+        'shares': [
+          for (final entry in percents.entries)
+            {'userId': entry.key, 'value': _round2(entry.value)},
+        ],
+      },
+    );
+    return CategorySplitDefault.fromJson(data as Map<String, dynamic>);
+  }
+
+  // Admins only.
+  static Future<void> deleteSplitDefault(int householdId, String category) async {
+    await ApiClient.delete('/api/households/$householdId/split-defaults/$category');
   }
 
   // ---- Balances and settlements ----
