@@ -377,14 +377,14 @@ abstract class AppLocalizations {
   /// No description provided for @markAsPaid.
   ///
   /// In en, this message translates to:
-  /// **'Mark as paid'**
+  /// **'Record payment'**
   String get markAsPaid;
 
   /// No description provided for @markAsPaidConfirm.
   ///
   /// In en, this message translates to:
-  /// **'Record that {from} paid {to} {amount}?'**
-  String markAsPaidConfirm(String from, String to, String amount);
+  /// **'Record that {from} paid {to}?'**
+  String markAsPaidConfirm(String from, String to);
 
   /// No description provided for @paymentsTitle.
   ///
@@ -641,7 +641,7 @@ abstract class AppLocalizations {
   /// No description provided for @errorLastAdmin.
   ///
   /// In en, this message translates to:
-  /// **'The last admin cannot leave the home.'**
+  /// **'You are the last admin. Make another member an admin first.'**
   String get errorLastAdmin;
 
   /// No description provided for @errorNoSuchUser.
@@ -835,6 +835,330 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You changed the amount, so the amount split needs adjusting too.'**
   String get splitAmountChanged;
+
+  /// No description provided for @editPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit payment'**
+  String get editPayment;
+
+  /// No description provided for @edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get edit;
+
+  /// No description provided for @paymentNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Note (optional)'**
+  String get paymentNote;
+
+  /// No description provided for @paymentNoteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. paid by bank transfer'**
+  String get paymentNoteHint;
+
+  /// No description provided for @paymentFromTo.
+  ///
+  /// In en, this message translates to:
+  /// **'{from} → {to}'**
+  String paymentFromTo(String from, String to);
+
+  /// No description provided for @paymentUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment updated'**
+  String get paymentUpdated;
+
+  /// No description provided for @copyIban.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy IBAN'**
+  String get copyIban;
+
+  /// No description provided for @ibanCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'IBAN copied'**
+  String get ibanCopied;
+
+  /// No description provided for @addIbanHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your IBAN in your profile so roommates can pay you easily.'**
+  String get addIbanHint;
+
+  /// No description provided for @makeAdmin.
+  ///
+  /// In en, this message translates to:
+  /// **'Make admin'**
+  String get makeAdmin;
+
+  /// No description provided for @removeAdmin.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove admin role'**
+  String get removeAdmin;
+
+  /// No description provided for @makeAdminConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Make {name} an admin? Admins can invite and remove members and change the ratios.'**
+  String makeAdminConfirm(String name);
+
+  /// No description provided for @removeAdminConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove admin rights from {name}?'**
+  String removeAdminConfirm(String name);
+
+  /// No description provided for @roleChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Role updated'**
+  String get roleChanged;
+
+  /// No description provided for @memberOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Member options'**
+  String get memberOptions;
+
+  /// No description provided for @leaveHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave home'**
+  String get leaveHome;
+
+  /// No description provided for @leaveHomeConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave this home? Someone has to invite you again to come back.'**
+  String get leaveHomeConfirm;
+
+  /// No description provided for @leaveHomeOwesWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Heads up: you haven\'t settled up and still owe {amount}. If you leave, the debt stays in the balances and you can pay it later.'**
+  String leaveHomeOwesWarning(String amount);
+
+  /// No description provided for @leaveHomeGetsBackWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Heads up: you haven\'t settled up and are still owed {amount}. If you leave, it stays in the balances and your roommates can pay you later.'**
+  String leaveHomeGetsBackWarning(String amount);
+
+  /// No description provided for @profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profile;
+
+  /// No description provided for @securityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Security'**
+  String get securityTitle;
+
+  /// No description provided for @iban.
+  ///
+  /// In en, this message translates to:
+  /// **'IBAN'**
+  String get iban;
+
+  /// No description provided for @ibanPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'TR00 0000 0000 0000 0000 0000 00'**
+  String get ibanPlaceholder;
+
+  /// No description provided for @ibanHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional. Roommates use it to pay you.'**
+  String get ibanHelper;
+
+  /// No description provided for @ibanFormatHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A Turkish IBAN starts with TR and has 26 characters.'**
+  String get ibanFormatHint;
+
+  /// No description provided for @profileUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated'**
+  String get profileUpdated;
+
+  /// No description provided for @changePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Change password'**
+  String get changePassword;
+
+  /// No description provided for @currentPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Current password'**
+  String get currentPassword;
+
+  /// No description provided for @newPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'New password'**
+  String get newPassword;
+
+  /// No description provided for @repeatNewPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat new password'**
+  String get repeatNewPassword;
+
+  /// No description provided for @passwordMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'The passwords don\'t match'**
+  String get passwordMismatch;
+
+  /// No description provided for @passwordChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Password changed'**
+  String get passwordChanged;
+
+  /// No description provided for @errorInvalidIban.
+  ///
+  /// In en, this message translates to:
+  /// **'This IBAN doesn\'t look right. Check it and try again.'**
+  String get errorInvalidIban;
+
+  /// No description provided for @errorWrongCurrentPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Your current password is wrong.'**
+  String get errorWrongCurrentPassword;
+
+  /// No description provided for @founder.
+  ///
+  /// In en, this message translates to:
+  /// **'Founder'**
+  String get founder;
+
+  /// No description provided for @stepDownAdmin.
+  ///
+  /// In en, this message translates to:
+  /// **'Step down as admin'**
+  String get stepDownAdmin;
+
+  /// No description provided for @stepDownAdminConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Step down as admin? You\'ll stay in the home as a member.'**
+  String get stepDownAdminConfirm;
+
+  /// No description provided for @transferOwnership.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer ownership'**
+  String get transferOwnership;
+
+  /// No description provided for @transferOwnershipConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} will become the home\'s founder and an admin. You stay an admin.'**
+  String transferOwnershipConfirm(String name);
+
+  /// No description provided for @transferOwnershipAdminConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} will become the home\'s founder. You stay an admin.'**
+  String transferOwnershipAdminConfirm(String name);
+
+  /// No description provided for @ownershipTransferred.
+  ///
+  /// In en, this message translates to:
+  /// **'Ownership transferred'**
+  String get ownershipTransferred;
+
+  /// No description provided for @errorFounderProtected.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the founder can change the founder\'s role or remove them.'**
+  String get errorFounderProtected;
+
+  /// No description provided for @errorOnlyFounderTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the founder can transfer ownership.'**
+  String get errorOnlyFounderTransfer;
+
+  /// No description provided for @errorOnlyFounderDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the home\'s founder can delete it.'**
+  String get errorOnlyFounderDelete;
+
+  /// No description provided for @suggestedAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested: {amount}'**
+  String suggestedAmount(String amount);
+
+  /// No description provided for @overpaymentWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'{from} currently owes {to} {owed}. You entered {amount}, so the extra will look like {to} owes {from}. Save anyway?'**
+  String overpaymentWarning(String from, String to, String owed, String amount);
+
+  /// No description provided for @overpaymentNoDebtWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'{from} doesn\'t owe {to} anything right now. You entered {amount}, so it will look like {to} owes {from}. Save anyway?'**
+  String overpaymentNoDebtWarning(String from, String to, String amount);
+
+  /// No description provided for @saveAnyway.
+  ///
+  /// In en, this message translates to:
+  /// **'Save anyway'**
+  String get saveAnyway;
+
+  /// No description provided for @monthExpenseSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 expense} other{{count} expenses}} · {amount}'**
+  String monthExpenseSummary(int count, String amount);
+
+  /// No description provided for @filterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get filterAll;
+
+  /// No description provided for @filterPaidByMe.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid by me'**
+  String get filterPaidByMe;
+
+  /// No description provided for @filterInMyShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Where I have a share'**
+  String get filterInMyShare;
+
+  /// No description provided for @noExpensesMatchFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'No expenses match this filter'**
+  String get noExpensesMatchFilter;
+
+  /// No description provided for @clearFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear filter'**
+  String get clearFilter;
 }
 
 class _AppLocalizationsDelegate

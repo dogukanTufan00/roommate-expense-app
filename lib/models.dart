@@ -33,6 +33,10 @@ class Member {
   final String email;
   final String role;
   final DateTime joinedAt;
+  // The member's saved IBAN, or null. Shown and copied in the members list.
+  final String? iban;
+  // True for the user who created the home, or who was given ownership.
+  final bool founder;
 
   Member({
     required this.userId,
@@ -40,6 +44,8 @@ class Member {
     required this.email,
     required this.role,
     required this.joinedAt,
+    this.iban,
+    this.founder = false,
   });
 
   factory Member.fromJson(Map<String, dynamic> json) {
@@ -49,6 +55,8 @@ class Member {
       email: json['email'] as String,
       role: json['role'] as String,
       joinedAt: DateTime.parse(json['joinedAt'] as String),
+      iban: _optionalText(json['iban']),
+      founder: json['founder'] as bool? ?? false,
     );
   }
 
@@ -245,6 +253,8 @@ class Settlement {
   final int toUserId;
   final String toName;
   final double amount;
+  // The receiver's IBAN, or null if they have not added one.
+  final String? toIban;
 
   Settlement({
     required this.fromUserId,
@@ -252,6 +262,7 @@ class Settlement {
     required this.toUserId,
     required this.toName,
     required this.amount,
+    this.toIban,
   });
 
   factory Settlement.fromJson(Map<String, dynamic> json) {
@@ -261,6 +272,7 @@ class Settlement {
       toUserId: json['toUserId'] as int,
       toName: json['toName'] as String,
       amount: (json['amount'] as num).toDouble(),
+      toIban: _optionalText(json['toIban']),
     );
   }
 }
@@ -274,6 +286,8 @@ class Payment {
   final String toUserName;
   final double amount;
   final DateTime paidAt;
+  // Optional note, up to 200 characters. Null when there is none.
+  final String? note;
 
   Payment({
     required this.id,
@@ -284,6 +298,7 @@ class Payment {
     required this.toUserName,
     required this.amount,
     required this.paidAt,
+    this.note,
   });
 
   factory Payment.fromJson(Map<String, dynamic> json) {
@@ -296,6 +311,41 @@ class Payment {
       toUserName: json['toUserName'] as String,
       amount: (json['amount'] as num).toDouble(),
       paidAt: DateTime.parse(json['paidAt'] as String),
+      note: _optionalText(json['note']),
     );
   }
+}
+
+// The logged in user's own profile, from GET /api/users/me.
+class UserProfile {
+  final int id;
+  final String name;
+  final String email;
+  // The saved IBAN without spaces, or null if none is set.
+  final String? iban;
+  final DateTime createdAt;
+
+  UserProfile({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.iban,
+    required this.createdAt,
+  });
+
+  factory UserProfile.fromJson(Map<String, dynamic> json) {
+    return UserProfile(
+      id: json['id'] as int,
+      name: json['name'] as String,
+      email: json['email'] as String,
+      iban: _optionalText(json['iban']),
+      createdAt: DateTime.parse(json['createdAt'] as String),
+    );
+  }
+}
+
+// Blank text from the API counts as "not set".
+String? _optionalText(Object? value) {
+  if (value is! String || value.trim().isEmpty) return null;
+  return value;
 }

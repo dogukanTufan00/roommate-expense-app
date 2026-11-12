@@ -53,17 +53,14 @@
   "getsBack": "gets back",
   "owes": "owes",
   "settled": "settled up",
-  "markAsPaid": "Mark as paid",
-  "markAsPaidConfirm": "Record that {from} paid {to} {amount}?",
+  "markAsPaid": "Record payment",
+  "markAsPaidConfirm": "Record that {from} paid {to}?",
   "@markAsPaidConfirm": {
     "placeholders": {
       "from": {
         "type": "String"
       },
       "to": {
-        "type": "String"
-      },
-      "amount": {
         "type": "String"
       }
     }
@@ -157,7 +154,7 @@
   "errorAlreadyMember": "This person is already a member.",
   "errorInvitationPending": "This person already has an open invitation to this home.",
   "errorInvitationNotPending": "This invitation is no longer open. It may have been cancelled or answered.",
-  "errorLastAdmin": "The last admin cannot leave the home.",
+  "errorLastAdmin": "You are the last admin. Make another member an admin first.",
   "errorNoSuchUser": "No account with this email.",
   "errorUnknown": "Something went wrong.",
   "loginTagline": "Shared home, fair shares.",
@@ -217,5 +214,121 @@
   "errorInvalidSplit": "The split is not valid. Check the shares and try again.",
   "movedOutTag": "moved out",
   "changeSplit": "Change split",
-  "splitAmountChanged": "You changed the amount, so the amount split needs adjusting too."
+  "splitAmountChanged": "You changed the amount, so the amount split needs adjusting too.",
+  "editPayment": "Edit payment",
+  "edit": "Edit",
+  "paymentNote": "Note (optional)",
+  "paymentNoteHint": "e.g. paid by bank transfer",
+  "paymentFromTo": "{from} → {to}",
+  "@paymentFromTo": {
+    "placeholders": {
+      "from": {"type": "String"},
+      "to": {"type": "String"}
+    }
+  },
+  "paymentUpdated": "Payment updated",
+  "copyIban": "Copy IBAN",
+  "ibanCopied": "IBAN copied",
+  "addIbanHint": "Add your IBAN in your profile so roommates can pay you easily.",
+  "makeAdmin": "Make admin",
+  "removeAdmin": "Remove admin role",
+  "makeAdminConfirm": "Make {name} an admin? Admins can invite and remove members and change the ratios.",
+  "@makeAdminConfirm": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "removeAdminConfirm": "Remove admin rights from {name}?",
+  "@removeAdminConfirm": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "roleChanged": "Role updated",
+  "memberOptions": "Member options",
+  "leaveHome": "Leave home",
+  "leaveHomeConfirm": "Leave this home? Someone has to invite you again to come back.",
+  "leaveHomeOwesWarning": "Heads up: you haven't settled up and still owe {amount}. If you leave, the debt stays in the balances and you can pay it later.",
+  "@leaveHomeOwesWarning": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "leaveHomeGetsBackWarning": "Heads up: you haven't settled up and are still owed {amount}. If you leave, it stays in the balances and your roommates can pay you later.",
+  "@leaveHomeGetsBackWarning": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "profile": "Profile",
+  "securityTitle": "Security",
+  "iban": "IBAN",
+  "ibanPlaceholder": "TR00 0000 0000 0000 0000 0000 00",
+  "ibanHelper": "Optional. Roommates use it to pay you.",
+  "ibanFormatHint": "A Turkish IBAN starts with TR and has 26 characters.",
+  "profileUpdated": "Profile updated",
+  "changePassword": "Change password",
+  "currentPassword": "Current password",
+  "newPassword": "New password",
+  "repeatNewPassword": "Repeat new password",
+  "passwordMismatch": "The passwords don't match",
+  "passwordChanged": "Password changed",
+  "errorInvalidIban": "This IBAN doesn't look right. Check it and try again.",
+  "errorWrongCurrentPassword": "Your current password is wrong.",
+  "founder": "Founder",
+  "stepDownAdmin": "Step down as admin",
+  "stepDownAdminConfirm": "Step down as admin? You'll stay in the home as a member.",
+  "transferOwnership": "Transfer ownership",
+  "transferOwnershipConfirm": "{name} will become the home's founder and an admin. You stay an admin.",
+  "@transferOwnershipConfirm": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "transferOwnershipAdminConfirm": "{name} will become the home's founder. You stay an admin.",
+  "@transferOwnershipAdminConfirm": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "ownershipTransferred": "Ownership transferred",
+  "errorFounderProtected": "Only the founder can change the founder's role or remove them.",
+  "errorOnlyFounderTransfer": "Only the founder can transfer ownership.",
+  "errorOnlyFounderDelete": "Only the home's founder can delete it.",
+  "suggestedAmount": "Suggested: {amount}",
+  "@suggestedAmount": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "overpaymentWarning": "{from} currently owes {to} {owed}. You entered {amount}, so the extra will look like {to} owes {from}. Save anyway?",
+  "@overpaymentWarning": {
+    "placeholders": {
+      "from": {"type": "String"},
+      "to": {"type": "String"},
+      "owed": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+  "overpaymentNoDebtWarning": "{from} doesn't owe {to} anything right now. You entered {amount}, so it will look like {to} owes {from}. Save anyway?",
+  "@overpaymentNoDebtWarning": {
+    "placeholders": {
+      "from": {"type": "String"},
+      "to": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+  "saveAnyway": "Save anyway",
+  "monthExpenseSummary": "{count, plural, =1{1 expense} other{{count} expenses}} · {amount}",
+  "@monthExpenseSummary": {
+    "placeholders": {
+      "count": {"type": "int"},
+      "amount": {"type": "String"}
+    }
+  },
+  "filterAll": "All",
+  "filterPaidByMe": "Paid by me",
+  "filterInMyShare": "Where I have a share",
+  "noExpensesMatchFilter": "No expenses match this filter",
+  "clearFilter": "Clear filter"
 }

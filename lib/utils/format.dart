@@ -19,6 +19,15 @@ String formatPercent(BuildContext context, double value) {
   return NumberFormat('#,##0.##', localeTag).format(value);
 }
 
+// Formats a month and year, for example "Kasım 2026" or "November 2026".
+// The first letter is capitalized, because Turkish month names are lowercase in intl.
+String formatMonthYear(BuildContext context, DateTime date) {
+  final localeTag = Localizations.localeOf(context).toLanguageTag();
+  final text = DateFormat.yMMMM(localeTag).format(date);
+  if (text.isEmpty) return text;
+  return text[0].toUpperCase() + text.substring(1);
+}
+
 // Formats a date for the current language, for example "10 Kas 2026" or "10 Nov 2026".
 String formatDate(BuildContext context, DateTime date) {
   final localeTag = Localizations.localeOf(context).toLanguageTag();

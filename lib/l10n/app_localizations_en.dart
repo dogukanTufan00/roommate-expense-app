@@ -152,11 +152,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settled => 'settled up';
 
   @override
-  String get markAsPaid => 'Mark as paid';
+  String get markAsPaid => 'Record payment';
 
   @override
-  String markAsPaidConfirm(String from, String to, String amount) {
-    return 'Record that $from paid $to $amount?';
+  String markAsPaidConfirm(String from, String to) {
+    return 'Record that $from paid $to?';
   }
 
   @override
@@ -306,7 +306,8 @@ class AppLocalizationsEn extends AppLocalizations {
       'This invitation is no longer open. It may have been cancelled or answered.';
 
   @override
-  String get errorLastAdmin => 'The last admin cannot leave the home.';
+  String get errorLastAdmin =>
+      'You are the last admin. Make another member an admin first.';
 
   @override
   String get errorNoSuchUser => 'No account with this email.';
@@ -417,4 +418,207 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get splitAmountChanged =>
       'You changed the amount, so the amount split needs adjusting too.';
+
+  @override
+  String get editPayment => 'Edit payment';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get paymentNote => 'Note (optional)';
+
+  @override
+  String get paymentNoteHint => 'e.g. paid by bank transfer';
+
+  @override
+  String paymentFromTo(String from, String to) {
+    return '$from → $to';
+  }
+
+  @override
+  String get paymentUpdated => 'Payment updated';
+
+  @override
+  String get copyIban => 'Copy IBAN';
+
+  @override
+  String get ibanCopied => 'IBAN copied';
+
+  @override
+  String get addIbanHint =>
+      'Add your IBAN in your profile so roommates can pay you easily.';
+
+  @override
+  String get makeAdmin => 'Make admin';
+
+  @override
+  String get removeAdmin => 'Remove admin role';
+
+  @override
+  String makeAdminConfirm(String name) {
+    return 'Make $name an admin? Admins can invite and remove members and change the ratios.';
+  }
+
+  @override
+  String removeAdminConfirm(String name) {
+    return 'Remove admin rights from $name?';
+  }
+
+  @override
+  String get roleChanged => 'Role updated';
+
+  @override
+  String get memberOptions => 'Member options';
+
+  @override
+  String get leaveHome => 'Leave home';
+
+  @override
+  String get leaveHomeConfirm =>
+      'Leave this home? Someone has to invite you again to come back.';
+
+  @override
+  String leaveHomeOwesWarning(String amount) {
+    return 'Heads up: you haven\'t settled up and still owe $amount. If you leave, the debt stays in the balances and you can pay it later.';
+  }
+
+  @override
+  String leaveHomeGetsBackWarning(String amount) {
+    return 'Heads up: you haven\'t settled up and are still owed $amount. If you leave, it stays in the balances and your roommates can pay you later.';
+  }
+
+  @override
+  String get profile => 'Profile';
+
+  @override
+  String get securityTitle => 'Security';
+
+  @override
+  String get iban => 'IBAN';
+
+  @override
+  String get ibanPlaceholder => 'TR00 0000 0000 0000 0000 0000 00';
+
+  @override
+  String get ibanHelper => 'Optional. Roommates use it to pay you.';
+
+  @override
+  String get ibanFormatHint =>
+      'A Turkish IBAN starts with TR and has 26 characters.';
+
+  @override
+  String get profileUpdated => 'Profile updated';
+
+  @override
+  String get changePassword => 'Change password';
+
+  @override
+  String get currentPassword => 'Current password';
+
+  @override
+  String get newPassword => 'New password';
+
+  @override
+  String get repeatNewPassword => 'Repeat new password';
+
+  @override
+  String get passwordMismatch => 'The passwords don\'t match';
+
+  @override
+  String get passwordChanged => 'Password changed';
+
+  @override
+  String get errorInvalidIban =>
+      'This IBAN doesn\'t look right. Check it and try again.';
+
+  @override
+  String get errorWrongCurrentPassword => 'Your current password is wrong.';
+
+  @override
+  String get founder => 'Founder';
+
+  @override
+  String get stepDownAdmin => 'Step down as admin';
+
+  @override
+  String get stepDownAdminConfirm =>
+      'Step down as admin? You\'ll stay in the home as a member.';
+
+  @override
+  String get transferOwnership => 'Transfer ownership';
+
+  @override
+  String transferOwnershipConfirm(String name) {
+    return '$name will become the home\'s founder and an admin. You stay an admin.';
+  }
+
+  @override
+  String transferOwnershipAdminConfirm(String name) {
+    return '$name will become the home\'s founder. You stay an admin.';
+  }
+
+  @override
+  String get ownershipTransferred => 'Ownership transferred';
+
+  @override
+  String get errorFounderProtected =>
+      'Only the founder can change the founder\'s role or remove them.';
+
+  @override
+  String get errorOnlyFounderTransfer =>
+      'Only the founder can transfer ownership.';
+
+  @override
+  String get errorOnlyFounderDelete =>
+      'Only the home\'s founder can delete it.';
+
+  @override
+  String suggestedAmount(String amount) {
+    return 'Suggested: $amount';
+  }
+
+  @override
+  String overpaymentWarning(
+    String from,
+    String to,
+    String owed,
+    String amount,
+  ) {
+    return '$from currently owes $to $owed. You entered $amount, so the extra will look like $to owes $from. Save anyway?';
+  }
+
+  @override
+  String overpaymentNoDebtWarning(String from, String to, String amount) {
+    return '$from doesn\'t owe $to anything right now. You entered $amount, so it will look like $to owes $from. Save anyway?';
+  }
+
+  @override
+  String get saveAnyway => 'Save anyway';
+
+  @override
+  String monthExpenseSummary(int count, String amount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count expenses',
+      one: '1 expense',
+    );
+    return '$_temp0 · $amount';
+  }
+
+  @override
+  String get filterAll => 'All';
+
+  @override
+  String get filterPaidByMe => 'Paid by me';
+
+  @override
+  String get filterInMyShare => 'Where I have a share';
+
+  @override
+  String get noExpensesMatchFilter => 'No expenses match this filter';
+
+  @override
+  String get clearFilter => 'Clear filter';
 }

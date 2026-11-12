@@ -152,11 +152,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get settled => 'ödeşmiş';
 
   @override
-  String get markAsPaid => 'Ödendi olarak işaretle';
+  String get markAsPaid => 'Ödeme kaydet';
 
   @override
-  String markAsPaidConfirm(String from, String to, String amount) {
-    return '$from kişisinin $to kişisine $amount ödediği kaydedilsin mi?';
+  String markAsPaidConfirm(String from, String to) {
+    return '$from kişisinin $to kişisine ödediği kaydedilsin mi?';
   }
 
   @override
@@ -306,7 +306,8 @@ class AppLocalizationsTr extends AppLocalizations {
       'Bu davet artık açık değil. İptal edilmiş ya da yanıtlanmış olabilir.';
 
   @override
-  String get errorLastAdmin => 'Evin son yöneticisi evden çıkamaz.';
+  String get errorLastAdmin =>
+      'Evin tek yöneticisi sensin. Önce başka bir üyeyi yönetici yap.';
 
   @override
   String get errorNoSuchUser => 'Bu e-postayla kayıtlı hesap yok.';
@@ -418,4 +419,200 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get splitAmountChanged =>
       'Tutarı değiştirdin, o yüzden tutar bazlı bölüşümü de ayarlamalısın.';
+
+  @override
+  String get editPayment => 'Ödemeyi düzenle';
+
+  @override
+  String get edit => 'Düzenle';
+
+  @override
+  String get paymentNote => 'Not (isteğe bağlı)';
+
+  @override
+  String get paymentNoteHint => 'ör. havale ile ödendi';
+
+  @override
+  String paymentFromTo(String from, String to) {
+    return '$from → $to';
+  }
+
+  @override
+  String get paymentUpdated => 'Ödeme güncellendi';
+
+  @override
+  String get copyIban => 'IBAN\'ı kopyala';
+
+  @override
+  String get ibanCopied => 'IBAN kopyalandı';
+
+  @override
+  String get addIbanHint =>
+      'IBAN\'ını profilinden ekleyebilirsin, böylece ev arkadaşların sana kolayca ödeme yapabilir.';
+
+  @override
+  String get makeAdmin => 'Yönetici yap';
+
+  @override
+  String get removeAdmin => 'Yöneticilikten al';
+
+  @override
+  String makeAdminConfirm(String name) {
+    return '$name yönetici yapılsın mı? Yöneticiler davet edebilir, üye çıkarabilir ve oranları değiştirebilir.';
+  }
+
+  @override
+  String removeAdminConfirm(String name) {
+    return '$name kişisinin yönetici yetkisi alınsın mı?';
+  }
+
+  @override
+  String get roleChanged => 'Rol güncellendi';
+
+  @override
+  String get memberOptions => 'Üye seçenekleri';
+
+  @override
+  String get leaveHome => 'Evden ayrıl';
+
+  @override
+  String get leaveHomeConfirm =>
+      'Bu evden ayrılmak istediğinden emin misin? Geri dönmek için birinin seni yeniden davet etmesi gerekir.';
+
+  @override
+  String leaveHomeOwesWarning(String amount) {
+    return 'Dikkat: henüz ödeşmedin, evde $amount borcun var. Ayrılsan da borcun bakiyede kalır; sonra ödeyebilirsin.';
+  }
+
+  @override
+  String leaveHomeGetsBackWarning(String amount) {
+    return 'Dikkat: henüz ödeşmedin, evden $amount alacağın var. Ayrılsan da alacağın bakiyede kalır; ev arkadaşların sonra ödeyebilir.';
+  }
+
+  @override
+  String get profile => 'Profil';
+
+  @override
+  String get securityTitle => 'Güvenlik';
+
+  @override
+  String get iban => 'IBAN';
+
+  @override
+  String get ibanPlaceholder => 'TR00 0000 0000 0000 0000 0000 00';
+
+  @override
+  String get ibanHelper =>
+      'İsteğe bağlı. Ev arkadaşların sana ödeme yapmak için kullanır.';
+
+  @override
+  String get ibanFormatHint => 'Türk IBAN\'ı TR ile başlar ve 26 karakterdir.';
+
+  @override
+  String get profileUpdated => 'Profilin güncellendi';
+
+  @override
+  String get changePassword => 'Şifreyi değiştir';
+
+  @override
+  String get currentPassword => 'Mevcut şifre';
+
+  @override
+  String get newPassword => 'Yeni şifre';
+
+  @override
+  String get repeatNewPassword => 'Yeni şifreyi tekrar yaz';
+
+  @override
+  String get passwordMismatch => 'Şifreler eşleşmiyor';
+
+  @override
+  String get passwordChanged => 'Şifren değiştirildi';
+
+  @override
+  String get errorInvalidIban =>
+      'Bu IBAN doğru görünmüyor. Kontrol edip tekrar dene.';
+
+  @override
+  String get errorWrongCurrentPassword => 'Mevcut şifren yanlış.';
+
+  @override
+  String get founder => 'Kurucu';
+
+  @override
+  String get stepDownAdmin => 'Yöneticilikten çık';
+
+  @override
+  String get stepDownAdminConfirm =>
+      'Yöneticilik yetkin alınsın mı? Evde üye olarak devam edersin.';
+
+  @override
+  String get transferOwnership => 'Kuruculuğu devret';
+
+  @override
+  String transferOwnershipConfirm(String name) {
+    return '$name evin kurucusu olacak ve yönetici yapılacak. Sen yönetici olarak kalırsın.';
+  }
+
+  @override
+  String transferOwnershipAdminConfirm(String name) {
+    return '$name evin kurucusu olacak. Sen yönetici olarak kalırsın.';
+  }
+
+  @override
+  String get ownershipTransferred => 'Kuruculuk devredildi';
+
+  @override
+  String get errorFounderProtected =>
+      'Kurucunun rolünü ya da üyeliğini yalnızca kurucu değiştirebilir.';
+
+  @override
+  String get errorOnlyFounderTransfer =>
+      'Kuruculuğu yalnızca kurucu devredebilir.';
+
+  @override
+  String get errorOnlyFounderDelete => 'Evi yalnızca kurucusu silebilir.';
+
+  @override
+  String suggestedAmount(String amount) {
+    return 'Önerilen: $amount';
+  }
+
+  @override
+  String overpaymentWarning(
+    String from,
+    String to,
+    String owed,
+    String amount,
+  ) {
+    return '$from kişisinin $to kişisine şu anki borcu $owed. $amount girdin; fazlası $to kişisinin $from kişisine borcu gibi görünecek. Yine de kaydedilsin mi?';
+  }
+
+  @override
+  String overpaymentNoDebtWarning(String from, String to, String amount) {
+    return '$from kişisinin $to kişisine şu anda borcu yok. $amount girdin; bu tutar $to kişisinin $from kişisine borcu gibi görünecek. Yine de kaydedilsin mi?';
+  }
+
+  @override
+  String get saveAnyway => 'Yine de kaydet';
+
+  @override
+  String monthExpenseSummary(int count, String amount) {
+    return '$count gider · $amount';
+  }
+
+  @override
+  String get filterAll => 'Tümü';
+
+  @override
+  String get filterPaidByMe => 'Benim ödediklerim';
+
+  @override
+  String get filterInMyShare => 'Payım olanlar';
+
+  @override
+  String get noExpensesMatchFilter => 'Bu filtreye uyan gider yok';
+
+  @override
+  String get clearFilter => 'Filtreyi temizle';
 }

@@ -122,6 +122,28 @@ class Api {
     await ApiClient.delete('/api/households/$householdId/members/$userId');
   }
 
+  // Leaving is removing yourself. Any member may do it, but the last admin may not.
+  static Future<void> leaveHousehold(int householdId, int myUserId) {
+    return removeMember(householdId, myUserId);
+  }
+
+  // Admins only. role is "ADMIN" or "MEMBER". Demoting the last admin fails with 409.
+  static Future<Member> changeRole(int householdId, int userId, String role) async {
+    final data = await ApiClient.patch(
+      '/api/households/$householdId/members/$userId',
+      {'role': role},
+    );
+    return Member.fromJson(data as Map<String, dynamic>);
+  }
+
+  // Founder only. The new founder is made an admin if needed. The founder stays an admin.
+  static Future<void> transferOwnership(int householdId, int userId) async {
+    await ApiClient.post(
+      '/api/households/$householdId/transfer-ownership',
+      {'userId': userId},
+    );
+  }
+
   // ---- Invitations ----
 
   // Admins only. The invitee has to accept before joining.
@@ -247,18 +269,42 @@ class Api {
     return payments;
   }
 
+  // note is optional and up to 200 characters. Null means no note.
   static Future<Payment> createPayment(
     int householdId,
     int fromUserId,
     int toUserId,
-    double amount,
-  ) async {
+    double amount, [
+    String? note,
+  ]) async {
     final data = await ApiClient.post(
       '/api/households/$householdId/payments',
       {
         'fromUserId': fromUserId,
         'toUserId': toUserId,
         'amount': _round2(amount),
+        'note': note,
+      },
+    );
+    return Payment.fromJson(data as Map<String, dynamic>);
+  }
+
+  // Only the original sender or an admin may edit. A null note clears the note.
+  static Future<Payment> updatePayment(
+    int householdId,
+    int paymentId, {
+    required int fromUserId,
+    required int toUserId,
+    required double amount,
+    required String? note,
+  }) async {
+    final data = await ApiClient.put(
+      '/api/households/$householdId/payments/$paymentId',
+      {
+        'fromUserId': fromUserId,
+        'toUserId': toUserId,
+        'amount': _round2(amount),
+        'note': note,
       },
     );
     return Payment.fromJson(data as Map<String, dynamic>);
@@ -266,6 +312,26 @@ class Api {
 
   static Future<void> deletePayment(int householdId, int paymentId) async {
     await ApiClient.delete('/api/households/$householdId/payments/$paymentId');
+  }
+
+  // ---- Profile ----
+
+  static Future<UserProfile> getProfile() async {
+    final data = await ApiClient.get('/api/users/me');
+    return UserProfile.fromJson(data as Map<String, dynamic>);
+  }
+
+  // An empty iban removes the saved IBAN. The API stores it without spaces.
+  static Future<UserProfile> updateProfile(String name, String iban) async {
+    final data = await ApiClient.put('/api/users/me', {'name': name, 'iban': iban});
+    return UserProfile.fromJson(data as Map<String, dynamic>);
+  }
+
+  static Future<void> changePassword(String currentPassword, String newPassword) async {
+    await ApiClient.put('/api/users/me/password', {
+      'currentPassword': currentPassword,
+      'newPassword': newPassword,
+    });
   }
 
   // Turns a JSON array into a list of models.

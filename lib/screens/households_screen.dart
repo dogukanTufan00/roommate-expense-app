@@ -4,6 +4,7 @@ import 'package:roommate_expense_app/l10n/app_localizations.dart';
 import 'package:roommate_expense_app/models.dart';
 import 'package:roommate_expense_app/screens/household_screen.dart';
 import 'package:roommate_expense_app/screens/login_screen.dart';
+import 'package:roommate_expense_app/screens/profile_screen.dart';
 import 'package:roommate_expense_app/session.dart';
 import 'package:roommate_expense_app/theme.dart';
 import 'package:roommate_expense_app/utils/errors.dart';
@@ -85,6 +86,14 @@ class _HouseholdsScreenState extends State<HouseholdsScreen> {
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (_) => const LoginScreen()),
       (route) => false,
+    );
+  }
+
+  // The profile has its own data, so nothing needs reloading when it closes.
+  void _openProfile() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const ProfileScreen()),
     );
   }
 
@@ -194,6 +203,11 @@ class _HouseholdsScreenState extends State<HouseholdsScreen> {
       appBar: AppBar(
         title: Text(l10n.households),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.person_outline),
+            tooltip: l10n.profile,
+            onPressed: _openProfile,
+          ),
           const LanguageMenuButton(),
           IconButton(
             icon: const Icon(Icons.logout),

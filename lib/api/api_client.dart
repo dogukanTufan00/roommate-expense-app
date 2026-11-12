@@ -34,6 +34,9 @@ class ApiClient {
   static Future<dynamic> put(String path, Object? body) =>
       _send('PUT', path, body);
 
+  static Future<dynamic> patch(String path, Object? body) =>
+      _send('PATCH', path, body);
+
   static Future<dynamic> delete(String path) => _send('DELETE', path);
 
   static Future<dynamic> _send(String method, String path, [Object? body]) async {
@@ -91,6 +94,8 @@ class ApiClient {
         return http.post(uri, headers: headers, body: body);
       case 'PUT':
         return http.put(uri, headers: headers, body: body);
+      case 'PATCH':
+        return http.patch(uri, headers: headers, body: body);
       default:
         return http.delete(uri, headers: headers);
     }
