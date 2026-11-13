@@ -1867,6 +1867,88 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'A recurring expense of {amount} was added for this month too'**
   String notificationRecurringBodyNoDetail(String amount);
+
+  /// No description provided for @reminderButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Remind'**
+  String get reminderButton;
+
+  /// No description provided for @reminderCooldownToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminded · again today at {time}'**
+  String reminderCooldownToday(String time);
+
+  /// No description provided for @reminderCooldownTomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminded · again tomorrow at {time}'**
+  String reminderCooldownTomorrow(String time);
+
+  /// No description provided for @reminderDialogBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A gentle reminder notification will be sent to {name}.'**
+  String reminderDialogBody(String name);
+
+  /// No description provided for @reminderNoteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. no rush, whenever you can'**
+  String get reminderNoteHint;
+
+  /// No description provided for @reminderSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get reminderSend;
+
+  /// No description provided for @reminderSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder sent'**
+  String get reminderSent;
+
+  /// No description provided for @errorReminderSelf.
+  ///
+  /// In en, this message translates to:
+  /// **'You cannot remind yourself.'**
+  String get errorReminderSelf;
+
+  /// No description provided for @errorReminderNoDebt.
+  ///
+  /// In en, this message translates to:
+  /// **'This person does not owe you anything. The list has been updated.'**
+  String get errorReminderNoDebt;
+
+  /// No description provided for @errorReminderCooldown.
+  ///
+  /// In en, this message translates to:
+  /// **'You already reminded this person in the last 24 hours.'**
+  String get errorReminderCooldown;
+
+  /// No description provided for @notificationReminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder · {household}'**
+  String notificationReminderTitle(String household);
+
+  /// No description provided for @notificationReminderBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} is gently reminding you that you owe them {amount} in {household}.'**
+  String notificationReminderBody(
+    String actor,
+    String amount,
+    String household,
+  );
+
+  /// No description provided for @notificationReminderNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Note: {note}'**
+  String notificationReminderNote(String note);
 }
 
 class _AppLocalizationsDelegate

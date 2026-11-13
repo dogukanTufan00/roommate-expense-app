@@ -273,6 +273,26 @@ class Api {
     return _parseList(data, Balance.fromJson);
   }
 
+  // Reminders I sent in this home in the last 24 hours. Used to disable the Remind button.
+  static Future<List<ReminderCooldown>> getReminderCooldowns(int householdId) async {
+    final data = await ApiClient.get('/api/households/$householdId/reminders/cooldowns');
+    return _parseList(data, ReminderCooldown.fromJson);
+  }
+
+  // Sends a polite reminder to a debtor. The answer has the new cooldown.
+  // note is null when the user wrote nothing.
+  static Future<ReminderCooldown> sendReminder(
+    int householdId,
+    int debtorUserId,
+    String? note,
+  ) async {
+    final data = await ApiClient.post(
+      '/api/households/$householdId/reminders',
+      {'debtorUserId': debtorUserId, 'note': note},
+    );
+    return ReminderCooldown.fromJson(data as Map<String, dynamic>);
+  }
+
   static Future<List<Settlement>> getSettlements(int householdId) async {
     final data = await ApiClient.get('/api/households/$householdId/settlements');
     return _parseList(data, Settlement.fromJson);

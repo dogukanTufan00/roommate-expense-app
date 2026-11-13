@@ -12,9 +12,14 @@ import 'package:roommate_expense_app/utils/errors.dart';
 
 // One home, with four tabs: expenses, balances, statement and members.
 class HouseholdScreen extends StatefulWidget {
-  const HouseholdScreen({super.key, required this.household});
+  const HouseholdScreen({super.key, required this.household, this.initialTab = 0});
+
+  // The index of the Balances tab. Used when a notification opens the home on it.
+  static const int balancesTab = 1;
 
   final Household household;
+  // Which tab opens first. 0 is Expenses.
+  final int initialTab;
 
   @override
   State<HouseholdScreen> createState() => _HouseholdScreenState();
@@ -116,6 +121,7 @@ class _HouseholdScreenState extends State<HouseholdScreen> {
     // DefaultTabController gives the TabBar and TabBarView one shared tab index.
     return DefaultTabController(
       length: 4,
+      initialIndex: widget.initialTab,
       child: Scaffold(
         appBar: AppBar(
           title: Text(_name),

@@ -572,5 +572,66 @@
         "type": "String"
       }
     }
+  },
+  "reminderButton": "Hatırlat",
+  "reminderCooldownToday": "Hatırlatıldı · bugün {time}'da tekrar",
+  "@reminderCooldownToday": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderCooldownTomorrow": "Hatırlatıldı · yarın {time}'da tekrar",
+  "@reminderCooldownTomorrow": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderDialogBody": "{name} kişisine kibar bir hatırlatma bildirimi gönderilecek.",
+  "@reminderDialogBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderNoteHint": "ör. acele yok, uygun olduğunda",
+  "reminderSend": "Gönder",
+  "reminderSent": "Hatırlatma gönderildi",
+  "errorReminderSelf": "Kendini hatırlatamazsın.",
+  "errorReminderNoDebt": "Bu kişinin sana borcu yok, liste güncellendi.",
+  "errorReminderCooldown": "Bu kişiyi son 24 saatte zaten hatırlattın.",
+  "notificationReminderTitle": "Hatırlatma · {household}",
+  "@notificationReminderTitle": {
+    "placeholders": {
+      "household": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReminderBody": "{actor} nazikçe hatırlatıyor: {household} evinde ona {amount} borcun var.",
+  "@notificationReminderBody": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "household": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReminderNote": "Not: {note}",
+  "@notificationReminderNote": {
+    "placeholders": {
+      "note": {
+        "type": "String"
+      }
+    }
   }
 }

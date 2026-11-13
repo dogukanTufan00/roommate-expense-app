@@ -106,10 +106,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     }
     final householdId = item.householdId;
     if (householdId == null) return;
-    await _openHousehold(householdId);
+    // A payment reminder opens the Balances tab, where the debt is.
+    final initialTab = item.type == NotificationType.paymentReminder
+        ? HouseholdScreen.balancesTab
+        : 0;
+    await _openHousehold(householdId, initialTab: initialTab);
   }
 
-  Future<void> _openHousehold(int householdId) async {
+  Future<void> _openHousehold(int householdId, {int initialTab = 0}) async {
     final l10n = AppLocalizations.of(context);
     final List<Household> households;
     try {
@@ -131,7 +135,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     }
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => HouseholdScreen(household: matches.first)),
+      MaterialPageRoute(
+        builder: (_) => HouseholdScreen(household: matches.first, initialTab: initialTab),
+      ),
     );
   }
 
@@ -308,6 +314,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         const _TypeStyle(Icons.person_add_rounded, AppColors.sage),
       NotificationType.recurringExpenseAdded =>
         const _TypeStyle(Icons.autorenew_rounded, AppColors.ink),
+      NotificationType.paymentReminder =>
+        const _TypeStyle(Icons.notifications_active_rounded, AppColors.mustard),
       NotificationType.unknown =>
         const _TypeStyle(Icons.notifications_rounded, AppColors.muted),
     };

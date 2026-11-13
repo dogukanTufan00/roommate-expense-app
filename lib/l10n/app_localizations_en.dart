@@ -1074,4 +1074,61 @@ class AppLocalizationsEn extends AppLocalizations {
   String notificationRecurringBodyNoDetail(String amount) {
     return 'A recurring expense of $amount was added for this month too';
   }
+
+  @override
+  String get reminderButton => 'Remind';
+
+  @override
+  String reminderCooldownToday(String time) {
+    return 'Reminded · again today at $time';
+  }
+
+  @override
+  String reminderCooldownTomorrow(String time) {
+    return 'Reminded · again tomorrow at $time';
+  }
+
+  @override
+  String reminderDialogBody(String name) {
+    return 'A gentle reminder notification will be sent to $name.';
+  }
+
+  @override
+  String get reminderNoteHint => 'e.g. no rush, whenever you can';
+
+  @override
+  String get reminderSend => 'Send';
+
+  @override
+  String get reminderSent => 'Reminder sent';
+
+  @override
+  String get errorReminderSelf => 'You cannot remind yourself.';
+
+  @override
+  String get errorReminderNoDebt =>
+      'This person does not owe you anything. The list has been updated.';
+
+  @override
+  String get errorReminderCooldown =>
+      'You already reminded this person in the last 24 hours.';
+
+  @override
+  String notificationReminderTitle(String household) {
+    return 'Reminder · $household';
+  }
+
+  @override
+  String notificationReminderBody(
+    String actor,
+    String amount,
+    String household,
+  ) {
+    return '$actor is gently reminding you that you owe them $amount in $household.';
+  }
+
+  @override
+  String notificationReminderNote(String note) {
+    return 'Note: $note';
+  }
 }

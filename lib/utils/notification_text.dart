@@ -60,6 +60,15 @@ NotificationText notificationText(
             ? l10n.notificationRecurringBodyNoDetail(amount)
             : l10n.notificationRecurringBody(detail, amount),
       );
+    case NotificationType.paymentReminder:
+      // The optional note from the creditor goes on its own line.
+      final sentence = l10n.notificationReminderBody(actor, household, amount);
+      return NotificationText(
+        title: l10n.notificationReminderTitle(household),
+        body: detail == null
+            ? sentence
+            : '$sentence\n${l10n.notificationReminderNote(detail)}',
+      );
     case NotificationType.unknown:
       return NotificationText(title: l10n.notificationGenericTitle, body: '');
   }

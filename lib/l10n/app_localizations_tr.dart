@@ -1051,4 +1051,61 @@ class AppLocalizationsTr extends AppLocalizations {
   String notificationRecurringBodyNoDetail(String amount) {
     return '$amount tutarındaki gider bu ay da eklendi';
   }
+
+  @override
+  String get reminderButton => 'Hatırlat';
+
+  @override
+  String reminderCooldownToday(String time) {
+    return 'Hatırlatıldı · bugün $time\'da tekrar';
+  }
+
+  @override
+  String reminderCooldownTomorrow(String time) {
+    return 'Hatırlatıldı · yarın $time\'da tekrar';
+  }
+
+  @override
+  String reminderDialogBody(String name) {
+    return '$name kişisine kibar bir hatırlatma bildirimi gönderilecek.';
+  }
+
+  @override
+  String get reminderNoteHint => 'ör. acele yok, uygun olduğunda';
+
+  @override
+  String get reminderSend => 'Gönder';
+
+  @override
+  String get reminderSent => 'Hatırlatma gönderildi';
+
+  @override
+  String get errorReminderSelf => 'Kendini hatırlatamazsın.';
+
+  @override
+  String get errorReminderNoDebt =>
+      'Bu kişinin sana borcu yok, liste güncellendi.';
+
+  @override
+  String get errorReminderCooldown =>
+      'Bu kişiyi son 24 saatte zaten hatırlattın.';
+
+  @override
+  String notificationReminderTitle(String household) {
+    return 'Hatırlatma · $household';
+  }
+
+  @override
+  String notificationReminderBody(
+    String actor,
+    String amount,
+    String household,
+  ) {
+    return '$actor nazikçe hatırlatıyor: $household evinde ona $amount borcun var.';
+  }
+
+  @override
+  String notificationReminderNote(String note) {
+    return 'Not: $note';
+  }
 }

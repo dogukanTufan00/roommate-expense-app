@@ -671,5 +671,66 @@
         "type": "String"
       }
     }
+  },
+  "reminderButton": "Remind",
+  "reminderCooldownToday": "Reminded · again today at {time}",
+  "@reminderCooldownToday": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderCooldownTomorrow": "Reminded · again tomorrow at {time}",
+  "@reminderCooldownTomorrow": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderDialogBody": "A gentle reminder notification will be sent to {name}.",
+  "@reminderDialogBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderNoteHint": "e.g. no rush, whenever you can",
+  "reminderSend": "Send",
+  "reminderSent": "Reminder sent",
+  "errorReminderSelf": "You cannot remind yourself.",
+  "errorReminderNoDebt": "This person does not owe you anything. The list has been updated.",
+  "errorReminderCooldown": "You already reminded this person in the last 24 hours.",
+  "notificationReminderTitle": "Reminder · {household}",
+  "@notificationReminderTitle": {
+    "placeholders": {
+      "household": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReminderBody": "{actor} is gently reminding you that you owe them {amount} in {household}.",
+  "@notificationReminderBody": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "household": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationReminderNote": "Note: {note}",
+  "@notificationReminderNote": {
+    "placeholders": {
+      "note": {
+        "type": "String"
+      }
+    }
   }
 }

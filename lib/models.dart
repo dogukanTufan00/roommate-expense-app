@@ -289,6 +289,23 @@ class Settlement {
   }
 }
 
+// A reminder I sent in this home in the last 24 hours. I cannot remind this person again before
+// nextAllowedAt. The POST answer has the same two fields, so it is read the same way.
+class ReminderCooldown {
+  final int debtorUserId;
+  // Converted to the phone's time zone.
+  final DateTime nextAllowedAt;
+
+  ReminderCooldown({required this.debtorUserId, required this.nextAllowedAt});
+
+  factory ReminderCooldown.fromJson(Map<String, dynamic> json) {
+    return ReminderCooldown(
+      debtorUserId: json['debtorUserId'] as int,
+      nextAllowedAt: DateTime.parse(json['nextAllowedAt'] as String).toLocal(),
+    );
+  }
+}
+
 class Payment {
   final int id;
   final int householdId;
@@ -714,6 +731,8 @@ enum NotificationType {
   invitationReceived,
   invitationAccepted,
   recurringExpenseAdded,
+  // Someone asks me (the debtor) to pay them back.
+  paymentReminder,
   unknown;
 
   static NotificationType fromApi(String value) => switch (value) {
@@ -722,6 +741,7 @@ enum NotificationType {
         'INVITATION_RECEIVED' => invitationReceived,
         'INVITATION_ACCEPTED' => invitationAccepted,
         'RECURRING_EXPENSE_ADDED' => recurringExpenseAdded,
+        'PAYMENT_REMINDER' => paymentReminder,
         _ => unknown,
       };
 }

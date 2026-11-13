@@ -16,6 +16,9 @@ String errorMessage(BuildContext context, Object error) {
 
   if (status == 0) return l10n.errorNetwork;
   if (status == 400) {
+    // Reminders: the API's messages are exact, so they are matched in full.
+    if (message.contains('cannot remind yourself')) return l10n.errorReminderSelf;
+    if (message.contains('does not owe you')) return l10n.errorReminderNoDebt;
     // Account deletion: the wrong password for the confirmation.
     if (message.contains('Password is incorrect')) return l10n.errorWrongPassword;
     // Checked first: "Invalid IBAN checksum" would otherwise match the "sum" keyword below.
@@ -50,6 +53,9 @@ String errorMessage(BuildContext context, Object error) {
   }
 
   if (status == 413) return l10n.errorAttachmentTooLarge;
+
+  // Only one reminder per debtor in 24 hours.
+  if (status == 429) return l10n.errorReminderCooldown;
 
   if (status == 409) {
     // Account deletion is blocked. Checked first: the message ends with home names, which could

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:roommate_expense_app/api/api.dart';
 import 'package:roommate_expense_app/api/api_client.dart';
 import 'package:roommate_expense_app/l10n/app_localizations.dart';
@@ -36,6 +37,13 @@ class _BalancesTabState extends State<BalancesTab> {
   // Admins can edit and delete any payment, not only their own.
   bool _myIsAdmin = false;
 
+  // Until when I may not remind each debtor again, keyed by the debtor's user id.
+  // Only debtors I reminded in the last 24 hours are in it.
+  Map<int, DateTime> _reminderCooldowns = {};
+
+  // Debtors whose reminder is being sent right now, so the button cannot be tapped twice.
+  final Set<int> _sendingReminders = {};
+
   bool _loading = true;
   // Set when the first load fails, so the screen can show a retry button.
   Object? _loadError;
@@ -61,17 +69,22 @@ class _BalancesTabState extends State<BalancesTab> {
 
   // Loads all four requests at the same time, then updates the screen once.
   Future<void> _loadAll() async {
+    // The cooldowns are extra: if they fail, the tab still works with no cooldowns.
+    final cooldownsRequest = Api.getReminderCooldowns(widget.householdId)
+        .catchError((_) => <ReminderCooldown>[]);
     final results = await Future.wait([
       Api.getBalances(widget.householdId),
       Api.getSettlements(widget.householdId),
       Api.getPayments(widget.householdId),
       Api.getMembers(widget.householdId),
+      cooldownsRequest,
     ]);
 
     final balances = results[0] as List<Balance>;
     final settlements = results[1] as List<Settlement>;
     final payments = results[2] as List<Payment>;
     final members = results[3] as List<Member>;
+    final cooldowns = results[4] as List<ReminderCooldown>;
 
     int? myId;
     var myIsAdmin = false;
@@ -89,6 +102,9 @@ class _BalancesTabState extends State<BalancesTab> {
       _payments = payments;
       _myUserId = myId;
       _myIsAdmin = myIsAdmin;
+      _reminderCooldowns = {
+        for (final c in cooldowns) c.debtorUserId: c.nextAllowedAt,
+      };
       _loading = false;
       _loadError = null;
     });
@@ -199,6 +215,40 @@ class _BalancesTabState extends State<BalancesTab> {
     );
     // The payment changes the balances, so reload everything.
     await _refresh();
+  }
+
+  // Asks for an optional note, then sends the reminder. The answer has the new cooldown,
+  // so the button updates at once.
+  Future<void> _remind(Settlement s) async {
+    final l10n = AppLocalizations.of(context);
+    final note = await showDialog<String>(
+      context: context,
+      builder: (_) => _ReminderDialog(name: s.fromName),
+    );
+    // Cancel gives null. An empty note is sent as null.
+    if (note == null || !mounted) return;
+
+    setState(() => _sendingReminders.add(s.fromUserId));
+    try {
+      final cooldown = await Api.sendReminder(
+        widget.householdId,
+        s.fromUserId,
+        note.isEmpty ? null : note,
+      );
+      if (!mounted) return;
+      setState(() => _reminderCooldowns[cooldown.debtorUserId] = cooldown.nextAllowedAt);
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(l10n.reminderSent)));
+    } catch (e) {
+      if (!mounted) return;
+      _showError(e);
+      // 400 (no debt any more) and 429 (already reminded) mean the screen is out of date.
+      if (e is ApiException && (e.statusCode == 400 || e.statusCode == 429)) {
+        await _refresh();
+      }
+    } finally {
+      if (mounted) setState(() => _sendingReminders.remove(s.fromUserId));
+    }
   }
 
   Future<void> _deletePayment(Payment p) async {
@@ -677,17 +727,57 @@ class _BalancesTabState extends State<BalancesTab> {
                 ),
               ),
             const SizedBox(height: 8),
-            Align(
-              alignment: Alignment.centerRight,
-              child: OutlinedButton(
-                onPressed: () => _markAsPaid(s),
-                child: Text(l10n.markAsPaid),
-              ),
+            Row(
+              children: [
+                // Only the creditor (the person who gets the money) sees the Remind button.
+                if (s.toUserId == _myUserId) ...[
+                  Expanded(child: _reminderButton(s, l10n)),
+                  const SizedBox(width: 8),
+                ] else
+                  const Spacer(),
+                OutlinedButton(
+                  onPressed: () => _markAsPaid(s),
+                  child: Text(l10n.markAsPaid),
+                ),
+              ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  // The Remind button of a settlement. While the 24 hour cooldown runs it is disabled and
+  // shows when it can be used again.
+  Widget _reminderButton(Settlement s, AppLocalizations l10n) {
+    final cooldown = _reminderCooldowns[s.fromUserId];
+    final String label;
+    final bool canRemind;
+    if (cooldown != null && cooldown.isAfter(DateTime.now())) {
+      label = _reminderAgainLabel(l10n, cooldown);
+      canRemind = false;
+    } else {
+      label = l10n.reminderButton;
+      canRemind = !_sendingReminders.contains(s.fromUserId);
+    }
+
+    return OutlinedButton.icon(
+      icon: const Icon(Icons.notifications_active_outlined, size: 18),
+      label: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
+      onPressed: canRemind ? () => _remind(s) : null,
+    );
+  }
+
+  // "Today at 14:30" or "Tomorrow at 14:30" in local time. A cooldown lasts at most 24 hours,
+  // so it always ends today or tomorrow.
+  String _reminderAgainLabel(AppLocalizations l10n, DateTime until) {
+    final now = DateTime.now();
+    final time = DateFormat.Hm(localeTagOf(context)).format(until);
+    final isToday =
+        until.year == now.year && until.month == now.month && until.day == now.day;
+    return isToday
+        ? l10n.reminderCooldownToday(time)
+        : l10n.reminderCooldownTomorrow(time);
   }
 
   Widget _paymentCard(Payment p, AppLocalizations l10n) {
@@ -805,6 +895,64 @@ Future<bool> _confirmOverpayment(
     ),
   );
   return confirmed == true;
+}
+
+// Asks for an optional note before a reminder is sent. Returns the typed text (empty when
+// nothing was typed), or null if the user cancelled.
+class _ReminderDialog extends StatefulWidget {
+  const _ReminderDialog({required this.name});
+
+  // The debtor's name, shown in the explanation.
+  final String name;
+
+  @override
+  State<_ReminderDialog> createState() => _ReminderDialogState();
+}
+
+class _ReminderDialogState extends State<_ReminderDialog> {
+  // The controller lives in the State so it is disposed only after the dialog closes.
+  final _noteController = TextEditingController();
+
+  @override
+  void dispose() {
+    _noteController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return AlertDialog(
+      title: Text(l10n.reminderButton),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(l10n.reminderDialogBody(widget.name)),
+          const SizedBox(height: 16),
+          TextField(
+            controller: _noteController,
+            maxLength: 200,
+            decoration: InputDecoration(
+              labelText: l10n.paymentNote,
+              hintText: l10n.reminderNoteHint,
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(l10n.cancel),
+        ),
+        FilledButton(
+          onPressed: () => Navigator.pop(context, _noteController.text.trim()),
+          child: Text(l10n.reminderSend),
+        ),
+      ],
+    );
+  }
 }
 
 // The values the edit dialog returns. The note is null when it is empty.
