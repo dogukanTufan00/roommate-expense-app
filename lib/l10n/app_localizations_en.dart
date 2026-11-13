@@ -529,6 +529,88 @@ class AppLocalizationsEn extends AppLocalizations {
   String get passwordChanged => 'Password changed';
 
   @override
+  String get deleteAccount => 'Delete my account';
+
+  @override
+  String get deleteAccountTitle => 'Delete account';
+
+  @override
+  String get deleteAccountWhatTitle => 'What gets deleted';
+
+  @override
+  String get deleteAccountDeletesProfile =>
+      'Your name, e-mail, IBAN, password, notifications and saved devices.';
+
+  @override
+  String get deleteAccountLeavesHomes => 'You leave every home you belong to.';
+
+  @override
+  String get deleteAccountHouseholdsIntro =>
+      'Homes where you are the only member are deleted completely, with all their expenses and payments:';
+
+  @override
+  String get deleteAccountKeepsTitle => 'What stays';
+
+  @override
+  String get deleteAccountKeepsShared =>
+      'Expenses and payments you shared stay in your roommates\' balances, under the name “Silinmiş kullanıcı”, so their accounts keep working.';
+
+  @override
+  String get deleteAccountIrreversible => 'This cannot be undone.';
+
+  @override
+  String get deleteAccountBlockedTitle => 'You can\'t delete your account yet';
+
+  @override
+  String blockerFounderWithMembers(String household) {
+    return '$household: transfer ownership first';
+  }
+
+  @override
+  String blockerLastAdminWithMembers(String household) {
+    return '$household: make another member an admin first';
+  }
+
+  @override
+  String get blockerHint => 'Open the home and do it from the Members tab.';
+
+  @override
+  String get openBalancesTitle => 'Your open balances';
+
+  @override
+  String balanceOwesWarning(String household, String amount) {
+    return '$household: you owe $amount. Deleting your account won\'t clear this debt.';
+  }
+
+  @override
+  String balanceGetsBackWarning(String household, String amount) {
+    return '$household: you are owed $amount. If you delete your account, you can\'t track this money in the app.';
+  }
+
+  @override
+  String get showPassword => 'Show password';
+
+  @override
+  String get hidePassword => 'Hide password';
+
+  @override
+  String get deleteAccountConfirmCheckbox =>
+      'I understand this cannot be undone';
+
+  @override
+  String get deleteAccountButton => 'Delete my account permanently';
+
+  @override
+  String get deleteAccountDone => 'Your account was deleted.';
+
+  @override
+  String get errorWrongPassword => 'Wrong password.';
+
+  @override
+  String get errorDeleteAccountBlocked =>
+      'Transfer ownership or give up your admin role in your homes first.';
+
+  @override
   String get errorInvalidIban =>
       'This IBAN doesn\'t look right. Check it and try again.';
 

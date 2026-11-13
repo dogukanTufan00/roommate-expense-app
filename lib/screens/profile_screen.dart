@@ -4,6 +4,7 @@ import 'package:roommate_expense_app/api/api.dart';
 import 'package:roommate_expense_app/l10n/app_localizations.dart';
 import 'package:roommate_expense_app/models.dart';
 import 'package:roommate_expense_app/push/push_service.dart';
+import 'package:roommate_expense_app/screens/delete_account_screen.dart';
 import 'package:roommate_expense_app/screens/login_screen.dart';
 import 'package:roommate_expense_app/session.dart';
 import 'package:roommate_expense_app/theme.dart';
@@ -130,6 +131,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  // The delete screen does its own logout when the account is gone, so nothing is done here afterwards.
+  Future<void> _openDeleteAccount() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const DeleteAccountScreen()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -247,6 +256,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onPressed: _logout,
               icon: const Icon(Icons.logout),
               label: Text(l10n.logout),
+            ),
+          ),
+          // A quiet danger zone at the very bottom, away from the everyday actions.
+          const SizedBox(height: 32),
+          Center(
+            child: TextButton(
+              onPressed: _openDeleteAccount,
+              style: TextButton.styleFrom(foregroundColor: AppColors.owes),
+              child: Text(l10n.deleteAccount),
             ),
           ),
         ],

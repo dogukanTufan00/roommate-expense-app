@@ -817,6 +817,85 @@ class UserProfile {
   }
 }
 
+// A home that blocks account deletion, from GET /api/users/me/deletion-check.
+// reason is FOUNDER_WITH_MEMBERS or LAST_ADMIN_WITH_MEMBERS.
+class DeletionBlocker {
+  final int householdId;
+  final String householdName;
+  final String reason;
+
+  DeletionBlocker({
+    required this.householdId,
+    required this.householdName,
+    required this.reason,
+  });
+
+  factory DeletionBlocker.fromJson(Map<String, dynamic> json) {
+    return DeletionBlocker(
+      householdId: json['householdId'] as int,
+      householdName: json['householdName'] as String,
+      reason: json['reason'] as String,
+    );
+  }
+}
+
+// The money still open in one home. net > 0: the home owes the user. net < 0: the user owes the home.
+class DeletionOpenBalance {
+  final int householdId;
+  final String householdName;
+  final double net;
+
+  DeletionOpenBalance({
+    required this.householdId,
+    required this.householdName,
+    required this.net,
+  });
+
+  factory DeletionOpenBalance.fromJson(Map<String, dynamic> json) {
+    return DeletionOpenBalance(
+      householdId: json['householdId'] as int,
+      householdName: json['householdName'] as String,
+      net: _numValue(json['net']),
+    );
+  }
+}
+
+// What deleting the account would do, from GET /api/users/me/deletion-check.
+class DeletionCheck {
+  final List<DeletionBlocker> blockers;
+  final List<DeletionOpenBalance> openBalances;
+  // Names of the homes where the user is alone. They are deleted with the account.
+  final List<String> householdsToDelete;
+
+  DeletionCheck({
+    required this.blockers,
+    required this.openBalances,
+    required this.householdsToDelete,
+  });
+
+  factory DeletionCheck.fromJson(Map<String, dynamic> json) {
+    return DeletionCheck(
+      blockers: [
+        for (final item in _list(json['blockers']))
+          DeletionBlocker.fromJson(item),
+      ],
+      openBalances: [
+        for (final item in _list(json['openBalances']))
+          DeletionOpenBalance.fromJson(item),
+      ],
+      householdsToDelete: [
+        for (final name in json['householdsToDelete'] as List<dynamic>? ?? const [])
+          name as String,
+      ],
+    );
+  }
+
+  static List<Map<String, dynamic>> _list(Object? value) {
+    final items = value as List<dynamic>? ?? const [];
+    return [for (final item in items) item as Map<String, dynamic>];
+  }
+}
+
 // Blank text from the API counts as "not set".
 String? _optionalText(Object? value) {
   if (value is! String || value.trim().isEmpty) return null;

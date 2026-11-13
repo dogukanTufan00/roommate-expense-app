@@ -1028,6 +1028,144 @@ abstract class AppLocalizations {
   /// **'Password changed'**
   String get passwordChanged;
 
+  /// No description provided for @deleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete my account'**
+  String get deleteAccount;
+
+  /// No description provided for @deleteAccountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get deleteAccountTitle;
+
+  /// No description provided for @deleteAccountWhatTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What gets deleted'**
+  String get deleteAccountWhatTitle;
+
+  /// No description provided for @deleteAccountDeletesProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Your name, e-mail, IBAN, password, notifications and saved devices.'**
+  String get deleteAccountDeletesProfile;
+
+  /// No description provided for @deleteAccountLeavesHomes.
+  ///
+  /// In en, this message translates to:
+  /// **'You leave every home you belong to.'**
+  String get deleteAccountLeavesHomes;
+
+  /// No description provided for @deleteAccountHouseholdsIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Homes where you are the only member are deleted completely, with all their expenses and payments:'**
+  String get deleteAccountHouseholdsIntro;
+
+  /// No description provided for @deleteAccountKeepsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What stays'**
+  String get deleteAccountKeepsTitle;
+
+  /// No description provided for @deleteAccountKeepsShared.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses and payments you shared stay in your roommates\' balances, under the name “Silinmiş kullanıcı”, so their accounts keep working.'**
+  String get deleteAccountKeepsShared;
+
+  /// No description provided for @deleteAccountIrreversible.
+  ///
+  /// In en, this message translates to:
+  /// **'This cannot be undone.'**
+  String get deleteAccountIrreversible;
+
+  /// No description provided for @deleteAccountBlockedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t delete your account yet'**
+  String get deleteAccountBlockedTitle;
+
+  /// No description provided for @blockerFounderWithMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'{household}: transfer ownership first'**
+  String blockerFounderWithMembers(String household);
+
+  /// No description provided for @blockerLastAdminWithMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'{household}: make another member an admin first'**
+  String blockerLastAdminWithMembers(String household);
+
+  /// No description provided for @blockerHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the home and do it from the Members tab.'**
+  String get blockerHint;
+
+  /// No description provided for @openBalancesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your open balances'**
+  String get openBalancesTitle;
+
+  /// No description provided for @balanceOwesWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'{household}: you owe {amount}. Deleting your account won\'t clear this debt.'**
+  String balanceOwesWarning(String household, String amount);
+
+  /// No description provided for @balanceGetsBackWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'{household}: you are owed {amount}. If you delete your account, you can\'t track this money in the app.'**
+  String balanceGetsBackWarning(String household, String amount);
+
+  /// No description provided for @showPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get showPassword;
+
+  /// No description provided for @hidePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide password'**
+  String get hidePassword;
+
+  /// No description provided for @deleteAccountConfirmCheckbox.
+  ///
+  /// In en, this message translates to:
+  /// **'I understand this cannot be undone'**
+  String get deleteAccountConfirmCheckbox;
+
+  /// No description provided for @deleteAccountButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete my account permanently'**
+  String get deleteAccountButton;
+
+  /// No description provided for @deleteAccountDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account was deleted.'**
+  String get deleteAccountDone;
+
+  /// No description provided for @errorWrongPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong password.'**
+  String get errorWrongPassword;
+
+  /// No description provided for @errorDeleteAccountBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer ownership or give up your admin role in your homes first.'**
+  String get errorDeleteAccountBlocked;
+
   /// No description provided for @errorInvalidIban.
   ///
   /// In en, this message translates to:

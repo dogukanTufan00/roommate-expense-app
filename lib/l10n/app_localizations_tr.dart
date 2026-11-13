@@ -530,6 +530,89 @@ class AppLocalizationsTr extends AppLocalizations {
   String get passwordChanged => 'Şifren değiştirildi';
 
   @override
+  String get deleteAccount => 'Hesabımı sil';
+
+  @override
+  String get deleteAccountTitle => 'Hesabı sil';
+
+  @override
+  String get deleteAccountWhatTitle => 'Neler silinecek';
+
+  @override
+  String get deleteAccountDeletesProfile =>
+      'Adın, e-postan, IBAN\'ın, şifren, bildirimlerin ve kayıtlı cihazların silinir.';
+
+  @override
+  String get deleteAccountLeavesHomes =>
+      'Üye olduğun bütün evlerden ayrılırsın.';
+
+  @override
+  String get deleteAccountHouseholdsIntro =>
+      'Evde tek başına kaldığın evler, içindeki tüm giderler ve ödemelerle birlikte tamamen silinir:';
+
+  @override
+  String get deleteAccountKeepsTitle => 'Neler kalacak';
+
+  @override
+  String get deleteAccountKeepsShared =>
+      'Ev arkadaşlarınla birlikte yaptığın giderler ve ödemeler, onların bakiyelerinde kalır. Senin yerine adın “Silinmiş kullanıcı” olarak görünür, böylece hesapları bozulmaz.';
+
+  @override
+  String get deleteAccountIrreversible => 'Bu işlem geri alınamaz.';
+
+  @override
+  String get deleteAccountBlockedTitle => 'Hesabını henüz silemezsin';
+
+  @override
+  String blockerFounderWithMembers(String household) {
+    return '$household: önce kuruculuğu devretmelisin';
+  }
+
+  @override
+  String blockerLastAdminWithMembers(String household) {
+    return '$household: önce başka birini yönetici yapmalısın';
+  }
+
+  @override
+  String get blockerHint => 'Evi açıp Üyeler sekmesinden yapabilirsin.';
+
+  @override
+  String get openBalancesTitle => 'Açık bakiyelerin';
+
+  @override
+  String balanceOwesWarning(String household, String amount) {
+    return '$household: $amount borcun var. Hesabını silsen de borç bakiyede kalır.';
+  }
+
+  @override
+  String balanceGetsBackWarning(String household, String amount) {
+    return '$household: $amount alacağın var. Silersen bu parayı uygulama üzerinden takip edemezsin.';
+  }
+
+  @override
+  String get showPassword => 'Şifreyi göster';
+
+  @override
+  String get hidePassword => 'Şifreyi gizle';
+
+  @override
+  String get deleteAccountConfirmCheckbox =>
+      'Bunun geri alınamayacağını anlıyorum';
+
+  @override
+  String get deleteAccountButton => 'Hesabımı kalıcı olarak sil';
+
+  @override
+  String get deleteAccountDone => 'Hesabın silindi. Seni özleyeceğiz 🧡';
+
+  @override
+  String get errorWrongPassword => 'Şifre yanlış.';
+
+  @override
+  String get errorDeleteAccountBlocked =>
+      'Önce evlerindeki kuruculuğu devretmeli ya da yöneticilik yetkini bırakmalısın.';
+
+  @override
   String get errorInvalidIban =>
       'Bu IBAN doğru görünmüyor. Kontrol edip tekrar dene.';
 

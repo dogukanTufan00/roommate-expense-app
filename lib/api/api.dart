@@ -430,6 +430,17 @@ class Api {
     });
   }
 
+  // What deleting the account would do: blockers, open balances and homes that go with it.
+  static Future<DeletionCheck> getDeletionCheck() async {
+    final data = await ApiClient.get('/api/users/me/deletion-check');
+    return DeletionCheck.fromJson(data as Map<String, dynamic>);
+  }
+
+  // Deletes the account. The password is sent in the body, never in the URL. Returns nothing on success (204).
+  static Future<void> deleteAccount(String password) async {
+    await ApiClient.delete('/api/users/me', {'password': password});
+  }
+
   // ---- Notifications ----
 
   // Latest first. Only the newest `limit` items are sent.

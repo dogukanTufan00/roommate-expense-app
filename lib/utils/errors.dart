@@ -16,6 +16,8 @@ String errorMessage(BuildContext context, Object error) {
 
   if (status == 0) return l10n.errorNetwork;
   if (status == 400) {
+    // Account deletion: the wrong password for the confirmation.
+    if (message.contains('Password is incorrect')) return l10n.errorWrongPassword;
     // Checked first: "Invalid IBAN checksum" would otherwise match the "sum" keyword below.
     if (message.contains('Invalid IBAN')) return l10n.errorInvalidIban;
     if (message.contains('Current password is incorrect')) {
@@ -50,6 +52,11 @@ String errorMessage(BuildContext context, Object error) {
   if (status == 413) return l10n.errorAttachmentTooLarge;
 
   if (status == 409) {
+    // Account deletion is blocked. Checked first: the message ends with home names, which could
+    // contain other keywords below (for example "Email").
+    if (message.contains('Transfer ownership or hand over admin rights first')) {
+      return l10n.errorDeleteAccountBlocked;
+    }
     // "at most 5 attachments" is the only 409 that mentions attachments.
     if (message.contains('attachments')) return l10n.errorAttachmentLimit;
     if (message.contains('already exists') || message.contains('Email')) {

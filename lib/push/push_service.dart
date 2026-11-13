@@ -126,6 +126,16 @@ class PushService {
     });
   }
 
+  // Deletes the FCM token on this phone only, without calling the API. Used after the
+  // account was deleted: the server already removed this device, and the login token no longer works.
+  static Future<void> forgetDeviceLocally() {
+    return _safely('local token removal', () async {
+      _token = null;
+      // ignore: deprecated_member_use
+      await FirebaseMessaging.instance.deleteToken();
+    });
+  }
+
   // Sends the current token with the current language to the API.
   static Future<void> _uploadToken() async {
     final token = await _fetchToken();

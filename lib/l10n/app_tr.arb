@@ -211,6 +211,51 @@
   "repeatNewPassword": "Yeni şifreyi tekrar yaz",
   "passwordMismatch": "Şifreler eşleşmiyor",
   "passwordChanged": "Şifren değiştirildi",
+  "deleteAccount": "Hesabımı sil",
+  "deleteAccountTitle": "Hesabı sil",
+  "deleteAccountWhatTitle": "Neler silinecek",
+  "deleteAccountDeletesProfile": "Adın, e-postan, IBAN'ın, şifren, bildirimlerin ve kayıtlı cihazların silinir.",
+  "deleteAccountLeavesHomes": "Üye olduğun bütün evlerden ayrılırsın.",
+  "deleteAccountHouseholdsIntro": "Evde tek başına kaldığın evler, içindeki tüm giderler ve ödemelerle birlikte tamamen silinir:",
+  "deleteAccountKeepsTitle": "Neler kalacak",
+  "deleteAccountKeepsShared": "Ev arkadaşlarınla birlikte yaptığın giderler ve ödemeler, onların bakiyelerinde kalır. Senin yerine adın “Silinmiş kullanıcı” olarak görünür, böylece hesapları bozulmaz.",
+  "deleteAccountIrreversible": "Bu işlem geri alınamaz.",
+  "deleteAccountBlockedTitle": "Hesabını henüz silemezsin",
+  "blockerFounderWithMembers": "{household}: önce kuruculuğu devretmelisin",
+  "@blockerFounderWithMembers": {
+    "placeholders": {
+      "household": {"type": "String"}
+    }
+  },
+  "blockerLastAdminWithMembers": "{household}: önce başka birini yönetici yapmalısın",
+  "@blockerLastAdminWithMembers": {
+    "placeholders": {
+      "household": {"type": "String"}
+    }
+  },
+  "blockerHint": "Evi açıp Üyeler sekmesinden yapabilirsin.",
+  "openBalancesTitle": "Açık bakiyelerin",
+  "balanceOwesWarning": "{household}: {amount} borcun var. Hesabını silsen de borç bakiyede kalır.",
+  "@balanceOwesWarning": {
+    "placeholders": {
+      "household": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+  "balanceGetsBackWarning": "{household}: {amount} alacağın var. Silersen bu parayı uygulama üzerinden takip edemezsin.",
+  "@balanceGetsBackWarning": {
+    "placeholders": {
+      "household": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+  "showPassword": "Şifreyi göster",
+  "hidePassword": "Şifreyi gizle",
+  "deleteAccountConfirmCheckbox": "Bunun geri alınamayacağını anlıyorum",
+  "deleteAccountButton": "Hesabımı kalıcı olarak sil",
+  "deleteAccountDone": "Hesabın silindi. Seni özleyeceğiz 🧡",
+  "errorWrongPassword": "Şifre yanlış.",
+  "errorDeleteAccountBlocked": "Önce evlerindeki kuruculuğu devretmeli ya da yöneticilik yetkini bırakmalısın.",
   "errorInvalidIban": "Bu IBAN doğru görünmüyor. Kontrol edip tekrar dene.",
   "errorWrongCurrentPassword": "Mevcut şifren yanlış.",
   "founder": "Kurucu",

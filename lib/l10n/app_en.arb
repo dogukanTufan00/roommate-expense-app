@@ -273,6 +273,51 @@
   "repeatNewPassword": "Repeat new password",
   "passwordMismatch": "The passwords don't match",
   "passwordChanged": "Password changed",
+  "deleteAccount": "Delete my account",
+  "deleteAccountTitle": "Delete account",
+  "deleteAccountWhatTitle": "What gets deleted",
+  "deleteAccountDeletesProfile": "Your name, e-mail, IBAN, password, notifications and saved devices.",
+  "deleteAccountLeavesHomes": "You leave every home you belong to.",
+  "deleteAccountHouseholdsIntro": "Homes where you are the only member are deleted completely, with all their expenses and payments:",
+  "deleteAccountKeepsTitle": "What stays",
+  "deleteAccountKeepsShared": "Expenses and payments you shared stay in your roommates' balances, under the name “Silinmiş kullanıcı”, so their accounts keep working.",
+  "deleteAccountIrreversible": "This cannot be undone.",
+  "deleteAccountBlockedTitle": "You can't delete your account yet",
+  "blockerFounderWithMembers": "{household}: transfer ownership first",
+  "@blockerFounderWithMembers": {
+    "placeholders": {
+      "household": {"type": "String"}
+    }
+  },
+  "blockerLastAdminWithMembers": "{household}: make another member an admin first",
+  "@blockerLastAdminWithMembers": {
+    "placeholders": {
+      "household": {"type": "String"}
+    }
+  },
+  "blockerHint": "Open the home and do it from the Members tab.",
+  "openBalancesTitle": "Your open balances",
+  "balanceOwesWarning": "{household}: you owe {amount}. Deleting your account won't clear this debt.",
+  "@balanceOwesWarning": {
+    "placeholders": {
+      "household": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+  "balanceGetsBackWarning": "{household}: you are owed {amount}. If you delete your account, you can't track this money in the app.",
+  "@balanceGetsBackWarning": {
+    "placeholders": {
+      "household": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+  "showPassword": "Show password",
+  "hidePassword": "Hide password",
+  "deleteAccountConfirmCheckbox": "I understand this cannot be undone",
+  "deleteAccountButton": "Delete my account permanently",
+  "deleteAccountDone": "Your account was deleted.",
+  "errorWrongPassword": "Wrong password.",
+  "errorDeleteAccountBlocked": "Transfer ownership or give up your admin role in your homes first.",
   "errorInvalidIban": "This IBAN doesn't look right. Check it and try again.",
   "errorWrongCurrentPassword": "Your current password is wrong.",
   "founder": "Founder",
