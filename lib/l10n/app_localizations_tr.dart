@@ -1108,4 +1108,193 @@ class AppLocalizationsTr extends AppLocalizations {
   String notificationReminderNote(String note) {
     return 'Not: $note';
   }
+
+  @override
+  String notificationNoteLine(String note) {
+    return 'Not: $note';
+  }
+
+  @override
+  String notificationExpenseUpdatedTitle(String household) {
+    return 'Gider düzenlendi · $household';
+  }
+
+  @override
+  String notificationExpenseUpdatedBody(
+    String actor,
+    String detail,
+    String change,
+  ) {
+    return '$actor \"$detail\" giderini düzenledi$change';
+  }
+
+  @override
+  String notificationExpenseUpdatedBodyNoDetail(String actor, String change) {
+    return '$actor bir gideri düzenledi$change';
+  }
+
+  @override
+  String notificationPaymentUpdatedTitle(String household) {
+    return 'Ödeme düzenlendi · $household';
+  }
+
+  @override
+  String notificationPaymentUpdatedBody(String actor, String change) {
+    return '$actor bir ödemeyi düzenledi$change';
+  }
+
+  @override
+  String get historyTitle => 'Geçmiş';
+
+  @override
+  String get historyEmpty => 'Henüz kayıt yok';
+
+  @override
+  String get historyEmptyHint =>
+      'Gider, ödeme ve üyelerle ilgili her ekleme, düzenleme ve silme; kimin yaptığı ve ne zaman yaptığıyla birlikte burada listelenecek.';
+
+  @override
+  String get historySharesHeading => 'Paylar';
+
+  @override
+  String get historyLoadMore => 'Daha fazla';
+
+  @override
+  String get historyUnknownName => 'Biri';
+
+  @override
+  String get historyExpenseFallback => 'gider';
+
+  @override
+  String get historyYes => 'Evet';
+
+  @override
+  String get historyNo => 'Hayır';
+
+  @override
+  String get historyRoleMember => 'Üye';
+
+  @override
+  String get historySharesChanged => 'Bölüşüm değişti';
+
+  @override
+  String get historyFieldAmount => 'Tutar';
+
+  @override
+  String get historyFieldDescription => 'Açıklama';
+
+  @override
+  String get historyFieldCategory => 'Kategori';
+
+  @override
+  String get historyFieldDate => 'Tarih';
+
+  @override
+  String get historyFieldPaidBy => 'Ödeyen';
+
+  @override
+  String get historyFieldFrom => 'Gönderen';
+
+  @override
+  String get historyFieldTo => 'Alan';
+
+  @override
+  String get historyFieldRecurring => 'Tekrarlayan';
+
+  @override
+  String get historyFieldSplitType => 'Bölüşüm türü';
+
+  @override
+  String get historyFieldNote => 'Not';
+
+  @override
+  String get historyFieldRole => 'Rol';
+
+  @override
+  String get historyFieldName => 'Ev adı';
+
+  @override
+  String historyHouseholdCreated(String actor) {
+    return '$actor evi kurdu';
+  }
+
+  @override
+  String historyHouseholdRenamed(String actor) {
+    return '$actor evin adını değiştirdi';
+  }
+
+  @override
+  String historyOwnershipTransferred(String actor, String subject) {
+    return '$actor kuruculuğu $subject kişisine devretti';
+  }
+
+  @override
+  String historyMemberJoined(String subject) {
+    return '$subject eve katıldı';
+  }
+
+  @override
+  String historyMemberLeft(String subject) {
+    return '$subject evden ayrıldı';
+  }
+
+  @override
+  String historyMemberRemoved(String actor, String subject) {
+    return '$actor, $subject kişisini evden çıkardı';
+  }
+
+  @override
+  String historyMemberRoleChanged(String actor, String subject) {
+    return '$actor, $subject kişisinin rolünü değiştirdi';
+  }
+
+  @override
+  String historyExpenseAdded(String actor, String label, String amount) {
+    return '$actor \"$label\" giderini ekledi · $amount';
+  }
+
+  @override
+  String historyExpenseUpdated(String actor, String label) {
+    return '$actor \"$label\" giderini düzenledi';
+  }
+
+  @override
+  String historyExpenseDeleted(String actor, String label, String amount) {
+    return '$actor \"$label\" giderini sildi · $amount';
+  }
+
+  @override
+  String historyRecurringGenerated(String label, String amount) {
+    return 'Tekrarlayan gider eklendi: \"$label\" · $amount';
+  }
+
+  @override
+  String historyPaymentAdded(
+    String actor,
+    String subject,
+    String other,
+    String amount,
+  ) {
+    return '$actor ödeme kaydetti: $subject → $other · $amount';
+  }
+
+  @override
+  String historyPaymentUpdated(String actor, String subject, String other) {
+    return '$actor bir ödemeyi düzenledi: $subject → $other';
+  }
+
+  @override
+  String historyPaymentDeleted(
+    String actor,
+    String subject,
+    String other,
+    String amount,
+  ) {
+    return '$actor bir ödemeyi sildi: $subject → $other · $amount';
+  }
+
+  @override
+  String historyGeneric(String actor) {
+    return '$actor bir değişiklik yaptı';
+  }
 }

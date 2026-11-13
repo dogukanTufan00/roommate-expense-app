@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:roommate_expense_app/api/api.dart';
 import 'package:roommate_expense_app/l10n/app_localizations.dart';
 import 'package:roommate_expense_app/models.dart';
+import 'package:roommate_expense_app/screens/history_screen.dart';
 import 'package:roommate_expense_app/screens/household_screen.dart';
 import 'package:roommate_expense_app/theme.dart';
 import 'package:roommate_expense_app/utils/errors.dart';
@@ -110,10 +111,21 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     final initialTab = item.type == NotificationType.paymentReminder
         ? HouseholdScreen.balancesTab
         : 0;
-    await _openHousehold(householdId, initialTab: initialTab);
+    // An edit opens the home's history, where the edit is listed.
+    final openHistory = item.type == NotificationType.expenseUpdated ||
+        item.type == NotificationType.paymentUpdated;
+    await _openHousehold(
+      householdId,
+      initialTab: initialTab,
+      openHistory: openHistory,
+    );
   }
 
-  Future<void> _openHousehold(int householdId, {int initialTab = 0}) async {
+  Future<void> _openHousehold(
+    int householdId, {
+    int initialTab = 0,
+    bool openHistory = false,
+  }) async {
     final l10n = AppLocalizations.of(context);
     final List<Household> households;
     try {
@@ -133,10 +145,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       );
       return;
     }
+    final household = matches.first;
     await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => HouseholdScreen(household: matches.first, initialTab: initialTab),
+        builder: (_) => openHistory
+            ? HistoryScreen(householdId: household.id, householdName: household.name)
+            : HouseholdScreen(household: household, initialTab: initialTab),
       ),
     );
   }
@@ -316,6 +331,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         const _TypeStyle(Icons.autorenew_rounded, AppColors.ink),
       NotificationType.paymentReminder =>
         const _TypeStyle(Icons.notifications_active_rounded, AppColors.mustard),
+      // Edits use the same edit icon and color as in the history screen.
+      NotificationType.expenseUpdated =>
+        const _TypeStyle(Icons.edit_rounded, AppColors.mustard),
+      NotificationType.paymentUpdated =>
+        const _TypeStyle(Icons.edit_rounded, AppColors.mustard),
       NotificationType.unknown =>
         const _TypeStyle(Icons.notifications_rounded, AppColors.muted),
     };

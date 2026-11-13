@@ -461,6 +461,22 @@ class Api {
     await ApiClient.delete('/api/users/me', {'password': password});
   }
 
+  // ---- Activity ----
+
+  // The home's history, newest first. To load the next (older) page, pass the
+  // smallest id you have as beforeId.
+  static Future<List<ActivityEntry>> getActivity(
+    int householdId, {
+    int limit = 30,
+    int? beforeId,
+  }) async {
+    final before = beforeId == null ? '' : '&beforeId=$beforeId';
+    final data = await ApiClient.get(
+      '/api/households/$householdId/activity?limit=$limit$before',
+    );
+    return _parseList(data, ActivityEntry.fromJson);
+  }
+
   // ---- Notifications ----
 
   // Latest first. Only the newest `limit` items are sent.

@@ -633,5 +633,259 @@
         "type": "String"
       }
     }
+  },
+  "notificationNoteLine": "Not: {note}",
+  "@notificationNoteLine": {
+    "placeholders": {
+      "note": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationExpenseUpdatedTitle": "Gider düzenlendi · {household}",
+  "@notificationExpenseUpdatedTitle": {
+    "placeholders": {
+      "household": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationExpenseUpdatedBody": "{actor} \"{detail}\" giderini düzenledi{change}",
+  "@notificationExpenseUpdatedBody": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "detail": {
+        "type": "String"
+      },
+      "change": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationExpenseUpdatedBodyNoDetail": "{actor} bir gideri düzenledi{change}",
+  "@notificationExpenseUpdatedBodyNoDetail": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "change": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationPaymentUpdatedTitle": "Ödeme düzenlendi · {household}",
+  "@notificationPaymentUpdatedTitle": {
+    "placeholders": {
+      "household": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationPaymentUpdatedBody": "{actor} bir ödemeyi düzenledi{change}",
+  "@notificationPaymentUpdatedBody": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "change": {
+        "type": "String"
+      }
+    }
+  },
+  "historyTitle": "Geçmiş",
+  "historyEmpty": "Henüz kayıt yok",
+  "historyEmptyHint": "Gider, ödeme ve üyelerle ilgili her ekleme, düzenleme ve silme; kimin yaptığı ve ne zaman yaptığıyla birlikte burada listelenecek.",
+  "historySharesHeading": "Paylar",
+  "historyLoadMore": "Daha fazla",
+  "historyUnknownName": "Biri",
+  "historyExpenseFallback": "gider",
+  "historyYes": "Evet",
+  "historyNo": "Hayır",
+  "historyRoleMember": "Üye",
+  "historySharesChanged": "Bölüşüm değişti",
+  "historyFieldAmount": "Tutar",
+  "historyFieldDescription": "Açıklama",
+  "historyFieldCategory": "Kategori",
+  "historyFieldDate": "Tarih",
+  "historyFieldPaidBy": "Ödeyen",
+  "historyFieldFrom": "Gönderen",
+  "historyFieldTo": "Alan",
+  "historyFieldRecurring": "Tekrarlayan",
+  "historyFieldSplitType": "Bölüşüm türü",
+  "historyFieldNote": "Not",
+  "historyFieldRole": "Rol",
+  "historyFieldName": "Ev adı",
+  "historyHouseholdCreated": "{actor} evi kurdu",
+  "@historyHouseholdCreated": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
+  },
+  "historyHouseholdRenamed": "{actor} evin adını değiştirdi",
+  "@historyHouseholdRenamed": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
+  },
+  "historyOwnershipTransferred": "{actor} kuruculuğu {subject} kişisine devretti",
+  "@historyOwnershipTransferred": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "subject": {
+        "type": "String"
+      }
+    }
+  },
+  "historyMemberJoined": "{subject} eve katıldı",
+  "@historyMemberJoined": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      }
+    }
+  },
+  "historyMemberLeft": "{subject} evden ayrıldı",
+  "@historyMemberLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      }
+    }
+  },
+  "historyMemberRemoved": "{actor}, {subject} kişisini evden çıkardı",
+  "@historyMemberRemoved": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "subject": {
+        "type": "String"
+      }
+    }
+  },
+  "historyMemberRoleChanged": "{actor}, {subject} kişisinin rolünü değiştirdi",
+  "@historyMemberRoleChanged": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "subject": {
+        "type": "String"
+      }
+    }
+  },
+  "historyExpenseAdded": "{actor} \"{label}\" giderini ekledi · {amount}",
+  "@historyExpenseAdded": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "label": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "historyExpenseUpdated": "{actor} \"{label}\" giderini düzenledi",
+  "@historyExpenseUpdated": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "historyExpenseDeleted": "{actor} \"{label}\" giderini sildi · {amount}",
+  "@historyExpenseDeleted": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "label": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "historyRecurringGenerated": "Tekrarlayan gider eklendi: \"{label}\" · {amount}",
+  "@historyRecurringGenerated": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "historyPaymentAdded": "{actor} ödeme kaydetti: {subject} → {other} · {amount}",
+  "@historyPaymentAdded": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "subject": {
+        "type": "String"
+      },
+      "other": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "historyPaymentUpdated": "{actor} bir ödemeyi düzenledi: {subject} → {other}",
+  "@historyPaymentUpdated": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "subject": {
+        "type": "String"
+      },
+      "other": {
+        "type": "String"
+      }
+    }
+  },
+  "historyPaymentDeleted": "{actor} bir ödemeyi sildi: {subject} → {other} · {amount}",
+  "@historyPaymentDeleted": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "subject": {
+        "type": "String"
+      },
+      "other": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "historyGeneric": "{actor} bir değişiklik yaptı",
+  "@historyGeneric": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
   }
 }

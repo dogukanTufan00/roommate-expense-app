@@ -4,6 +4,7 @@ import 'package:roommate_expense_app/l10n/app_localizations.dart';
 import 'package:roommate_expense_app/models.dart';
 import 'package:roommate_expense_app/screens/balances_tab.dart';
 import 'package:roommate_expense_app/screens/expenses_tab.dart';
+import 'package:roommate_expense_app/screens/history_screen.dart';
 import 'package:roommate_expense_app/screens/members_tab.dart';
 import 'package:roommate_expense_app/screens/recurring_expenses_screen.dart';
 import 'package:roommate_expense_app/screens/split_defaults_screen.dart';
@@ -76,6 +77,19 @@ class _HouseholdScreenState extends State<HouseholdScreen> {
     );
   }
 
+  // The history uses the current name, so a rename shows up at once.
+  void _openHistory() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => HistoryScreen(
+          householdId: widget.household.id,
+          householdName: _name,
+        ),
+      ),
+    );
+  }
+
   Future<void> _delete() async {
     final l10n = AppLocalizations.of(context);
     final error = Theme.of(context).colorScheme.error;
@@ -126,6 +140,11 @@ class _HouseholdScreenState extends State<HouseholdScreen> {
         appBar: AppBar(
           title: Text(_name),
           actions: [
+            IconButton(
+              icon: const Icon(Icons.history_rounded),
+              tooltip: l10n.historyTitle,
+              onPressed: _openHistory,
+            ),
             PopupMenuButton<_HouseholdMenuAction>(
               onSelected: (action) {
                 switch (action) {

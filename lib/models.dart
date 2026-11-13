@@ -733,6 +733,9 @@ enum NotificationType {
   recurringExpenseAdded,
   // Someone asks me (the debtor) to pay them back.
   paymentReminder,
+  // Someone edited an expense or a payment. previousAmount is set when the amount changed.
+  expenseUpdated,
+  paymentUpdated,
   unknown;
 
   static NotificationType fromApi(String value) => switch (value) {
@@ -742,6 +745,8 @@ enum NotificationType {
         'INVITATION_ACCEPTED' => invitationAccepted,
         'RECURRING_EXPENSE_ADDED' => recurringExpenseAdded,
         'PAYMENT_REMINDER' => paymentReminder,
+        'EXPENSE_UPDATED' => expenseUpdated,
+        'PAYMENT_UPDATED' => paymentUpdated,
         _ => unknown,
       };
 }
@@ -758,6 +763,8 @@ class AppNotification {
   // The other person, for example the receiver of a payment. Null for other types.
   final String? targetName;
   final double? amount;
+  // The amount before an edit. Only set when the amount changed (EXPENSE_UPDATED, PAYMENT_UPDATED).
+  final double? previousAmount;
   // For example the expense description "Market". Null when there is none.
   final String? detail;
   final int? expenseId;
@@ -776,6 +783,7 @@ class AppNotification {
     required this.actorName,
     required this.targetName,
     required this.amount,
+    required this.previousAmount,
     required this.detail,
     required this.expenseId,
     required this.paymentId,
@@ -793,6 +801,7 @@ class AppNotification {
       actorName: json['actorName'] as String? ?? '',
       targetName: _optionalText(json['targetName']),
       amount: (json['amount'] as num?)?.toDouble(),
+      previousAmount: (json['previousAmount'] as num?)?.toDouble(),
       detail: _optionalText(json['detail']),
       expenseId: json['expenseId'] as int?,
       paymentId: json['paymentId'] as int?,
@@ -808,6 +817,138 @@ double _numValue(Object? value) => value is num ? value.toDouble() : 0;
 
 // Reads a count sent as a JSON number. Missing or odd values count as 0.
 int _countValue(Object? value) => value is num ? value.toInt() : 0;
+
+// The kinds of change in the home's history. A kind the app does not know yet is unknown.
+enum ActivityType {
+  householdCreated,
+  householdRenamed,
+  ownershipTransferred,
+  memberJoined,
+  memberLeft,
+  memberRemoved,
+  memberRoleChanged,
+  expenseAdded,
+  expenseUpdated,
+  expenseDeleted,
+  recurringExpenseGenerated,
+  paymentAdded,
+  paymentUpdated,
+  paymentDeleted,
+  unknown;
+
+  static ActivityType fromApi(String value) => switch (value) {
+        'HOUSEHOLD_CREATED' => householdCreated,
+        'HOUSEHOLD_RENAMED' => householdRenamed,
+        'OWNERSHIP_TRANSFERRED' => ownershipTransferred,
+        'MEMBER_JOINED' => memberJoined,
+        'MEMBER_LEFT' => memberLeft,
+        'MEMBER_REMOVED' => memberRemoved,
+        'MEMBER_ROLE_CHANGED' => memberRoleChanged,
+        'EXPENSE_ADDED' => expenseAdded,
+        'EXPENSE_UPDATED' => expenseUpdated,
+        'EXPENSE_DELETED' => expenseDeleted,
+        'RECURRING_EXPENSE_GENERATED' => recurringExpenseGenerated,
+        'PAYMENT_ADDED' => paymentAdded,
+        'PAYMENT_UPDATED' => paymentUpdated,
+        'PAYMENT_DELETED' => paymentDeleted,
+        _ => unknown,
+      };
+}
+
+// One field that changed in a history item. Values are text, as the API sends them.
+class ActivityChange {
+  // The API's field name, for example "amount" or "paidBy".
+  final String field;
+  // Null when there was no old value (or no new value).
+  final String? oldValue;
+  final String? newValue;
+  // For "share" changes: the person whose share changed. Null for other fields.
+  final int? userId;
+  final String? personName;
+
+  ActivityChange({
+    required this.field,
+    required this.oldValue,
+    required this.newValue,
+    this.userId,
+    this.personName,
+  });
+
+  factory ActivityChange.fromJson(Map<String, dynamic> json) {
+    return ActivityChange(
+      field: json['field'] as String? ?? '',
+      oldValue: json['oldValue']?.toString(),
+      newValue: json['newValue']?.toString(),
+      userId: json['userId'] as int?,
+      personName: _optionalText(json['personName']),
+    );
+  }
+}
+
+// One item from GET /api/households/{id}/activity. The server sends data only, so the
+// app writes the sentence in the current language (see utils/activity_text.dart).
+class ActivityEntry {
+  final int id;
+  final ActivityType type;
+  // The person who did it. Null for recurring expenses, which the app adds by itself.
+  final int? actorUserId;
+  final String? actorName;
+  // The person the action is about, for example who joined or whose payment it was.
+  final int? subjectUserId;
+  final String? subjectName;
+  // The other person in a payment (the receiver). Null for other types.
+  final int? otherUserId;
+  final String? otherName;
+  final double? amount;
+  // The expense description. Null when there is none.
+  final String? label;
+  final int? expenseId;
+  final int? paymentId;
+  // Empty when nothing changed in a readable way.
+  final List<ActivityChange> changes;
+  // Converted to the phone's time zone.
+  final DateTime createdAt;
+
+  ActivityEntry({
+    required this.id,
+    required this.type,
+    required this.actorUserId,
+    required this.actorName,
+    required this.subjectUserId,
+    required this.subjectName,
+    required this.otherUserId,
+    required this.otherName,
+    required this.amount,
+    required this.label,
+    required this.expenseId,
+    required this.paymentId,
+    required this.changes,
+    required this.createdAt,
+  });
+
+  factory ActivityEntry.fromJson(Map<String, dynamic> json) {
+    final rawChanges = json['changes'] as List<dynamic>? ?? const [];
+    return ActivityEntry(
+      id: json['id'] as int,
+      type: ActivityType.fromApi(json['type'] as String? ?? ''),
+      actorUserId: json['actorUserId'] as int?,
+      actorName: _optionalText(json['actorName']),
+      subjectUserId: json['subjectUserId'] as int?,
+      subjectName: _optionalText(json['subjectName']),
+      otherUserId: json['otherUserId'] as int?,
+      otherName: _optionalText(json['otherName']),
+      amount: (json['amount'] as num?)?.toDouble(),
+      label: _optionalText(json['label']),
+      expenseId: json['expenseId'] as int?,
+      paymentId: json['paymentId'] as int?,
+      changes: [
+        for (final item in rawChanges)
+          ActivityChange.fromJson(item as Map<String, dynamic>),
+      ],
+      createdAt: DateTime.parse(json['createdAt'] as String).toLocal(),
+    );
+  }
+}
 
 // The logged in user's own profile, from GET /api/users/me.
 class UserProfile {

@@ -732,5 +732,259 @@
         "type": "String"
       }
     }
+  },
+  "notificationNoteLine": "Note: {note}",
+  "@notificationNoteLine": {
+    "placeholders": {
+      "note": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationExpenseUpdatedTitle": "Expense edited · {household}",
+  "@notificationExpenseUpdatedTitle": {
+    "placeholders": {
+      "household": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationExpenseUpdatedBody": "{actor} edited \"{detail}\"{change}",
+  "@notificationExpenseUpdatedBody": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "detail": {
+        "type": "String"
+      },
+      "change": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationExpenseUpdatedBodyNoDetail": "{actor} edited an expense{change}",
+  "@notificationExpenseUpdatedBodyNoDetail": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "change": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationPaymentUpdatedTitle": "Payment edited · {household}",
+  "@notificationPaymentUpdatedTitle": {
+    "placeholders": {
+      "household": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationPaymentUpdatedBody": "{actor} edited a payment{change}",
+  "@notificationPaymentUpdatedBody": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "change": {
+        "type": "String"
+      }
+    }
+  },
+  "historyTitle": "History",
+  "historyEmpty": "No activity yet",
+  "historyEmptyHint": "Every addition, edit and deletion of expenses, payments and members will be listed here, with who did it and when.",
+  "historySharesHeading": "Shares",
+  "historyLoadMore": "Load more",
+  "historyUnknownName": "Someone",
+  "historyExpenseFallback": "expense",
+  "historyYes": "Yes",
+  "historyNo": "No",
+  "historyRoleMember": "Member",
+  "historySharesChanged": "Split changed",
+  "historyFieldAmount": "Amount",
+  "historyFieldDescription": "Description",
+  "historyFieldCategory": "Category",
+  "historyFieldDate": "Date",
+  "historyFieldPaidBy": "Paid by",
+  "historyFieldFrom": "From",
+  "historyFieldTo": "To",
+  "historyFieldRecurring": "Recurring",
+  "historyFieldSplitType": "Split type",
+  "historyFieldNote": "Note",
+  "historyFieldRole": "Role",
+  "historyFieldName": "Name",
+  "historyHouseholdCreated": "{actor} created the household",
+  "@historyHouseholdCreated": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
+  },
+  "historyHouseholdRenamed": "{actor} renamed the household",
+  "@historyHouseholdRenamed": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
+  },
+  "historyOwnershipTransferred": "{actor} transferred ownership to {subject}",
+  "@historyOwnershipTransferred": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "subject": {
+        "type": "String"
+      }
+    }
+  },
+  "historyMemberJoined": "{subject} joined",
+  "@historyMemberJoined": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      }
+    }
+  },
+  "historyMemberLeft": "{subject} left",
+  "@historyMemberLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      }
+    }
+  },
+  "historyMemberRemoved": "{actor} removed {subject}",
+  "@historyMemberRemoved": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "subject": {
+        "type": "String"
+      }
+    }
+  },
+  "historyMemberRoleChanged": "{actor} changed {subject}'s role",
+  "@historyMemberRoleChanged": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "subject": {
+        "type": "String"
+      }
+    }
+  },
+  "historyExpenseAdded": "{actor} added \"{label}\" · {amount}",
+  "@historyExpenseAdded": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "label": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "historyExpenseUpdated": "{actor} edited \"{label}\"",
+  "@historyExpenseUpdated": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "historyExpenseDeleted": "{actor} deleted \"{label}\" · {amount}",
+  "@historyExpenseDeleted": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "label": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "historyRecurringGenerated": "Recurring expense added: \"{label}\" · {amount}",
+  "@historyRecurringGenerated": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "historyPaymentAdded": "{actor} recorded a payment: {subject} → {other} · {amount}",
+  "@historyPaymentAdded": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "subject": {
+        "type": "String"
+      },
+      "other": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "historyPaymentUpdated": "{actor} edited a payment: {subject} → {other}",
+  "@historyPaymentUpdated": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "subject": {
+        "type": "String"
+      },
+      "other": {
+        "type": "String"
+      }
+    }
+  },
+  "historyPaymentDeleted": "{actor} deleted a payment: {subject} → {other} · {amount}",
+  "@historyPaymentDeleted": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "subject": {
+        "type": "String"
+      },
+      "other": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "historyGeneric": "{actor} made a change",
+  "@historyGeneric": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
   }
 }

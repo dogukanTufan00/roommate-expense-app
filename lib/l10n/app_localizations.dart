@@ -1949,6 +1949,284 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Note: {note}'**
   String notificationReminderNote(String note);
+
+  /// No description provided for @notificationNoteLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Note: {note}'**
+  String notificationNoteLine(String note);
+
+  /// No description provided for @notificationExpenseUpdatedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense edited · {household}'**
+  String notificationExpenseUpdatedTitle(String household);
+
+  /// No description provided for @notificationExpenseUpdatedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} edited \"{detail}\"{change}'**
+  String notificationExpenseUpdatedBody(
+    String actor,
+    String detail,
+    String change,
+  );
+
+  /// No description provided for @notificationExpenseUpdatedBodyNoDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} edited an expense{change}'**
+  String notificationExpenseUpdatedBodyNoDetail(String actor, String change);
+
+  /// No description provided for @notificationPaymentUpdatedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment edited · {household}'**
+  String notificationPaymentUpdatedTitle(String household);
+
+  /// No description provided for @notificationPaymentUpdatedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} edited a payment{change}'**
+  String notificationPaymentUpdatedBody(String actor, String change);
+
+  /// No description provided for @historyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get historyTitle;
+
+  /// No description provided for @historyEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No activity yet'**
+  String get historyEmpty;
+
+  /// No description provided for @historyEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Every addition, edit and deletion of expenses, payments and members will be listed here, with who did it and when.'**
+  String get historyEmptyHint;
+
+  /// No description provided for @historySharesHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Shares'**
+  String get historySharesHeading;
+
+  /// No description provided for @historyLoadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Load more'**
+  String get historyLoadMore;
+
+  /// No description provided for @historyUnknownName.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone'**
+  String get historyUnknownName;
+
+  /// No description provided for @historyExpenseFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'expense'**
+  String get historyExpenseFallback;
+
+  /// No description provided for @historyYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get historyYes;
+
+  /// No description provided for @historyNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get historyNo;
+
+  /// No description provided for @historyRoleMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Member'**
+  String get historyRoleMember;
+
+  /// No description provided for @historySharesChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Split changed'**
+  String get historySharesChanged;
+
+  /// No description provided for @historyFieldAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get historyFieldAmount;
+
+  /// No description provided for @historyFieldDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get historyFieldDescription;
+
+  /// No description provided for @historyFieldCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get historyFieldCategory;
+
+  /// No description provided for @historyFieldDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get historyFieldDate;
+
+  /// No description provided for @historyFieldPaidBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid by'**
+  String get historyFieldPaidBy;
+
+  /// No description provided for @historyFieldFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get historyFieldFrom;
+
+  /// No description provided for @historyFieldTo.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get historyFieldTo;
+
+  /// No description provided for @historyFieldRecurring.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring'**
+  String get historyFieldRecurring;
+
+  /// No description provided for @historyFieldSplitType.
+  ///
+  /// In en, this message translates to:
+  /// **'Split type'**
+  String get historyFieldSplitType;
+
+  /// No description provided for @historyFieldNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get historyFieldNote;
+
+  /// No description provided for @historyFieldRole.
+  ///
+  /// In en, this message translates to:
+  /// **'Role'**
+  String get historyFieldRole;
+
+  /// No description provided for @historyFieldName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get historyFieldName;
+
+  /// No description provided for @historyHouseholdCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} created the household'**
+  String historyHouseholdCreated(String actor);
+
+  /// No description provided for @historyHouseholdRenamed.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} renamed the household'**
+  String historyHouseholdRenamed(String actor);
+
+  /// No description provided for @historyOwnershipTransferred.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} transferred ownership to {subject}'**
+  String historyOwnershipTransferred(String actor, String subject);
+
+  /// No description provided for @historyMemberJoined.
+  ///
+  /// In en, this message translates to:
+  /// **'{subject} joined'**
+  String historyMemberJoined(String subject);
+
+  /// No description provided for @historyMemberLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{subject} left'**
+  String historyMemberLeft(String subject);
+
+  /// No description provided for @historyMemberRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} removed {subject}'**
+  String historyMemberRemoved(String actor, String subject);
+
+  /// No description provided for @historyMemberRoleChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} changed {subject}\'s role'**
+  String historyMemberRoleChanged(String actor, String subject);
+
+  /// No description provided for @historyExpenseAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} added \"{label}\" · {amount}'**
+  String historyExpenseAdded(String actor, String label, String amount);
+
+  /// No description provided for @historyExpenseUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} edited \"{label}\"'**
+  String historyExpenseUpdated(String actor, String label);
+
+  /// No description provided for @historyExpenseDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} deleted \"{label}\" · {amount}'**
+  String historyExpenseDeleted(String actor, String label, String amount);
+
+  /// No description provided for @historyRecurringGenerated.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring expense added: \"{label}\" · {amount}'**
+  String historyRecurringGenerated(String label, String amount);
+
+  /// No description provided for @historyPaymentAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} recorded a payment: {subject} → {other} · {amount}'**
+  String historyPaymentAdded(
+    String actor,
+    String subject,
+    String other,
+    String amount,
+  );
+
+  /// No description provided for @historyPaymentUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} edited a payment: {subject} → {other}'**
+  String historyPaymentUpdated(String actor, String subject, String other);
+
+  /// No description provided for @historyPaymentDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} deleted a payment: {subject} → {other} · {amount}'**
+  String historyPaymentDeleted(
+    String actor,
+    String subject,
+    String other,
+    String amount,
+  );
+
+  /// No description provided for @historyGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} made a change'**
+  String historyGeneric(String actor);
 }
 
 class _AppLocalizationsDelegate

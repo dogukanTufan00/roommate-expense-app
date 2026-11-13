@@ -27,6 +27,11 @@ NotificationText notificationText(
   final amount = amountValue == null
       ? ''
       : formatMoneyFor(l10n.localeName, amountValue);
+  // After an edit that changed the amount: ": ₺1.500,00 → ₺2.500,00". Empty otherwise.
+  final previousValue = notification.previousAmount;
+  final change = previousValue == null || amountValue == null
+      ? ''
+      : ': ${formatMoneyFor(l10n.localeName, previousValue)} → $amount';
 
   switch (notification.type) {
     case NotificationType.expenseAdded:
@@ -68,6 +73,22 @@ NotificationText notificationText(
         body: detail == null
             ? sentence
             : '$sentence\n${l10n.notificationReminderNote(detail)}',
+      );
+    case NotificationType.expenseUpdated:
+      return NotificationText(
+        title: l10n.notificationExpenseUpdatedTitle(household),
+        body: detail == null
+            ? l10n.notificationExpenseUpdatedBodyNoDetail(actor, change)
+            : l10n.notificationExpenseUpdatedBody(actor, detail, change),
+      );
+    case NotificationType.paymentUpdated:
+      // Like a payment reminder, the note goes on its own line.
+      final updatedSentence = l10n.notificationPaymentUpdatedBody(actor, change);
+      return NotificationText(
+        title: l10n.notificationPaymentUpdatedTitle(household),
+        body: detail == null
+            ? updatedSentence
+            : '$updatedSentence\n${l10n.notificationNoteLine(detail)}',
       );
     case NotificationType.unknown:
       return NotificationText(title: l10n.notificationGenericTitle, body: '');

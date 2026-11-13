@@ -1131,4 +1131,193 @@ class AppLocalizationsEn extends AppLocalizations {
   String notificationReminderNote(String note) {
     return 'Note: $note';
   }
+
+  @override
+  String notificationNoteLine(String note) {
+    return 'Note: $note';
+  }
+
+  @override
+  String notificationExpenseUpdatedTitle(String household) {
+    return 'Expense edited · $household';
+  }
+
+  @override
+  String notificationExpenseUpdatedBody(
+    String actor,
+    String detail,
+    String change,
+  ) {
+    return '$actor edited \"$detail\"$change';
+  }
+
+  @override
+  String notificationExpenseUpdatedBodyNoDetail(String actor, String change) {
+    return '$actor edited an expense$change';
+  }
+
+  @override
+  String notificationPaymentUpdatedTitle(String household) {
+    return 'Payment edited · $household';
+  }
+
+  @override
+  String notificationPaymentUpdatedBody(String actor, String change) {
+    return '$actor edited a payment$change';
+  }
+
+  @override
+  String get historyTitle => 'History';
+
+  @override
+  String get historyEmpty => 'No activity yet';
+
+  @override
+  String get historyEmptyHint =>
+      'Every addition, edit and deletion of expenses, payments and members will be listed here, with who did it and when.';
+
+  @override
+  String get historySharesHeading => 'Shares';
+
+  @override
+  String get historyLoadMore => 'Load more';
+
+  @override
+  String get historyUnknownName => 'Someone';
+
+  @override
+  String get historyExpenseFallback => 'expense';
+
+  @override
+  String get historyYes => 'Yes';
+
+  @override
+  String get historyNo => 'No';
+
+  @override
+  String get historyRoleMember => 'Member';
+
+  @override
+  String get historySharesChanged => 'Split changed';
+
+  @override
+  String get historyFieldAmount => 'Amount';
+
+  @override
+  String get historyFieldDescription => 'Description';
+
+  @override
+  String get historyFieldCategory => 'Category';
+
+  @override
+  String get historyFieldDate => 'Date';
+
+  @override
+  String get historyFieldPaidBy => 'Paid by';
+
+  @override
+  String get historyFieldFrom => 'From';
+
+  @override
+  String get historyFieldTo => 'To';
+
+  @override
+  String get historyFieldRecurring => 'Recurring';
+
+  @override
+  String get historyFieldSplitType => 'Split type';
+
+  @override
+  String get historyFieldNote => 'Note';
+
+  @override
+  String get historyFieldRole => 'Role';
+
+  @override
+  String get historyFieldName => 'Name';
+
+  @override
+  String historyHouseholdCreated(String actor) {
+    return '$actor created the household';
+  }
+
+  @override
+  String historyHouseholdRenamed(String actor) {
+    return '$actor renamed the household';
+  }
+
+  @override
+  String historyOwnershipTransferred(String actor, String subject) {
+    return '$actor transferred ownership to $subject';
+  }
+
+  @override
+  String historyMemberJoined(String subject) {
+    return '$subject joined';
+  }
+
+  @override
+  String historyMemberLeft(String subject) {
+    return '$subject left';
+  }
+
+  @override
+  String historyMemberRemoved(String actor, String subject) {
+    return '$actor removed $subject';
+  }
+
+  @override
+  String historyMemberRoleChanged(String actor, String subject) {
+    return '$actor changed $subject\'s role';
+  }
+
+  @override
+  String historyExpenseAdded(String actor, String label, String amount) {
+    return '$actor added \"$label\" · $amount';
+  }
+
+  @override
+  String historyExpenseUpdated(String actor, String label) {
+    return '$actor edited \"$label\"';
+  }
+
+  @override
+  String historyExpenseDeleted(String actor, String label, String amount) {
+    return '$actor deleted \"$label\" · $amount';
+  }
+
+  @override
+  String historyRecurringGenerated(String label, String amount) {
+    return 'Recurring expense added: \"$label\" · $amount';
+  }
+
+  @override
+  String historyPaymentAdded(
+    String actor,
+    String subject,
+    String other,
+    String amount,
+  ) {
+    return '$actor recorded a payment: $subject → $other · $amount';
+  }
+
+  @override
+  String historyPaymentUpdated(String actor, String subject, String other) {
+    return '$actor edited a payment: $subject → $other';
+  }
+
+  @override
+  String historyPaymentDeleted(
+    String actor,
+    String subject,
+    String other,
+    String amount,
+  ) {
+    return '$actor deleted a payment: $subject → $other · $amount';
+  }
+
+  @override
+  String historyGeneric(String actor) {
+    return '$actor made a change';
+  }
 }

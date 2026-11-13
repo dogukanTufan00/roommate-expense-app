@@ -9,6 +9,7 @@ import 'package:roommate_expense_app/api/api.dart';
 import 'package:roommate_expense_app/l10n/app_localizations.dart';
 import 'package:roommate_expense_app/main.dart' show navigatorKey;
 import 'package:roommate_expense_app/models.dart';
+import 'package:roommate_expense_app/screens/history_screen.dart';
 import 'package:roommate_expense_app/screens/household_screen.dart';
 import 'package:roommate_expense_app/screens/notifications_screen.dart';
 import 'package:roommate_expense_app/session.dart';
@@ -213,15 +214,30 @@ class PushService {
         final households = await Api.getHouseholds();
         final matches = households.where((h) => h.id == householdId).toList();
         if (matches.isNotEmpty) {
+          final household = matches.first;
+          final type = NotificationType.fromApi(data['type'] ?? '');
+          // An edit opens the home's history, where the edit is listed. The name comes
+          // from my home list, so the push data needs only the id.
+          if (type == NotificationType.expenseUpdated ||
+              type == NotificationType.paymentUpdated) {
+            await navigator.push(
+              MaterialPageRoute(
+                builder: (_) => HistoryScreen(
+                  householdId: household.id,
+                  householdName: household.name,
+                ),
+              ),
+            );
+            return;
+          }
           // A payment reminder opens the Balances tab, where the debt is.
-          final initialTab =
-              NotificationType.fromApi(data['type'] ?? '') == NotificationType.paymentReminder
-                  ? HouseholdScreen.balancesTab
-                  : 0;
+          final initialTab = type == NotificationType.paymentReminder
+              ? HouseholdScreen.balancesTab
+              : 0;
           await navigator.push(
             MaterialPageRoute(
               builder: (_) => HouseholdScreen(
-                household: matches.first,
+                household: household,
                 initialTab: initialTab,
               ),
             ),
