@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:roommate_expense_app/api/api.dart';
 import 'package:roommate_expense_app/api/api_client.dart';
 import 'package:roommate_expense_app/l10n/app_localizations.dart';
@@ -11,15 +13,25 @@ import 'package:roommate_expense_app/utils/errors.dart';
 import 'package:roommate_expense_app/utils/format.dart';
 import 'package:roommate_expense_app/utils/iban.dart';
 import 'package:roommate_expense_app/utils/split.dart';
+import 'package:roommate_expense_app/utils/summary_text.dart';
 import 'package:roommate_expense_app/widgets/attachments_section.dart';
 import 'package:roommate_expense_app/widgets/illustration.dart';
+
+// What the share summary sheet returns: copy the text, or share it.
+enum _SummaryAction { copy, share }
 
 // The "Balances" tab: who owes whom, the suggested payments and the payment history.
 // It is shown inside another screen's TabBarView, so it returns a body, not a Scaffold.
 class BalancesTab extends StatefulWidget {
-  const BalancesTab({super.key, required this.householdId});
+  const BalancesTab({
+    super.key,
+    required this.householdId,
+    required this.householdName,
+  });
 
   final int householdId;
+  // The home's name, used as the title of the share summary.
+  final String householdName;
 
   @override
   State<BalancesTab> createState() => _BalancesTabState();
@@ -371,6 +383,46 @@ class _BalancesTabState extends State<BalancesTab> {
     await _refresh();
   }
 
+  // The share summary: a preview sheet with Copy and Share. The text is built from the
+  // settlements on screen, so it matches what the tab shows.
+  Future<void> _openShareSheet() => _shareText(buildBalanceSummary(
+        AppLocalizations.of(context),
+        householdName: widget.householdName,
+        date: DateTime.now(),
+        settlements: _settlements,
+      ));
+
+  // One payment only, to send straight to that person (see buildSettlementMessage).
+  Future<void> _shareSettlement(Settlement s) => _shareText(buildSettlementMessage(
+        AppLocalizations.of(context),
+        householdName: widget.householdName,
+        settlement: s,
+        myUserId: _myUserId,
+      ));
+
+  // Shows the preview sheet for a ready text, then copies or shares it.
+  Future<void> _shareText(String text) async {
+    final l10n = AppLocalizations.of(context);
+    final action = await showModalBottomSheet<_SummaryAction>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (_) => _ShareSummarySheet(text: text),
+    );
+    if (!mounted || action == null) return;
+
+    if (action == _SummaryAction.copy) {
+      await Clipboard.setData(ClipboardData(text: text));
+      if (!mounted) return;
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(l10n.summaryCopied)));
+    } else {
+      await SharePlus.instance.share(
+        ShareParams(text: text, subject: widget.householdName),
+      );
+    }
+  }
+
   // My net balance. If I am not in the balance list, it is 0.
   double get _myNet {
     for (final b in _balances) {
@@ -426,7 +478,15 @@ class _BalancesTabState extends State<BalancesTab> {
           _sectionTitle(theme, l10n.balancesTitle),
           ..._balances.map((b) => _balanceCard(b, l10n)),
 
-          _sectionTitle(theme, l10n.settlementsTitle),
+          _sectionTitle(
+            theme,
+            l10n.settlementsTitle,
+            trailing: TextButton.icon(
+              onPressed: _openShareSheet,
+              icon: const Icon(Icons.share_outlined, size: 18),
+              label: Text(l10n.shareSummary),
+            ),
+          ),
           if (_settlements.isEmpty)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
@@ -530,15 +590,28 @@ class _BalancesTabState extends State<BalancesTab> {
     );
   }
 
-  Widget _sectionTitle(ThemeData theme, String text) {
+  // A section heading. An optional trailing widget (a button) sits on the same line, at the right.
+  Widget _sectionTitle(ThemeData theme, String text, {Widget? trailing}) {
+    final title = Text(
+      text,
+      style: theme.textTheme.titleMedium?.copyWith(
+        fontWeight: FontWeight.w800,
+        color: AppColors.ink,
+      ),
+    );
+    if (trailing == null) {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+        child: title,
+      );
+    }
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
-      child: Text(
-        text,
-        style: theme.textTheme.titleMedium?.copyWith(
-          fontWeight: FontWeight.w800,
-          color: AppColors.ink,
-        ),
+      padding: const EdgeInsets.fromLTRB(16, 24, 8, 8),
+      child: Row(
+        children: [
+          Expanded(child: title),
+          trailing,
+        ],
       ),
     );
   }
@@ -701,6 +774,13 @@ class _BalancesTabState extends State<BalancesTab> {
                   const SizedBox(width: 8),
                 ] else
                   const Spacer(),
+                // Sends just this payment to the person, e.g. on WhatsApp.
+                IconButton(
+                  tooltip: l10n.shareSettlement,
+                  icon: const Icon(Icons.share_outlined, size: 20),
+                  onPressed: () => _shareSettlement(s),
+                ),
+                const SizedBox(width: 4),
                 OutlinedButton(
                   onPressed: () => _markAsPaid(s),
                   child: Text(l10n.markAsPaid),
@@ -958,6 +1038,76 @@ Future<bool> _confirmOverpayment(
     ),
   );
   return confirmed == true;
+}
+
+// The preview of the share summary. Copy and Share close it and return which one was picked.
+class _ShareSummarySheet extends StatelessWidget {
+  const _ShareSummarySheet({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              l10n.shareSummarySheetTitle,
+              style: theme.textTheme.titleMedium
+                  ?.copyWith(fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 12),
+            // Read-only preview. A long summary scrolls inside this box.
+            Container(
+              constraints: const BoxConstraints(maxHeight: 320),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: SingleChildScrollView(child: SelectableText(text)),
+            ),
+            const SizedBox(height: 16),
+            // Two buttons side by side. Expanded keeps them on one line on a 360dp phone.
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    icon: const Icon(Icons.copy_rounded),
+                    label: Text(
+                      l10n.copySummary,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    onPressed: () => Navigator.pop(context, _SummaryAction.copy),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: FilledButton.icon(
+                    icon: const Icon(Icons.share_outlined),
+                    label: Text(
+                      l10n.shareSummary,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    onPressed: () => Navigator.pop(context, _SummaryAction.share),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 // Asks for an optional note before a reminder is sent. Returns the typed text (empty when

@@ -1829,4 +1829,41 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get clearSearch => 'Aramayı temizle';
+
+  @override
+  String get shareSummary => 'Paylaş';
+
+  @override
+  String get shareSummarySheetTitle => 'Özeti paylaş';
+
+  @override
+  String get copySummary => 'Kopyala';
+
+  @override
+  String get summaryCopied => 'Kopyalandı';
+
+  @override
+  String get summaryWhoPaysWhom => 'Kim kime ne ödeyecek:';
+
+  @override
+  String get summaryIbansTitle => 'IBAN\'lar:';
+
+  @override
+  String get summaryAllSettled => 'Herkes ödeşmiş 🎉';
+
+  @override
+  String get summaryFooter => 'Evce ile hesaplandı';
+
+  @override
+  String summaryPersonalAsk(String name, String home, String amount) {
+    return 'Selam $name, $home hesabına göre bana $amount ödemen gerekiyor.';
+  }
+
+  @override
+  String summaryIbanLine(String iban, String owner) {
+    return 'IBAN: $iban ($owner)';
+  }
+
+  @override
+  String get shareSettlement => 'Bu ödemeyi paylaş';
 }

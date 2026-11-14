@@ -1353,5 +1353,39 @@
     }
   },
   "expenseSearchHint": "Gider ara (açıklama, kişi, tutar)",
-  "clearSearch": "Aramayı temizle"
+  "clearSearch": "Aramayı temizle",
+  "shareSummary": "Paylaş",
+  "shareSummarySheetTitle": "Özeti paylaş",
+  "copySummary": "Kopyala",
+  "summaryCopied": "Kopyalandı",
+  "summaryWhoPaysWhom": "Kim kime ne ödeyecek:",
+  "summaryIbansTitle": "IBAN'lar:",
+  "summaryAllSettled": "Herkes ödeşmiş 🎉",
+  "summaryFooter": "Evce ile hesaplandı",
+  "summaryPersonalAsk": "Selam {name}, {home} hesabına göre bana {amount} ödemen gerekiyor.",
+  "@summaryPersonalAsk": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "home": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "summaryIbanLine": "IBAN: {iban} ({owner})",
+  "@summaryIbanLine": {
+    "placeholders": {
+      "iban": {
+        "type": "String"
+      },
+      "owner": {
+        "type": "String"
+      }
+    }
+  },
+  "shareSettlement": "Bu ödemeyi paylaş"
 }

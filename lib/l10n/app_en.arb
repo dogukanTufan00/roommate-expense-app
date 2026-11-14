@@ -1452,5 +1452,39 @@
     }
   },
   "expenseSearchHint": "Search (text, person, amount)",
-  "clearSearch": "Clear search"
+  "clearSearch": "Clear search",
+  "shareSummary": "Share",
+  "shareSummarySheetTitle": "Share summary",
+  "copySummary": "Copy",
+  "summaryCopied": "Copied",
+  "summaryWhoPaysWhom": "Who pays whom:",
+  "summaryIbansTitle": "IBANs:",
+  "summaryAllSettled": "Everyone is settled 🎉",
+  "summaryFooter": "Calculated with Evce",
+  "summaryPersonalAsk": "Hi {name}, according to {home} you owe me {amount}.",
+  "@summaryPersonalAsk": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "home": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "summaryIbanLine": "IBAN: {iban} ({owner})",
+  "@summaryIbanLine": {
+    "placeholders": {
+      "iban": {
+        "type": "String"
+      },
+      "owner": {
+        "type": "String"
+      }
+    }
+  },
+  "shareSettlement": "Share this payment"
 }

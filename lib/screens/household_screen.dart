@@ -224,7 +224,7 @@ class _HouseholdScreenState extends State<HouseholdScreen> {
         body: TabBarView(
           children: [
             ExpensesTab(householdId: id),
-            BalancesTab(householdId: id),
+            BalancesTab(householdId: id, householdName: _name),
             ChoresTab(householdId: id),
             StatementTab(householdId: id),
             MembersTab(householdId: id),

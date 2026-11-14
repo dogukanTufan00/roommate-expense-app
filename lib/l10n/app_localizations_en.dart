@@ -1853,4 +1853,41 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get clearSearch => 'Clear search';
+
+  @override
+  String get shareSummary => 'Share';
+
+  @override
+  String get shareSummarySheetTitle => 'Share summary';
+
+  @override
+  String get copySummary => 'Copy';
+
+  @override
+  String get summaryCopied => 'Copied';
+
+  @override
+  String get summaryWhoPaysWhom => 'Who pays whom:';
+
+  @override
+  String get summaryIbansTitle => 'IBANs:';
+
+  @override
+  String get summaryAllSettled => 'Everyone is settled 🎉';
+
+  @override
+  String get summaryFooter => 'Calculated with Evce';
+
+  @override
+  String summaryPersonalAsk(String name, String home, String amount) {
+    return 'Hi $name, according to $home you owe me $amount.';
+  }
+
+  @override
+  String summaryIbanLine(String iban, String owner) {
+    return 'IBAN: $iban ($owner)';
+  }
+
+  @override
+  String get shareSettlement => 'Share this payment';
 }

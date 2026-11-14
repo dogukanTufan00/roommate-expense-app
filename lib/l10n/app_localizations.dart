@@ -3049,6 +3049,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Clear search'**
   String get clearSearch;
+
+  /// No description provided for @shareSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get shareSummary;
+
+  /// No description provided for @shareSummarySheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Share summary'**
+  String get shareSummarySheetTitle;
+
+  /// No description provided for @copySummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get copySummary;
+
+  /// No description provided for @summaryCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied'**
+  String get summaryCopied;
+
+  /// No description provided for @summaryWhoPaysWhom.
+  ///
+  /// In en, this message translates to:
+  /// **'Who pays whom:'**
+  String get summaryWhoPaysWhom;
+
+  /// No description provided for @summaryIbansTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'IBANs:'**
+  String get summaryIbansTitle;
+
+  /// No description provided for @summaryAllSettled.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyone is settled 🎉'**
+  String get summaryAllSettled;
+
+  /// No description provided for @summaryFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculated with Evce'**
+  String get summaryFooter;
+
+  /// No description provided for @summaryPersonalAsk.
+  ///
+  /// In en, this message translates to:
+  /// **'Hi {name}, according to {home} you owe me {amount}.'**
+  String summaryPersonalAsk(String name, String home, String amount);
+
+  /// No description provided for @summaryIbanLine.
+  ///
+  /// In en, this message translates to:
+  /// **'IBAN: {iban} ({owner})'**
+  String summaryIbanLine(String iban, String owner);
+
+  /// No description provided for @shareSettlement.
+  ///
+  /// In en, this message translates to:
+  /// **'Share this payment'**
+  String get shareSettlement;
 }
 
 class _AppLocalizationsDelegate
