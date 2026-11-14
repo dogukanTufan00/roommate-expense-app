@@ -287,7 +287,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
     final fields = [for (final l in lines) if (l.short && !l.share && l.values != null) l];
     final shares = [for (final l in lines) if (l.share && l.values != null) l];
-    final others = [for (final l in lines) if (!l.short && !l.share || l.values == null) l];
+    final lists = [for (final l in lines) if (l.oldItems != null) l];
+    final others = [
+      for (final l in lines)
+        if ((!l.short && !l.share || l.values == null) && l.oldItems == null) l
+    ];
 
     final rows = <TableRow>[
       for (final l in fields) row(l.label, l.values!),
@@ -316,11 +320,77 @@ class _HistoryScreenState extends State<HistoryScreen> {
             textBaseline: TextBaseline.alphabetic,
             children: rows,
           ),
+        for (final l in lists) _listChange(theme, l10n, l, labelStyle),
         for (final l in others)
           Padding(
             padding: const EdgeInsets.only(bottom: 4),
             child: Text(l.values == null ? l.label : '${l.label}: ${l.values}', style: labelStyle),
           ),
+      ],
+    );
+  }
+
+  // A changed order, like a chore's rotation, as two rows of numbered name chips:
+  //   Sıra
+  //     Önce   [1 Doğukan Tufan] [2 Bülent Aksoy] ...
+  //     Sonra  [1 Bülent Aksoy] [2 Doğukan Tufan] ...
+  // A chip never breaks in the middle of a name; if the row is full, the whole chip moves down.
+  Widget _listChange(ThemeData theme, AppLocalizations l10n, ChangeLine line, TextStyle? labelStyle) {
+    Widget chips(List<String> names, {required bool after}) {
+      if (names.isEmpty) return Text('—', style: labelStyle);
+      return Wrap(
+        spacing: 6,
+        runSpacing: 4,
+        children: [
+          for (var i = 0; i < names.length; i++)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              decoration: BoxDecoration(
+                color: after
+                    ? AppColors.mustard.withValues(alpha: 0.30)
+                    : AppColors.muted.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(999),
+              ),
+              child: Text(
+                '${i + 1}  ${names[i]}',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: after ? AppColors.ink : AppColors.muted,
+                  fontWeight: after ? FontWeight.w700 : FontWeight.w600,
+                ),
+              ),
+            ),
+        ],
+      );
+    }
+
+    Widget row(String label, Widget content) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 10, bottom: 4),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: 48,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 2),
+                child: Text(label, style: theme.textTheme.bodySmall?.copyWith(color: AppColors.muted)),
+              ),
+            ),
+            Expanded(child: content),
+          ],
+        ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 2, bottom: 4),
+          child: Text(line.label, style: labelStyle?.copyWith(fontWeight: FontWeight.w700)),
+        ),
+        row(l10n.historyBefore, chips(line.oldItems!, after: false)),
+        row(l10n.historyAfter, chips(line.newItems ?? const [], after: true)),
       ],
     );
   }
@@ -373,6 +443,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
       ActivityType.paymentUpdated =>
         const _TypeStyle(Icons.edit_rounded, AppColors.mustard),
       ActivityType.paymentDeleted =>
+        const _TypeStyle(Icons.delete_outline_rounded, AppColors.owes),
+      ActivityType.choreAdded =>
+        const _TypeStyle(Icons.cleaning_services_rounded, AppColors.sage),
+      ActivityType.choreUpdated =>
+        const _TypeStyle(Icons.cleaning_services_rounded, AppColors.mustard),
+      ActivityType.choreDeleted =>
         const _TypeStyle(Icons.delete_outline_rounded, AppColors.owes),
       ActivityType.unknown =>
         const _TypeStyle(Icons.history_rounded, AppColors.muted),

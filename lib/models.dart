@@ -736,6 +736,10 @@ enum NotificationType {
   // Someone edited an expense or a payment. previousAmount is set when the amount changed.
   expenseUpdated,
   paymentUpdated,
+  // A chore came to my turn (sent to the person who is next). actorName did the chore.
+  choreTurn,
+  // Someone asks me to do my chore turn. actorName sent the reminder.
+  choreReminder,
   unknown;
 
   static NotificationType fromApi(String value) => switch (value) {
@@ -747,6 +751,8 @@ enum NotificationType {
         'PAYMENT_REMINDER' => paymentReminder,
         'EXPENSE_UPDATED' => expenseUpdated,
         'PAYMENT_UPDATED' => paymentUpdated,
+        'CHORE_TURN' => choreTurn,
+        'CHORE_REMINDER' => choreReminder,
         _ => unknown,
       };
 }
@@ -812,6 +818,83 @@ class AppNotification {
   }
 }
 
+// ---- Chores (GET /api/households/{id}/chores) ----
+
+// One person in a chore's rotation.
+class ChoreMember {
+  final int userId;
+  final String name;
+
+  ChoreMember({required this.userId, required this.name});
+
+  factory ChoreMember.fromJson(Map<String, dynamic> json) {
+    return ChoreMember(
+      userId: json['userId'] as int,
+      name: json['name'] as String,
+    );
+  }
+}
+
+// One time a chore was marked as done.
+class ChoreCompletion {
+  final String userName;
+  // Converted to the phone's time zone.
+  final DateTime doneAt;
+
+  ChoreCompletion({required this.userName, required this.doneAt});
+
+  factory ChoreCompletion.fromJson(Map<String, dynamic> json) {
+    return ChoreCompletion(
+      userName: json['userName'] as String,
+      doneAt: DateTime.parse(json['doneAt'] as String).toLocal(),
+    );
+  }
+}
+
+// A household chore. currentUserId is whose turn it is now (null when nobody is up).
+class Chore {
+  final int id;
+  final String name;
+  // The turn order. The turn moves to the next person after each "done".
+  final List<ChoreMember> rotation;
+  final int? currentUserId;
+  final String? currentUserName;
+  // The latest completions, newest first (at most 5).
+  final List<ChoreCompletion> recentCompletions;
+  // Until when nobody may remind the current person again. Null when a reminder is allowed.
+  final DateTime? reminderAvailableAt;
+
+  Chore({
+    required this.id,
+    required this.name,
+    required this.rotation,
+    required this.currentUserId,
+    required this.currentUserName,
+    required this.recentCompletions,
+    required this.reminderAvailableAt,
+  });
+
+  factory Chore.fromJson(Map<String, dynamic> json) {
+    final rawRotation = json['rotation'] as List<dynamic>? ?? const [];
+    final rawCompletions = json['recentCompletions'] as List<dynamic>? ?? const [];
+    return Chore(
+      id: json['id'] as int,
+      name: json['name'] as String,
+      rotation: [
+        for (final item in rawRotation)
+          ChoreMember.fromJson(item as Map<String, dynamic>),
+      ],
+      currentUserId: json['currentUserId'] as int?,
+      currentUserName: _optionalText(json['currentUserName']),
+      recentCompletions: [
+        for (final item in rawCompletions)
+          ChoreCompletion.fromJson(item as Map<String, dynamic>),
+      ],
+      reminderAvailableAt: _optionalDate(json['reminderAvailableAt'])?.toLocal(),
+    );
+  }
+}
+
 // Reads a JSON number as a double. Missing or odd values count as 0.
 double _numValue(Object? value) => value is num ? value.toDouble() : 0;
 
@@ -834,6 +917,9 @@ enum ActivityType {
   paymentAdded,
   paymentUpdated,
   paymentDeleted,
+  choreAdded,
+  choreUpdated,
+  choreDeleted,
   unknown;
 
   static ActivityType fromApi(String value) => switch (value) {
@@ -851,6 +937,9 @@ enum ActivityType {
         'PAYMENT_ADDED' => paymentAdded,
         'PAYMENT_UPDATED' => paymentUpdated,
         'PAYMENT_DELETED' => paymentDeleted,
+        'CHORE_ADDED' => choreAdded,
+        'CHORE_UPDATED' => choreUpdated,
+        'CHORE_DELETED' => choreDeleted,
         _ => unknown,
       };
 }

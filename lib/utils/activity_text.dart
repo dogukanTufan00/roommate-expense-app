@@ -16,7 +16,20 @@ class ActivityText {
 // One change, split in two so the screen can lay it out as a row:
 // label on the left ("Tutar"), values on the right ("₺30.000,00 → ₺31.000,00").
 class ChangeLine {
-  const ChangeLine(this.label, this.values, {this.short = false, this.share = false});
+  const ChangeLine(this.label, this.values,
+      {this.short = false, this.share = false, this.oldItems, this.newItems});
+
+  // A list change (a chore's turn order): the names before and after, in order.
+  // The screen shows them as two rows of name chips, so a name is never split over two lines.
+  const ChangeLine.list(this.label, List<String> before, List<String> after)
+      : values = null,
+        short = false,
+        share = false,
+        oldItems = before,
+        newItems = after;
+
+  final List<String>? oldItems;
+  final List<String>? newItems;
 
   final String label;
   // Null for a line that is only a label, like "Bölüşüm değişti".
@@ -70,6 +83,9 @@ ActivityText activityText(AppLocalizations l10n, ActivityEntry entry) {
       l10n.historyPaymentUpdated(actor, subject, other),
     ActivityType.paymentDeleted =>
       l10n.historyPaymentDeleted(actor, subject, other, amount),
+    ActivityType.choreAdded => l10n.historyChoreAdded(actor, label),
+    ActivityType.choreUpdated => l10n.historyChoreUpdated(actor, label),
+    ActivityType.choreDeleted => l10n.historyChoreDeleted(actor, label),
     ActivityType.unknown => l10n.historyGeneric(actor),
   };
 
@@ -82,6 +98,21 @@ ActivityText activityText(AppLocalizations l10n, ActivityEntry entry) {
 // One change as label + "old → new". Old "shares" rows have no values, so they are a label only.
 ChangeLine _changeLine(AppLocalizations l10n, ActivityChange change) {
   if (change.field == 'shares') return ChangeLine(l10n.historySharesChanged, null);
+  // A chore's turn order as names, for example "Doğukan, Bülent → Doğukan, Bülent, Hatem".
+  // Rows written before this had no values; they keep the short "Sıra değişti" line.
+  if (change.field == 'rotation') {
+    if (change.oldValue == null && change.newValue == null) {
+      return ChangeLine(l10n.historyRotationChanged, null);
+    }
+    // The server joins the names with ", ".
+    List<String> names(String? text) =>
+        text == null || text.isEmpty ? const [] : text.split(', ');
+    return ChangeLine.list(
+      l10n.historyFieldRotation,
+      names(change.oldValue),
+      names(change.newValue),
+    );
+  }
   final short = _shortFields.contains(change.field);
   // One person's split share, for example "Doğukan Tufan" + "₺750,00 → ₺1.050,00".
   // A missing old or new value (person added or removed) shows as a dash.
@@ -116,6 +147,7 @@ String? _fieldLabel(AppLocalizations l10n, String field) {
     'note' => l10n.historyFieldNote,
     'role' => l10n.historyFieldRole,
     'name' => l10n.historyFieldName,
+    'currentUser' => l10n.historyFieldCurrentUser,
     _ => null,
   };
 }

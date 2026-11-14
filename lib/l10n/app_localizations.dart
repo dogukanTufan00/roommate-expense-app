@@ -1874,16 +1874,22 @@ abstract class AppLocalizations {
   /// **'Remind'**
   String get reminderButton;
 
+  /// No description provided for @reminderSentShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminded'**
+  String get reminderSentShort;
+
   /// No description provided for @reminderCooldownToday.
   ///
   /// In en, this message translates to:
-  /// **'Reminded · again today at {time}'**
+  /// **'You can remind again today at {time}'**
   String reminderCooldownToday(String time);
 
   /// No description provided for @reminderCooldownTomorrow.
   ///
   /// In en, this message translates to:
-  /// **'Reminded · again tomorrow at {time}'**
+  /// **'You can remind again tomorrow at {time}'**
   String reminderCooldownTomorrow(String time);
 
   /// No description provided for @reminderDialogBody.
@@ -2227,6 +2233,288 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{actor} made a change'**
   String historyGeneric(String actor);
+
+  /// No description provided for @tabChores.
+  ///
+  /// In en, this message translates to:
+  /// **'Chores'**
+  String get tabChores;
+
+  /// No description provided for @choresEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No chores yet'**
+  String get choresEmptyTitle;
+
+  /// No description provided for @choresEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Add chores like trash, dishes or cleaning. The turn moves around by itself.'**
+  String get choresEmptyBody;
+
+  /// No description provided for @choresAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add chore'**
+  String get choresAdd;
+
+  /// No description provided for @choresTurnOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn: {name}'**
+  String choresTurnOf(String name);
+
+  /// No description provided for @choresTurnYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Your turn'**
+  String get choresTurnYou;
+
+  /// No description provided for @choresNobodyTurn.
+  ///
+  /// In en, this message translates to:
+  /// **'Nobody is up'**
+  String get choresNobodyTurn;
+
+  /// No description provided for @choresLastDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Last: {name} · {when}'**
+  String choresLastDone(String name, String when);
+
+  /// No description provided for @choresNotDoneYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not done yet'**
+  String get choresNotDoneYet;
+
+  /// No description provided for @choresHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get choresHistory;
+
+  /// No description provided for @choresNoHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing has been done yet.'**
+  String get choresNoHistory;
+
+  /// No description provided for @choresDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get choresDone;
+
+  /// No description provided for @choresDoneSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'Marked as done. The turn has moved on.'**
+  String get choresDoneSnack;
+
+  /// No description provided for @choresDoneNotMyTurn.
+  ///
+  /// In en, this message translates to:
+  /// **'The turn is {name}\'s. Mark it as done anyway?'**
+  String choresDoneNotMyTurn(String name);
+
+  /// No description provided for @choresRemind.
+  ///
+  /// In en, this message translates to:
+  /// **'Remind'**
+  String get choresRemind;
+
+  /// No description provided for @choresRemindedToday.
+  ///
+  /// In en, this message translates to:
+  /// **'You can remind again today at {time}'**
+  String choresRemindedToday(String time);
+
+  /// No description provided for @choresRemindedTomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'You can remind again tomorrow at {time}'**
+  String choresRemindedTomorrow(String time);
+
+  /// No description provided for @choresDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this chore?'**
+  String get choresDeleteConfirm;
+
+  /// No description provided for @choresDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Chore deleted'**
+  String get choresDeleted;
+
+  /// No description provided for @choresSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Chore saved'**
+  String get choresSaved;
+
+  /// No description provided for @choresMinutesAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} minutes ago'**
+  String choresMinutesAgo(int count);
+
+  /// No description provided for @choresHoursAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} hours ago'**
+  String choresHoursAgo(int count);
+
+  /// No description provided for @choresYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'yesterday'**
+  String get choresYesterday;
+
+  /// No description provided for @choresDaysAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} days ago'**
+  String choresDaysAgo(int count);
+
+  /// No description provided for @choresFormNewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New chore'**
+  String get choresFormNewTitle;
+
+  /// No description provided for @choresFormEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit chore'**
+  String get choresFormEditTitle;
+
+  /// No description provided for @choresNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Chore name'**
+  String get choresNameLabel;
+
+  /// No description provided for @choresNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a name.'**
+  String get choresNameRequired;
+
+  /// No description provided for @choresPeopleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Who does it'**
+  String get choresPeopleTitle;
+
+  /// No description provided for @choresPeopleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tick the people, then drag them to set the order.'**
+  String get choresPeopleHint;
+
+  /// No description provided for @choresOrderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Rotation order'**
+  String get choresOrderTitle;
+
+  /// No description provided for @choresPickOne.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose at least one person.'**
+  String get choresPickOne;
+
+  /// No description provided for @choresNextUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Next up'**
+  String get choresNextUp;
+
+  /// No description provided for @errorChoreLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'A home can have at most 20 chores.'**
+  String get errorChoreLimit;
+
+  /// No description provided for @errorChoreMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyone in the rotation must be an active member.'**
+  String get errorChoreMembers;
+
+  /// No description provided for @errorChoreOwnTurn.
+  ///
+  /// In en, this message translates to:
+  /// **'It is already your turn.'**
+  String get errorChoreOwnTurn;
+
+  /// No description provided for @notificationChoreTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Chores · {household}'**
+  String notificationChoreTitle(String household);
+
+  /// No description provided for @notificationChoreTurnBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} did \"{detail}\", it\'s your turn now.'**
+  String notificationChoreTurnBody(String actor, String detail);
+
+  /// No description provided for @notificationChoreReminderBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} is gently reminding you: it\'s your turn for \"{detail}\".'**
+  String notificationChoreReminderBody(String actor, String detail);
+
+  /// No description provided for @historyChoreAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} added the \"{label}\" chore'**
+  String historyChoreAdded(String actor, String label);
+
+  /// No description provided for @historyChoreUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} edited the \"{label}\" chore'**
+  String historyChoreUpdated(String actor, String label);
+
+  /// No description provided for @historyChoreDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} deleted the \"{label}\" chore'**
+  String historyChoreDeleted(String actor, String label);
+
+  /// No description provided for @historyRotationChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Rotation changed'**
+  String get historyRotationChanged;
+
+  /// No description provided for @historyFieldRotation.
+  ///
+  /// In en, this message translates to:
+  /// **'Rotation'**
+  String get historyFieldRotation;
+
+  /// No description provided for @historyBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'Before'**
+  String get historyBefore;
+
+  /// No description provided for @historyAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'After'**
+  String get historyAfter;
+
+  /// No description provided for @historyFieldCurrentUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Next up'**
+  String get historyFieldCurrentUser;
 }
 
 class _AppLocalizationsDelegate

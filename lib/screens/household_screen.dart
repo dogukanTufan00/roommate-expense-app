@@ -3,6 +3,7 @@ import 'package:roommate_expense_app/api/api.dart';
 import 'package:roommate_expense_app/l10n/app_localizations.dart';
 import 'package:roommate_expense_app/models.dart';
 import 'package:roommate_expense_app/screens/balances_tab.dart';
+import 'package:roommate_expense_app/screens/chores_tab.dart';
 import 'package:roommate_expense_app/screens/expenses_tab.dart';
 import 'package:roommate_expense_app/screens/history_screen.dart';
 import 'package:roommate_expense_app/screens/members_tab.dart';
@@ -11,12 +12,14 @@ import 'package:roommate_expense_app/screens/split_defaults_screen.dart';
 import 'package:roommate_expense_app/screens/statement_tab.dart';
 import 'package:roommate_expense_app/utils/errors.dart';
 
-// One home, with four tabs: expenses, balances, statement and members.
+// One home, with five tabs: expenses, balances, chores, statement and members.
 class HouseholdScreen extends StatefulWidget {
   const HouseholdScreen({super.key, required this.household, this.initialTab = 0});
 
   // The index of the Balances tab. Used when a notification opens the home on it.
   static const int balancesTab = 1;
+  // The index of the Chores tab. Used when a chore notification opens the home on it.
+  static const int choresTab = 2;
 
   final Household household;
   // Which tab opens first. 0 is Expenses.
@@ -134,7 +137,7 @@ class _HouseholdScreenState extends State<HouseholdScreen> {
 
     // DefaultTabController gives the TabBar and TabBarView one shared tab index.
     return DefaultTabController(
-      length: 4,
+      length: 5,
       initialIndex: widget.initialTab,
       child: Scaffold(
         appBar: AppBar(
@@ -202,15 +205,18 @@ class _HouseholdScreenState extends State<HouseholdScreen> {
               ],
             ),
           ],
+          // Five fixed tabs that share the full width equally, so there is no dead space and every
+          // part of the bar opens a tab. (A scrollable bar left an empty, untappable gap on the right.)
           bottom: TabBar(
+            isScrollable: false,
+            tabAlignment: TabAlignment.fill,
+            labelPadding: const EdgeInsets.symmetric(horizontal: 2),
             tabs: [
-              Tab(icon: const Icon(Icons.receipt_long), text: l10n.tabExpenses),
-              Tab(
-                icon: const Icon(Icons.account_balance_wallet),
-                text: l10n.tabBalances,
-              ),
-              Tab(icon: const Icon(Icons.insights_rounded), text: l10n.tabStatement),
-              Tab(icon: const Icon(Icons.group), text: l10n.tabMembers),
+              _tab(Icons.receipt_long, l10n.tabExpenses),
+              _tab(Icons.account_balance_wallet, l10n.tabBalances),
+              _tab(Icons.cleaning_services_rounded, l10n.tabChores),
+              _tab(Icons.insights_rounded, l10n.tabStatement),
+              _tab(Icons.group, l10n.tabMembers),
             ],
           ),
         ),
@@ -219,11 +225,21 @@ class _HouseholdScreenState extends State<HouseholdScreen> {
           children: [
             ExpensesTab(householdId: id),
             BalancesTab(householdId: id),
+            ChoresTab(householdId: id),
             StatementTab(householdId: id),
             MembersTab(householdId: id),
           ],
         ),
       ),
+    );
+  }
+
+  // One tab: icon over a label. On a very narrow phone the label shrinks to fit its
+  // fifth of the width instead of overflowing.
+  Widget _tab(IconData icon, String label) {
+    return Tab(
+      icon: Icon(icon),
+      child: FittedBox(fit: BoxFit.scaleDown, child: Text(label, maxLines: 1)),
     );
   }
 }

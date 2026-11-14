@@ -231,9 +231,13 @@ class PushService {
             return;
           }
           // A payment reminder opens the Balances tab, where the debt is.
-          final initialTab = type == NotificationType.paymentReminder
-              ? HouseholdScreen.balancesTab
-              : 0;
+          // Chore notifications open the Chores tab.
+          final initialTab = switch (type) {
+            NotificationType.paymentReminder => HouseholdScreen.balancesTab,
+            NotificationType.choreTurn || NotificationType.choreReminder =>
+              HouseholdScreen.choresTab,
+            _ => 0,
+          };
           await navigator.push(
             MaterialPageRoute(
               builder: (_) => HouseholdScreen(

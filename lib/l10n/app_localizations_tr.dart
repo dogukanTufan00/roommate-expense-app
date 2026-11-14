@@ -1056,13 +1056,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get reminderButton => 'Hatırlat';
 
   @override
+  String get reminderSentShort => 'Hatırlatıldı';
+
+  @override
   String reminderCooldownToday(String time) {
-    return 'Hatırlatıldı · bugün $time\'da tekrar';
+    return 'Bugün $time\'da tekrar hatırlatabilirsin';
   }
 
   @override
   String reminderCooldownTomorrow(String time) {
-    return 'Hatırlatıldı · yarın $time\'da tekrar';
+    return 'Yarın $time\'da tekrar hatırlatabilirsin';
   }
 
   @override
@@ -1211,7 +1214,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get historyFieldRole => 'Rol';
 
   @override
-  String get historyFieldName => 'Ev adı';
+  String get historyFieldName => 'Ad';
 
   @override
   String historyHouseholdCreated(String actor) {
@@ -1297,4 +1300,175 @@ class AppLocalizationsTr extends AppLocalizations {
   String historyGeneric(String actor) {
     return '$actor bir değişiklik yaptı';
   }
+
+  @override
+  String get tabChores => 'İşler';
+
+  @override
+  String get choresEmptyTitle => 'Henüz ev işi yok';
+
+  @override
+  String get choresEmptyBody =>
+      'Çöp, bulaşık, temizlik gibi işleri ekle; sıra sizin aranızda kendiliğinden dönsün.';
+
+  @override
+  String get choresAdd => 'İş ekle';
+
+  @override
+  String choresTurnOf(String name) {
+    return 'Sıra: $name';
+  }
+
+  @override
+  String get choresTurnYou => 'Sıra sende';
+
+  @override
+  String get choresNobodyTurn => 'Sırada kimse yok';
+
+  @override
+  String choresLastDone(String name, String when) {
+    return 'Son: $name · $when';
+  }
+
+  @override
+  String get choresNotDoneYet => 'Henüz yapılmadı';
+
+  @override
+  String get choresHistory => 'Geçmiş';
+
+  @override
+  String get choresNoHistory => 'Henüz kayıt yok.';
+
+  @override
+  String get choresDone => 'Yaptım';
+
+  @override
+  String get choresDoneSnack => 'Yapıldı olarak işaretlendi, sıra ilerledi.';
+
+  @override
+  String choresDoneNotMyTurn(String name) {
+    return 'Sıra $name kişisinde. Yine de yaptım olarak işaretlensin mi?';
+  }
+
+  @override
+  String get choresRemind => 'Hatırlat';
+
+  @override
+  String choresRemindedToday(String time) {
+    return 'Bugün $time\'da tekrar hatırlatabilirsin';
+  }
+
+  @override
+  String choresRemindedTomorrow(String time) {
+    return 'Yarın $time\'da tekrar hatırlatabilirsin';
+  }
+
+  @override
+  String get choresDeleteConfirm => 'Bu iş silinsin mi?';
+
+  @override
+  String get choresDeleted => 'İş silindi';
+
+  @override
+  String get choresSaved => 'İş kaydedildi';
+
+  @override
+  String choresMinutesAgo(int count) {
+    return '$count dk önce';
+  }
+
+  @override
+  String choresHoursAgo(int count) {
+    return '$count saat önce';
+  }
+
+  @override
+  String get choresYesterday => 'dün';
+
+  @override
+  String choresDaysAgo(int count) {
+    return '$count gün önce';
+  }
+
+  @override
+  String get choresFormNewTitle => 'Yeni iş';
+
+  @override
+  String get choresFormEditTitle => 'İşi düzenle';
+
+  @override
+  String get choresNameLabel => 'İş adı';
+
+  @override
+  String get choresNameRequired => 'İş adı yazın.';
+
+  @override
+  String get choresPeopleTitle => 'Kimler yapacak';
+
+  @override
+  String get choresPeopleHint =>
+      'Kişileri işaretle, sonra sürükleyerek sırayı ayarla.';
+
+  @override
+  String get choresOrderTitle => 'Dönüş sırası';
+
+  @override
+  String get choresPickOne => 'En az bir kişi seçin.';
+
+  @override
+  String get choresNextUp => 'Sıradaki kişi';
+
+  @override
+  String get errorChoreLimit => 'Bir evde en fazla 20 iş olabilir.';
+
+  @override
+  String get errorChoreMembers => 'Sıradaki herkes evin aktif üyesi olmalı.';
+
+  @override
+  String get errorChoreOwnTurn => 'Sıra zaten sende.';
+
+  @override
+  String notificationChoreTitle(String household) {
+    return 'İşler · $household';
+  }
+
+  @override
+  String notificationChoreTurnBody(String actor, String detail) {
+    return '$actor \"$detail\" işini yaptı, sıra sende.';
+  }
+
+  @override
+  String notificationChoreReminderBody(String actor, String detail) {
+    return '$actor nazikçe hatırlatıyor: \"$detail\" sırası sende.';
+  }
+
+  @override
+  String historyChoreAdded(String actor, String label) {
+    return '$actor \"$label\" işini ekledi';
+  }
+
+  @override
+  String historyChoreUpdated(String actor, String label) {
+    return '$actor \"$label\" işini düzenledi';
+  }
+
+  @override
+  String historyChoreDeleted(String actor, String label) {
+    return '$actor \"$label\" işini sildi';
+  }
+
+  @override
+  String get historyRotationChanged => 'Sıra değişti';
+
+  @override
+  String get historyFieldRotation => 'Sıra';
+
+  @override
+  String get historyBefore => 'Önce';
+
+  @override
+  String get historyAfter => 'Sonra';
+
+  @override
+  String get historyFieldCurrentUser => 'Sıradaki';
 }

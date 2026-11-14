@@ -461,6 +461,63 @@ class Api {
     await ApiClient.delete('/api/users/me', {'password': password});
   }
 
+  // ---- Chores ----
+
+  // Every chore of the home, with its rotation and whose turn it is now.
+  static Future<List<Chore>> getChores(int householdId) async {
+    final data = await ApiClient.get('/api/households/$householdId/chores');
+    return _parseList(data, Chore.fromJson);
+  }
+
+  // rotationUserIds is the turn order. The first person is up first. Admins and members may add chores.
+  static Future<Chore> createChore(
+    int householdId,
+    String name,
+    List<int> rotationUserIds,
+  ) async {
+    final data = await ApiClient.post(
+      '/api/households/$householdId/chores',
+      {'name': name, 'rotationUserIds': rotationUserIds},
+    );
+    return Chore.fromJson(data as Map<String, dynamic>);
+  }
+
+  // currentUserId is whose turn it is now. It must be one of the rotation.
+  static Future<Chore> updateChore(
+    int householdId,
+    int choreId, {
+    required String name,
+    required List<int> rotationUserIds,
+    required int? currentUserId,
+  }) async {
+    final data = await ApiClient.put(
+      '/api/households/$householdId/chores/$choreId',
+      {
+        'name': name,
+        'rotationUserIds': rotationUserIds,
+        'currentUserId': currentUserId,
+      },
+    );
+    return Chore.fromJson(data as Map<String, dynamic>);
+  }
+
+  static Future<void> deleteChore(int householdId, int choreId) async {
+    await ApiClient.delete('/api/households/$householdId/chores/$choreId');
+  }
+
+  // Marks the chore as done. Any member may do it, even when it is not their turn.
+  // The turn moves to the next person. The answer is the updated chore.
+  static Future<Chore> markChoreDone(int householdId, int choreId) async {
+    final data = await ApiClient.post('/api/households/$householdId/chores/$choreId/done');
+    return Chore.fromJson(data as Map<String, dynamic>);
+  }
+
+  // Reminds the person whose turn it is. The screen reloads the list afterwards,
+  // which gives the new reminderAvailableAt.
+  static Future<void> remindChore(int householdId, int choreId) async {
+    await ApiClient.post('/api/households/$householdId/chores/$choreId/remind');
+  }
+
   // ---- Activity ----
 
   // The home's history, newest first. To load the next (older) page, pass the

@@ -673,7 +673,8 @@
     }
   },
   "reminderButton": "Remind",
-  "reminderCooldownToday": "Reminded · again today at {time}",
+  "reminderSentShort": "Reminded",
+  "reminderCooldownToday": "You can remind again today at {time}",
   "@reminderCooldownToday": {
     "placeholders": {
       "time": {
@@ -681,7 +682,7 @@
       }
     }
   },
-  "reminderCooldownTomorrow": "Reminded · again tomorrow at {time}",
+  "reminderCooldownTomorrow": "You can remind again tomorrow at {time}",
   "@reminderCooldownTomorrow": {
     "placeholders": {
       "time": {
@@ -986,5 +987,168 @@
         "type": "String"
       }
     }
-  }
+  },
+  "tabChores": "Chores",
+  "choresEmptyTitle": "No chores yet",
+  "choresEmptyBody": "Add chores like trash, dishes or cleaning. The turn moves around by itself.",
+  "choresAdd": "Add chore",
+  "choresTurnOf": "Turn: {name}",
+  "@choresTurnOf": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "choresTurnYou": "Your turn",
+  "choresNobodyTurn": "Nobody is up",
+  "choresLastDone": "Last: {name} · {when}",
+  "@choresLastDone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "choresNotDoneYet": "Not done yet",
+  "choresHistory": "History",
+  "choresNoHistory": "Nothing has been done yet.",
+  "choresDone": "Done",
+  "choresDoneSnack": "Marked as done. The turn has moved on.",
+  "choresDoneNotMyTurn": "The turn is {name}'s. Mark it as done anyway?",
+  "@choresDoneNotMyTurn": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "choresRemind": "Remind",
+  "choresRemindedToday": "You can remind again today at {time}",
+  "@choresRemindedToday": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "choresRemindedTomorrow": "You can remind again tomorrow at {time}",
+  "@choresRemindedTomorrow": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "choresDeleteConfirm": "Delete this chore?",
+  "choresDeleted": "Chore deleted",
+  "choresSaved": "Chore saved",
+  "choresMinutesAgo": "{count} minutes ago",
+  "@choresMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "choresHoursAgo": "{count} hours ago",
+  "@choresHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "choresYesterday": "yesterday",
+  "choresDaysAgo": "{count} days ago",
+  "@choresDaysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "choresFormNewTitle": "New chore",
+  "choresFormEditTitle": "Edit chore",
+  "choresNameLabel": "Chore name",
+  "choresNameRequired": "Enter a name.",
+  "choresPeopleTitle": "Who does it",
+  "choresPeopleHint": "Tick the people, then drag them to set the order.",
+  "choresOrderTitle": "Rotation order",
+  "choresPickOne": "Choose at least one person.",
+  "choresNextUp": "Next up",
+  "errorChoreLimit": "A home can have at most 20 chores.",
+  "errorChoreMembers": "Everyone in the rotation must be an active member.",
+  "errorChoreOwnTurn": "It is already your turn.",
+  "notificationChoreTitle": "Chores · {household}",
+  "@notificationChoreTitle": {
+    "placeholders": {
+      "household": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationChoreTurnBody": "{actor} did \"{detail}\", it's your turn now.",
+  "@notificationChoreTurnBody": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationChoreReminderBody": "{actor} is gently reminding you: it's your turn for \"{detail}\".",
+  "@notificationChoreReminderBody": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
+  "historyChoreAdded": "{actor} added the \"{label}\" chore",
+  "@historyChoreAdded": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "historyChoreUpdated": "{actor} edited the \"{label}\" chore",
+  "@historyChoreUpdated": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "historyChoreDeleted": "{actor} deleted the \"{label}\" chore",
+  "@historyChoreDeleted": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "historyRotationChanged": "Rotation changed",
+  "historyFieldRotation": "Rotation",
+  "historyBefore": "Before",
+  "historyAfter": "After",
+  "historyFieldCurrentUser": "Next up"
 }

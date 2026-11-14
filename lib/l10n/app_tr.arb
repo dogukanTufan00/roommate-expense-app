@@ -574,7 +574,8 @@
     }
   },
   "reminderButton": "Hatırlat",
-  "reminderCooldownToday": "Hatırlatıldı · bugün {time}'da tekrar",
+  "reminderSentShort": "Hatırlatıldı",
+  "reminderCooldownToday": "Bugün {time}'da tekrar hatırlatabilirsin",
   "@reminderCooldownToday": {
     "placeholders": {
       "time": {
@@ -582,7 +583,7 @@
       }
     }
   },
-  "reminderCooldownTomorrow": "Hatırlatıldı · yarın {time}'da tekrar",
+  "reminderCooldownTomorrow": "Yarın {time}'da tekrar hatırlatabilirsin",
   "@reminderCooldownTomorrow": {
     "placeholders": {
       "time": {
@@ -716,7 +717,7 @@
   "historyFieldSplitType": "Bölüşüm türü",
   "historyFieldNote": "Not",
   "historyFieldRole": "Rol",
-  "historyFieldName": "Ev adı",
+  "historyFieldName": "Ad",
   "historyHouseholdCreated": "{actor} evi kurdu",
   "@historyHouseholdCreated": {
     "placeholders": {
@@ -887,5 +888,168 @@
         "type": "String"
       }
     }
-  }
+  },
+  "tabChores": "İşler",
+  "choresEmptyTitle": "Henüz ev işi yok",
+  "choresEmptyBody": "Çöp, bulaşık, temizlik gibi işleri ekle; sıra sizin aranızda kendiliğinden dönsün.",
+  "choresAdd": "İş ekle",
+  "choresTurnOf": "Sıra: {name}",
+  "@choresTurnOf": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "choresTurnYou": "Sıra sende",
+  "choresNobodyTurn": "Sırada kimse yok",
+  "choresLastDone": "Son: {name} · {when}",
+  "@choresLastDone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "choresNotDoneYet": "Henüz yapılmadı",
+  "choresHistory": "Geçmiş",
+  "choresNoHistory": "Henüz kayıt yok.",
+  "choresDone": "Yaptım",
+  "choresDoneSnack": "Yapıldı olarak işaretlendi, sıra ilerledi.",
+  "choresDoneNotMyTurn": "Sıra {name} kişisinde. Yine de yaptım olarak işaretlensin mi?",
+  "@choresDoneNotMyTurn": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "choresRemind": "Hatırlat",
+  "choresRemindedToday": "Bugün {time}'da tekrar hatırlatabilirsin",
+  "@choresRemindedToday": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "choresRemindedTomorrow": "Yarın {time}'da tekrar hatırlatabilirsin",
+  "@choresRemindedTomorrow": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "choresDeleteConfirm": "Bu iş silinsin mi?",
+  "choresDeleted": "İş silindi",
+  "choresSaved": "İş kaydedildi",
+  "choresMinutesAgo": "{count} dk önce",
+  "@choresMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "choresHoursAgo": "{count} saat önce",
+  "@choresHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "choresYesterday": "dün",
+  "choresDaysAgo": "{count} gün önce",
+  "@choresDaysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "choresFormNewTitle": "Yeni iş",
+  "choresFormEditTitle": "İşi düzenle",
+  "choresNameLabel": "İş adı",
+  "choresNameRequired": "İş adı yazın.",
+  "choresPeopleTitle": "Kimler yapacak",
+  "choresPeopleHint": "Kişileri işaretle, sonra sürükleyerek sırayı ayarla.",
+  "choresOrderTitle": "Dönüş sırası",
+  "choresPickOne": "En az bir kişi seçin.",
+  "choresNextUp": "Sıradaki kişi",
+  "errorChoreLimit": "Bir evde en fazla 20 iş olabilir.",
+  "errorChoreMembers": "Sıradaki herkes evin aktif üyesi olmalı.",
+  "errorChoreOwnTurn": "Sıra zaten sende.",
+  "notificationChoreTitle": "İşler · {household}",
+  "@notificationChoreTitle": {
+    "placeholders": {
+      "household": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationChoreTurnBody": "{actor} \"{detail}\" işini yaptı, sıra sende.",
+  "@notificationChoreTurnBody": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationChoreReminderBody": "{actor} nazikçe hatırlatıyor: \"{detail}\" sırası sende.",
+  "@notificationChoreReminderBody": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
+  "historyChoreAdded": "{actor} \"{label}\" işini ekledi",
+  "@historyChoreAdded": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "historyChoreUpdated": "{actor} \"{label}\" işini düzenledi",
+  "@historyChoreUpdated": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "historyChoreDeleted": "{actor} \"{label}\" işini sildi",
+  "@historyChoreDeleted": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "historyRotationChanged": "Sıra değişti",
+  "historyFieldRotation": "Sıra",
+  "historyBefore": "Önce",
+  "historyAfter": "Sonra",
+  "historyFieldCurrentUser": "Sıradaki"
 }

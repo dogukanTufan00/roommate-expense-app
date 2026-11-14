@@ -90,6 +90,17 @@ NotificationText notificationText(
             ? updatedSentence
             : '$updatedSentence\n${l10n.notificationNoteLine(detail)}',
       );
+    case NotificationType.choreTurn:
+      // detail is the chore name.
+      return NotificationText(
+        title: l10n.notificationChoreTitle(household),
+        body: l10n.notificationChoreTurnBody(actor, detail ?? ''),
+      );
+    case NotificationType.choreReminder:
+      return NotificationText(
+        title: l10n.notificationChoreTitle(household),
+        body: l10n.notificationChoreReminderBody(actor, detail ?? ''),
+      );
     case NotificationType.unknown:
       return NotificationText(title: l10n.notificationGenericTitle, body: '');
   }

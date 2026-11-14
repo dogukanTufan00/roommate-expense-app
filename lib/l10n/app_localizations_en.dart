@@ -1079,13 +1079,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reminderButton => 'Remind';
 
   @override
+  String get reminderSentShort => 'Reminded';
+
+  @override
   String reminderCooldownToday(String time) {
-    return 'Reminded · again today at $time';
+    return 'You can remind again today at $time';
   }
 
   @override
   String reminderCooldownTomorrow(String time) {
-    return 'Reminded · again tomorrow at $time';
+    return 'You can remind again tomorrow at $time';
   }
 
   @override
@@ -1320,4 +1323,176 @@ class AppLocalizationsEn extends AppLocalizations {
   String historyGeneric(String actor) {
     return '$actor made a change';
   }
+
+  @override
+  String get tabChores => 'Chores';
+
+  @override
+  String get choresEmptyTitle => 'No chores yet';
+
+  @override
+  String get choresEmptyBody =>
+      'Add chores like trash, dishes or cleaning. The turn moves around by itself.';
+
+  @override
+  String get choresAdd => 'Add chore';
+
+  @override
+  String choresTurnOf(String name) {
+    return 'Turn: $name';
+  }
+
+  @override
+  String get choresTurnYou => 'Your turn';
+
+  @override
+  String get choresNobodyTurn => 'Nobody is up';
+
+  @override
+  String choresLastDone(String name, String when) {
+    return 'Last: $name · $when';
+  }
+
+  @override
+  String get choresNotDoneYet => 'Not done yet';
+
+  @override
+  String get choresHistory => 'History';
+
+  @override
+  String get choresNoHistory => 'Nothing has been done yet.';
+
+  @override
+  String get choresDone => 'Done';
+
+  @override
+  String get choresDoneSnack => 'Marked as done. The turn has moved on.';
+
+  @override
+  String choresDoneNotMyTurn(String name) {
+    return 'The turn is $name\'s. Mark it as done anyway?';
+  }
+
+  @override
+  String get choresRemind => 'Remind';
+
+  @override
+  String choresRemindedToday(String time) {
+    return 'You can remind again today at $time';
+  }
+
+  @override
+  String choresRemindedTomorrow(String time) {
+    return 'You can remind again tomorrow at $time';
+  }
+
+  @override
+  String get choresDeleteConfirm => 'Delete this chore?';
+
+  @override
+  String get choresDeleted => 'Chore deleted';
+
+  @override
+  String get choresSaved => 'Chore saved';
+
+  @override
+  String choresMinutesAgo(int count) {
+    return '$count minutes ago';
+  }
+
+  @override
+  String choresHoursAgo(int count) {
+    return '$count hours ago';
+  }
+
+  @override
+  String get choresYesterday => 'yesterday';
+
+  @override
+  String choresDaysAgo(int count) {
+    return '$count days ago';
+  }
+
+  @override
+  String get choresFormNewTitle => 'New chore';
+
+  @override
+  String get choresFormEditTitle => 'Edit chore';
+
+  @override
+  String get choresNameLabel => 'Chore name';
+
+  @override
+  String get choresNameRequired => 'Enter a name.';
+
+  @override
+  String get choresPeopleTitle => 'Who does it';
+
+  @override
+  String get choresPeopleHint =>
+      'Tick the people, then drag them to set the order.';
+
+  @override
+  String get choresOrderTitle => 'Rotation order';
+
+  @override
+  String get choresPickOne => 'Choose at least one person.';
+
+  @override
+  String get choresNextUp => 'Next up';
+
+  @override
+  String get errorChoreLimit => 'A home can have at most 20 chores.';
+
+  @override
+  String get errorChoreMembers =>
+      'Everyone in the rotation must be an active member.';
+
+  @override
+  String get errorChoreOwnTurn => 'It is already your turn.';
+
+  @override
+  String notificationChoreTitle(String household) {
+    return 'Chores · $household';
+  }
+
+  @override
+  String notificationChoreTurnBody(String actor, String detail) {
+    return '$actor did \"$detail\", it\'s your turn now.';
+  }
+
+  @override
+  String notificationChoreReminderBody(String actor, String detail) {
+    return '$actor is gently reminding you: it\'s your turn for \"$detail\".';
+  }
+
+  @override
+  String historyChoreAdded(String actor, String label) {
+    return '$actor added the \"$label\" chore';
+  }
+
+  @override
+  String historyChoreUpdated(String actor, String label) {
+    return '$actor edited the \"$label\" chore';
+  }
+
+  @override
+  String historyChoreDeleted(String actor, String label) {
+    return '$actor deleted the \"$label\" chore';
+  }
+
+  @override
+  String get historyRotationChanged => 'Rotation changed';
+
+  @override
+  String get historyFieldRotation => 'Rotation';
+
+  @override
+  String get historyBefore => 'Before';
+
+  @override
+  String get historyAfter => 'After';
+
+  @override
+  String get historyFieldCurrentUser => 'Next up';
 }

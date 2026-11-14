@@ -108,9 +108,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     final householdId = item.householdId;
     if (householdId == null) return;
     // A payment reminder opens the Balances tab, where the debt is.
-    final initialTab = item.type == NotificationType.paymentReminder
-        ? HouseholdScreen.balancesTab
-        : 0;
+    // Chore notifications open the Chores tab.
+    final initialTab = switch (item.type) {
+      NotificationType.paymentReminder => HouseholdScreen.balancesTab,
+      NotificationType.choreTurn || NotificationType.choreReminder =>
+        HouseholdScreen.choresTab,
+      _ => 0,
+    };
     // An edit opens the home's history, where the edit is listed.
     final openHistory = item.type == NotificationType.expenseUpdated ||
         item.type == NotificationType.paymentUpdated;
@@ -336,6 +340,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         const _TypeStyle(Icons.edit_rounded, AppColors.mustard),
       NotificationType.paymentUpdated =>
         const _TypeStyle(Icons.edit_rounded, AppColors.mustard),
+      NotificationType.choreTurn =>
+        const _TypeStyle(Icons.cleaning_services_rounded, AppColors.sage),
+      NotificationType.choreReminder =>
+        const _TypeStyle(Icons.touch_app_rounded, AppColors.mustard),
       NotificationType.unknown =>
         const _TypeStyle(Icons.notifications_rounded, AppColors.muted),
     };

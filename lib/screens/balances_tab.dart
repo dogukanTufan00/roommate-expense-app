@@ -741,28 +741,41 @@ class _BalancesTabState extends State<BalancesTab> {
                 ),
               ],
             ),
+            // While the reminder cooldown runs, the time is shown in full under the buttons.
+            if (s.toUserId == _myUserId && _activeCooldown(s) != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 6),
+                child: Text(
+                  _reminderAgainLabel(l10n, _activeCooldown(s)!),
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodySmall?.copyWith(color: AppColors.muted),
+                ),
+              ),
           ],
         ),
       ),
     );
   }
 
-  // The Remind button of a settlement. While the 24 hour cooldown runs it is disabled and
-  // shows when it can be used again.
-  Widget _reminderButton(Settlement s, AppLocalizations l10n) {
+  // When the creditor may remind this debtor again, or null if they can remind now.
+  DateTime? _activeCooldown(Settlement s) {
     final cooldown = _reminderCooldowns[s.fromUserId];
-    final String label;
-    final bool canRemind;
-    if (cooldown != null && cooldown.isAfter(DateTime.now())) {
-      label = _reminderAgainLabel(l10n, cooldown);
-      canRemind = false;
-    } else {
-      label = l10n.reminderButton;
-      canRemind = !_sendingReminders.contains(s.fromUserId);
-    }
+    return cooldown != null && cooldown.isAfter(DateTime.now()) ? cooldown : null;
+  }
+
+  // The Remind button of a settlement. While the 24 hour cooldown runs it is disabled and only
+  // says "Hatırlatıldı"; the time is shown in full under the buttons (it does not fit in here).
+  Widget _reminderButton(Settlement s, AppLocalizations l10n) {
+    final waiting = _activeCooldown(s) != null;
+    final String label =
+        waiting ? l10n.reminderSentShort : l10n.reminderButton;
+    final bool canRemind = !waiting && !_sendingReminders.contains(s.fromUserId);
 
     return OutlinedButton.icon(
-      icon: const Icon(Icons.notifications_active_outlined, size: 18),
+      icon: Icon(
+        waiting ? Icons.check_rounded : Icons.notifications_active_outlined,
+        size: 18,
+      ),
       label: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
       onPressed: canRemind ? () => _remind(s) : null,
     );

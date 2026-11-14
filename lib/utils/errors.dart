@@ -16,6 +16,9 @@ String errorMessage(BuildContext context, Object error) {
 
   if (status == 0) return l10n.errorNetwork;
   if (status == 400) {
+    // Chores: the API's messages are exact.
+    if (message.contains('active member')) return l10n.errorChoreMembers;
+    if (message.contains('It is your turn')) return l10n.errorChoreOwnTurn;
     // Reminders: the API's messages are exact, so they are matched in full.
     if (message.contains('cannot remind yourself')) return l10n.errorReminderSelf;
     if (message.contains('does not owe you')) return l10n.errorReminderNoDebt;
@@ -58,6 +61,10 @@ String errorMessage(BuildContext context, Object error) {
   if (status == 429) return l10n.errorReminderCooldown;
 
   if (status == 409) {
+    // A home can have at most 20 chores. Checked first, the message has no other keyword.
+    if (message.contains('20 iş') || message.toLowerCase().contains('chore')) {
+      return l10n.errorChoreLimit;
+    }
     // Account deletion is blocked. Checked first: the message ends with home names, which could
     // contain other keywords below (for example "Email").
     if (message.contains('Transfer ownership or hand over admin rights first')) {
