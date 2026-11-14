@@ -1450,5 +1450,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "expenseSearchHint": "Search (text, person, amount)",
+  "clearSearch": "Clear search"
 }

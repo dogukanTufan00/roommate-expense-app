@@ -1823,4 +1823,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String historyDepositPassedOwn(String actor, String amount) {
     return '$actor depozito payını kalanlara devretti · $amount';
   }
+
+  @override
+  String get expenseSearchHint => 'Gider ara (açıklama, kişi, tutar)';
+
+  @override
+  String get clearSearch => 'Aramayı temizle';
 }

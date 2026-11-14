@@ -1351,5 +1351,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "expenseSearchHint": "Gider ara (açıklama, kişi, tutar)",
+  "clearSearch": "Aramayı temizle"
 }

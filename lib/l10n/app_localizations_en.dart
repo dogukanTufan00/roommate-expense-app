@@ -1847,4 +1847,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String historyDepositPassedOwn(String actor, String amount) {
     return '$actor passed their deposit share to the others · $amount';
   }
+
+  @override
+  String get expenseSearchHint => 'Search (text, person, amount)';
+
+  @override
+  String get clearSearch => 'Clear search';
 }

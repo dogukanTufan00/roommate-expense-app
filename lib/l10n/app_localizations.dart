@@ -3037,6 +3037,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{actor} passed their deposit share to the others · {amount}'**
   String historyDepositPassedOwn(String actor, String amount);
+
+  /// No description provided for @expenseSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search (text, person, amount)'**
+  String get expenseSearchHint;
+
+  /// No description provided for @clearSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get clearSearch;
 }
 
 class _AppLocalizationsDelegate

@@ -11,6 +11,7 @@ import 'package:roommate_expense_app/utils/bill_reminder.dart';
 import 'package:roommate_expense_app/utils/category.dart';
 import 'package:roommate_expense_app/utils/errors.dart';
 import 'package:roommate_expense_app/utils/format.dart';
+import 'package:roommate_expense_app/utils/search.dart';
 import 'package:roommate_expense_app/utils/split.dart';
 import 'package:roommate_expense_app/widgets/illustration.dart';
 
@@ -54,6 +55,8 @@ class _ExpensesTabState extends State<ExpensesTab> {
   _PersonFilter _personFilter = _PersonFilter.all;
   // One category code from expenseCategories, or null for all categories.
   String? _categoryFilter;
+  // The search text. It is matched against the description, category, payer, share names and amount.
+  final TextEditingController _searchController = TextEditingController();
 
   // Months the user opened or closed by tapping. Other months use the default:
   // the current month and later are open, older months are closed.
@@ -63,6 +66,12 @@ class _ExpensesTabState extends State<ExpensesTab> {
   void initState() {
     super.initState();
     _load();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   Future<void> _load() async {
@@ -338,7 +347,9 @@ class _ExpensesTabState extends State<ExpensesTab> {
   bool get _filtersActive =>
       _personFilter != _PersonFilter.all || _categoryFilter != null;
 
+  // Also clears the search text, so "All" and the "clear filter" button reset everything.
   void _clearFilters() {
+    _searchController.clear();
     setState(() {
       _personFilter = _PersonFilter.all;
       _categoryFilter = null;
@@ -372,6 +383,39 @@ class _ExpensesTabState extends State<ExpensesTab> {
     final category = _categoryFilter;
     if (category != null && e.category != category) return false;
     return true;
+  }
+
+  // ---- Search ----
+
+  // True when the query is empty or appears in the description, the category label (in the
+  // current language), the payer's name, any share person's name, or the amount.
+  // The query must already be normalized with normalizeForSearch.
+  bool _matchesSearch(Expense e, AppLocalizations l10n, String query) {
+    if (query.isEmpty) return true;
+    if (normalizeForSearch(e.description ?? '').contains(query)) return true;
+    if (normalizeForSearch(categoryLabel(l10n, e.category)).contains(query)) return true;
+    if (normalizeForSearch(e.paidByName).contains(query)) return true;
+    for (final share in e.shares) {
+      if (normalizeForSearch(share.name).contains(query)) return true;
+    }
+    return _amountMatches(e.amount, query);
+  }
+
+  // Amount matching: the whole number the user has in mind, never a part of it.
+  // The user may type "5555", "5.555", "5555,4" or "5.555,40". Dots and spaces are removed
+  // (a dot is the Turkish thousands separator) and the comma becomes a decimal point.
+  // - Without decimals ("5555"): the lira part must be equal, so 5.555,00 and 5.555,40 match,
+  //   but 15.555 or 555 do not.
+  // - With decimals ("5555,4"): the amount must be exactly equal (5.555,40).
+  // Compared in kuruş (whole numbers), so floating-point rounding cannot cause a miss.
+  bool _amountMatches(double amount, String query) {
+    final numeric = query.replaceAll('.', '').replaceAll(' ', '').replaceAll(',', '.');
+    if (!RegExp(r'^\d+(\.\d{1,2})?$').hasMatch(numeric)) return false;
+    final amountKurus = (amount * 100).round();
+    if (!numeric.contains('.')) {
+      return amountKurus ~/ 100 == int.parse(numeric);
+    }
+    return amountKurus == (double.parse(numeric) * 100).round();
   }
 
   // ---- Months ----
@@ -491,13 +535,19 @@ class _ExpensesTabState extends State<ExpensesTab> {
       );
     }
 
-    final groups = _groupByMonth(expenses.where(_matchesFilters).toList());
+    // Filters and search combine with AND. The month groups are built from the matches only,
+    // so their counts and totals match the list below them.
+    final query = normalizeForSearch(_searchController.text);
+    final groups = _groupByMonth(
+      expenses.where((e) => _matchesFilters(e) && _matchesSearch(e, l10n, query)).toList(),
+    );
 
     // The shopping card is first, then the upcoming payments card when there is one.
-    // The filter row scrolls away with the list. The month cards follow it.
+    // The search field and the filter row scroll away with the list. The month cards follow them.
     final children = <Widget>[
       _shoppingCard(l10n),
       if (_dueSoon.isNotEmpty) _upcomingCard(context, l10n),
+      _searchField(l10n),
       _filterRow(l10n),
     ];
     if (groups.isEmpty) {
@@ -518,7 +568,40 @@ class _ExpensesTabState extends State<ExpensesTab> {
       child: ListView(
         // Top and bottom padding: the floating button must not cover the last card.
         padding: const EdgeInsets.only(top: 8, bottom: 88),
+        // Scrolling hides the keyboard, so the search field does not keep it open over the list.
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         children: children,
+      ),
+    );
+  }
+
+  // The search field above the filter chips. The list filters as the user types, so there is no
+  // submit button. The clear (x) button shows only while there is text.
+  Widget _searchField(AppLocalizations l10n) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+      child: TextField(
+        key: const ValueKey('expenseSearchField'),
+        controller: _searchController,
+        textInputAction: TextInputAction.search,
+        decoration: InputDecoration(
+          isDense: true,
+          prefixIcon: const Icon(Icons.search_rounded, size: 20),
+          hintText: l10n.expenseSearchHint,
+          suffixIcon: _searchController.text.isEmpty
+              ? null
+              : IconButton(
+                  tooltip: l10n.clearSearch,
+                  icon: const Icon(Icons.close_rounded),
+                  onPressed: () {
+                    _searchController.clear();
+                    setState(() {});
+                  },
+                ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+        ),
+        // Rebuilds the list (and the clear button) on every change.
+        onChanged: (_) => setState(() {}),
       ),
     );
   }
