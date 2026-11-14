@@ -44,6 +44,9 @@ class ExpenseInput {
   final String? splitType;
   // The participants. Null on edit means "keep the stored split". Omitted from the JSON.
   final List<ShareInput>? shares;
+  // Days before the due date that payers get a reminder: 0 is off, otherwise 1, 3 or 7.
+  // Always sent. It only matters when the expense repeats.
+  final int reminderDaysBefore;
 
   ExpenseInput({
     required this.paidByUserId,
@@ -54,6 +57,7 @@ class ExpenseInput {
     required this.expenseDate,
     required this.splitType,
     required this.shares,
+    this.reminderDaysBefore = 3,
   });
 
   Map<String, dynamic> toJson() {
@@ -64,6 +68,7 @@ class ExpenseInput {
       'description': description,
       'recurring': recurring,
       'expenseDate': _apiDateFormat.format(expenseDate),
+      'reminderDaysBefore': reminderDaysBefore,
     };
     // Sending neither splitType nor shares tells the API to keep the stored split.
     if (splitType != null) json['splitType'] = splitType;
@@ -303,10 +308,15 @@ class Api {
     return _parseList(data, RecurringExpense.fromJson);
   }
 
-  // Admins only. Adds the months that are due now. Returns how many expenses were added.
-  static Future<int> runRecurringNow(int householdId) async {
-    final data = await ApiClient.post('/api/households/$householdId/expenses/recurring/run');
-    return (data as Map<String, dynamic>)['generated'] as int;
+  // Admins only. Adds the months that are due now, and sends the bill reminders that are due.
+  // generated is how many expenses were added. remindersSent is how many reminders went out.
+  static Future<({int generated, int remindersSent})> runRecurringNow(int householdId) async {
+    final data = await ApiClient.post('/api/households/$householdId/expenses/recurring/run')
+        as Map<String, dynamic>;
+    return (
+      generated: (data['generated'] as num?)?.toInt() ?? 0,
+      remindersSent: (data['remindersSent'] as num?)?.toInt() ?? 0,
+    );
   }
 
   // ---- Category split defaults ----

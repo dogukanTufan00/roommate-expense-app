@@ -5,6 +5,7 @@ import 'package:roommate_expense_app/l10n/app_localizations.dart';
 import 'package:roommate_expense_app/models.dart';
 import 'package:roommate_expense_app/session.dart';
 import 'package:roommate_expense_app/theme.dart';
+import 'package:roommate_expense_app/utils/bill_reminder.dart';
 import 'package:roommate_expense_app/utils/category.dart';
 import 'package:roommate_expense_app/utils/errors.dart';
 import 'package:roommate_expense_app/utils/format.dart';
@@ -18,7 +19,8 @@ double? _parseAmount(String text) {
 
 // Dates are stored at 12:00 so that the day does not shift when the
 // server or another time zone converts the value.
-DateTime _atNoon(DateTime date) => DateTime(date.year, date.month, date.day, 12);
+DateTime _atNoon(DateTime date) =>
+    DateTime(date.year, date.month, date.day, 12);
 
 // The description for a shopping checkout: the item names joined with ", ".
 // At most 255 characters. Longer text is cut at a comma and "…" is added.
@@ -72,6 +74,8 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
   late String _category;
   late DateTime _date;
   late bool _recurring;
+  // Days before the due date for the bill reminder: 0 is off. Only shown when recurring.
+  late int _reminderDaysBefore;
 
   // The split: EQUAL, PERCENT or AMOUNT.
   late String _splitType;
@@ -102,17 +106,21 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
   void initState() {
     super.initState();
     final expense = widget.expense;
-    _linkedItems = expense == null ? (widget.shoppingItems ?? const []) : const [];
+    _linkedItems = expense == null
+        ? (widget.shoppingItems ?? const [])
+        : const [];
 
     if (expense == null) {
       _category = 'GROCERIES';
       _date = _atNoon(DateTime.now());
       _recurring = false;
+      _reminderDaysBefore = 3;
       _splitType = 'EQUAL';
       // A shopping checkout starts with the item names as the description.
       if (_linkedItems.isNotEmpty) {
-        _descriptionController.text =
-            shoppingDescription([for (final item in _linkedItems) item.name]);
+        _descriptionController.text = shoppingDescription([
+          for (final item in _linkedItems) item.name,
+        ]);
       }
     } else {
       _amountController.text = expense.amount.toStringAsFixed(2);
@@ -120,6 +128,11 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
       _category = expense.category;
       _date = _atNoon(expense.expenseDate);
       _recurring = expense.recurring;
+      // A stored value the dropdown does not offer falls back to the default of 3 days.
+      final storedReminder = expense.reminderDaysBefore;
+      _reminderDaysBefore = reminderDayChoices.contains(storedReminder)
+          ? storedReminder
+          : 3;
       _splitType = expense.splitType;
 
       // Prefill the saved split. The people are selected now, and the values later
@@ -129,9 +142,11 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
         final value = _splitType == 'PERCENT'
             ? share.percent
             : _splitType == 'AMOUNT'
-                ? share.owedAmount
-                : null;
-        if (value != null) _controllerFor(share.userId).text = numberText(value);
+            ? share.owedAmount
+            : null;
+        if (value != null) {
+          _controllerFor(share.userId).text = numberText(value);
+        }
       }
     }
 
@@ -281,7 +296,9 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
   // One share value in hundredths, or null when the field is empty or invalid.
   int? _shareUnits(int userId) {
     final value = parseDecimal(_controllerFor(userId).text);
-    if (value == null || value <= 0 || !hasAtMostTwoDecimals(value)) return null;
+    if (value == null || value <= 0 || !hasAtMostTwoDecimals(value)) {
+      return null;
+    }
     return toHundredths(value);
   }
 
@@ -322,11 +339,14 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
   // shares are sent, so the user must adjust the split first.
   bool get _amountNeedsAdjust {
     final expense = widget.expense;
-    if (expense == null || !_keepsStoredSplit || expense.splitType != 'AMOUNT') {
+    if (expense == null ||
+        !_keepsStoredSplit ||
+        expense.splitType != 'AMOUNT') {
       return false;
     }
     final amount = _amount;
-    return amount != null && toHundredths(amount) != toHundredths(expense.amount);
+    return amount != null &&
+        toHundredths(amount) != toHundredths(expense.amount);
   }
 
   // Edit only: show the stored split read-only. This happens when someone moved out,
@@ -337,7 +357,10 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
   // Selected user ids in the member list order.
   List<int> _selectedIdsInOrder() {
     final members = _members ?? const <Member>[];
-    return [for (final m in members) if (_selected.contains(m.userId)) m.userId];
+    return [
+      for (final m in members)
+        if (_selected.contains(m.userId)) m.userId,
+    ];
   }
 
   // A user change ends the automatic default.
@@ -368,7 +391,9 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
 
   void _toggleMember(Member member, bool selected) {
     // At least one person must share the expense.
-    if (!selected && _selected.length == 1 && _selected.contains(member.userId)) {
+    if (!selected &&
+        _selected.length == 1 &&
+        _selected.contains(member.userId)) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(AppLocalizations.of(context).splitNoneSelected)),
       );
@@ -433,6 +458,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
       // Null on an untouched edit: the API keeps the stored split.
       splitType: keepStored ? null : _splitType,
       shares: shares,
+      reminderDaysBefore: _reminderDaysBefore,
     );
 
     setState(() => _saving = true);
@@ -443,11 +469,9 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
         // A shopping checkout creates the expense and links the items in one request.
         final created = _linkedItems.isEmpty
             ? await Api.createExpense(widget.householdId, input)
-            : await Api.checkoutShopping(
-                widget.householdId,
-                [for (final item in _linkedItems) item.id],
-                input,
-              );
+            : await Api.checkoutShopping(widget.householdId, [
+                for (final item in _linkedItems) item.id,
+              ], input);
         failedUploads = await _uploadPendingFiles(created.id);
       } else {
         await Api.updateExpense(widget.householdId, expense.id, input);
@@ -457,7 +481,8 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              AppLocalizations.of(context).attachmentsUploadFailed(failedUploads),
+              AppLocalizations.of(context)
+                  .attachmentsUploadFailed(failedUploads),
             ),
           ),
         );
@@ -466,9 +491,8 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
     } catch (e) {
       if (!mounted) return;
       setState(() => _saving = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(errorMessage(context, e))),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(errorMessage(context, e))));
     }
   }
 
@@ -513,9 +537,8 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
     } catch (e) {
       if (!mounted) return;
       setState(() => _saving = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(errorMessage(context, e))),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(errorMessage(context, e))));
     }
   }
 
@@ -538,8 +561,8 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
             isEdit
                 ? l10n.editExpense
                 : isCheckout
-                    ? l10n.shoppingCheckoutTitle
-                    : l10n.addExpense,
+                ? l10n.shoppingCheckoutTitle
+                : l10n.addExpense,
           ),
           actions: [
             if (isEdit)
@@ -586,14 +609,21 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
           children: [
             if (_linkedItems.isNotEmpty) ...[
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 10,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.sage.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.shopping_cart_outlined, size: 18, color: AppColors.sage),
+                    const Icon(
+                      Icons.shopping_cart_outlined,
+                      size: 18,
+                      color: AppColors.sage,
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
@@ -608,7 +638,9 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
             ],
             TextFormField(
               controller: _amountController,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
               decoration: InputDecoration(labelText: l10n.amount),
               // Rebuilds the split preview and the remaining line as the amount changes.
               onChanged: (_) => setState(() {}),
@@ -632,7 +664,11 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(categoryIcon(category), size: 20, color: categoryColor(category)),
+                        Icon(
+                          categoryIcon(category),
+                          size: 20,
+                          color: categoryColor(category),
+                        ),
                         const SizedBox(width: 8),
                         Text(categoryLabel(l10n, category)),
                       ],
@@ -654,7 +690,10 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
               decoration: InputDecoration(labelText: l10n.paidBy),
               items: [
                 for (final member in members)
-                  DropdownMenuItem(value: member.userId, child: Text(member.name)),
+                  DropdownMenuItem(
+                    value: member.userId,
+                    child: Text(member.name),
+                  ),
               ],
               onChanged: (value) => setState(() => _paidByUserId = value),
               validator: (value) => value == null ? l10n.fieldRequired : null,
@@ -678,13 +717,50 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
               value: _recurring,
               onChanged: (value) => setState(() => _recurring = value),
             ),
+            // The reminder choice sits right under the recurring switch, and only shows when it is on.
+            if (_recurring) ...[
+              DropdownButtonFormField<int>(
+                initialValue: _reminderDaysBefore,
+                decoration: InputDecoration(labelText: l10n.reminderLabel),
+                items: [
+                  for (final days in reminderDayChoices)
+                    DropdownMenuItem(
+                      value: days,
+                      child: Text(reminderChoiceLabel(l10n, days)),
+                    ),
+                ],
+                onChanged: (value) {
+                  if (value != null) {
+                    setState(() => _reminderDaysBefore = value);
+                  }
+                },
+              ),
+              // "Payı olan herkese bildirim gider" makes no sense when the reminder is off.
+              if (_reminderDaysBefore == 0)
+                const SizedBox(height: 8)
+              else
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 4,
+                    right: 4,
+                    top: 4,
+                    bottom: 8,
+                  ),
+                  child: Text(
+                    l10n.reminderHelper,
+                    style: Theme.of(context).textTheme.bodySmall
+                        ?.copyWith(color: AppColors.muted),
+                  ),
+                ),
+            ],
             // Shows the day the copies will be added on, from the chosen date.
             if (_recurring)
               Padding(
                 padding: const EdgeInsets.only(left: 4, right: 4, bottom: 8),
                 child: Text(
                   l10n.recurringAutoHint(_date.day),
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.muted),
+                  style: Theme.of(context).textTheme.bodySmall
+                      ?.copyWith(color: AppColors.muted),
                 ),
               ),
             const SizedBox(height: 16),
@@ -703,7 +779,8 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                 files: _pendingFiles,
                 enabled: !_saving,
                 onAdded: (file) => setState(() => _pendingFiles.add(file)),
-                onRemoved: (index) => setState(() => _pendingFiles.removeAt(index)),
+                onRemoved: (index) =>
+                    setState(() => _pendingFiles.removeAt(index)),
               ),
             const SizedBox(height: 24),
             SizedBox(
@@ -738,7 +815,9 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
       children: [
         Text(
           l10n.splitTitle,
-          style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w800,
+          ),
         ),
         const SizedBox(height: 8),
         Wrap(
@@ -785,8 +864,12 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
           const SizedBox(height: 4),
           Text(
             _splitType == 'PERCENT'
-                ? l10n.splitRemainingPercent(formatPercent(context, remaining / 100))
-                : l10n.splitRemainingAmount(formatMoney(context, remaining / 100)),
+                ? l10n.splitRemainingPercent(
+                    formatPercent(context, remaining / 100),
+                  )
+                : l10n.splitRemainingAmount(
+                    formatMoney(context, remaining / 100),
+                  ),
             textAlign: TextAlign.end,
             style: theme.textTheme.titleSmall?.copyWith(
               fontWeight: FontWeight.w800,
@@ -817,7 +900,9 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
       children: [
         Text(
           l10n.splitTitle,
-          style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w800,
+          ),
         ),
         const SizedBox(height: 8),
         for (final share in expense.shares)
@@ -839,7 +924,9 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                         const SizedBox(width: 8),
                         Text(
                           l10n.movedOutTag,
-                          style: theme.textTheme.bodySmall?.copyWith(color: AppColors.muted),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: AppColors.muted,
+                          ),
                         ),
                       ],
                     ],
@@ -849,7 +936,10 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                   share.percent == null
                       ? formatMoney(context, share.owedAmount)
                       : '%${formatPercent(context, share.percent!)} · ${formatMoney(context, share.owedAmount)}',
-                  style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.ink),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.ink,
+                  ),
                 ),
               ],
             ),
@@ -887,10 +977,18 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
         padding: const EdgeInsets.symmetric(vertical: 6),
         child: Row(
           children: [
-            Expanded(child: Text(member.name, style: const TextStyle(fontWeight: FontWeight.w600))),
+            Expanded(
+              child: Text(
+                member.name,
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
+            ),
             Text(
               share == null ? '' : formatMoney(context, share),
-              style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.ink),
+              style: const TextStyle(
+                fontWeight: FontWeight.w800,
+                color: AppColors.ink,
+              ),
             ),
           ],
         ),
@@ -912,11 +1010,16 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(member.name, style: const TextStyle(fontWeight: FontWeight.w600)),
+                Text(
+                  member.name,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
                 if (hint != null)
                   Text(
                     hint,
-                    style: theme.textTheme.bodySmall?.copyWith(color: AppColors.muted),
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: AppColors.muted,
+                    ),
                   ),
               ],
             ),
@@ -926,7 +1029,9 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
             width: 130,
             child: TextFormField(
               controller: _controllerFor(member.userId),
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
               textAlign: TextAlign.end,
               decoration: InputDecoration(
                 isDense: true,

@@ -1618,4 +1618,80 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get errorShoppingRestoreSaved =>
       'This item was saved as an expense and cannot be brought back. You can add it to the list again.';
+
+  @override
+  String get reminderLabel => 'Reminder';
+
+  @override
+  String get reminderOff => 'None';
+
+  @override
+  String reminderDaysBefore(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count days before',
+      one: '1 day before',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get reminderHelper => 'Everyone with a share gets a notification.';
+
+  @override
+  String get upcomingPaymentsTitle => 'Upcoming payments';
+
+  @override
+  String upcomingPaymentsMore(int count) {
+    return '+$count more';
+  }
+
+  @override
+  String get dueToday => 'Today';
+
+  @override
+  String get dueTomorrow => 'Tomorrow';
+
+  @override
+  String dueInDays(int count) {
+    return 'In $count days';
+  }
+
+  @override
+  String get reminderNoteOff => 'No reminder';
+
+  @override
+  String reminderNoteOn(Object when) {
+    return 'Reminder: $when';
+  }
+
+  @override
+  String recurringRunReminders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count reminders sent',
+      one: '1 reminder sent',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notificationBillDueTitle(Object name) {
+    return 'Upcoming payment: $name';
+  }
+
+  @override
+  String notificationBillBodyPayer(Object amount, Object when) {
+    return '$when · $amount · you pay it';
+  }
+
+  @override
+  String notificationBillBodyOther(Object payer, Object share, Object when) {
+    return '$when · $payer pays · your share $share';
+  }
+
+  @override
+  String get notificationBillFallbackName => 'Shared bill';
 }

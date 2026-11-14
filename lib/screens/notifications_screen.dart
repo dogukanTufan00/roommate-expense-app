@@ -344,6 +344,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         const _TypeStyle(Icons.cleaning_services_rounded, AppColors.sage),
       NotificationType.choreReminder =>
         const _TypeStyle(Icons.touch_app_rounded, AppColors.mustard),
+      NotificationType.billDueSoon =>
+        const _TypeStyle(Icons.event_outlined, AppColors.mustard),
       NotificationType.unknown =>
         const _TypeStyle(Icons.notifications_rounded, AppColors.muted),
     };

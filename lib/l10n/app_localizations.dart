@@ -2695,6 +2695,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This item was saved as an expense and cannot be brought back. You can add it to the list again.'**
   String get errorShoppingRestoreSaved;
+
+  /// No description provided for @reminderLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder'**
+  String get reminderLabel;
+
+  /// No description provided for @reminderOff.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get reminderOff;
+
+  /// No description provided for @reminderDaysBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 day before} other{{count} days before}}'**
+  String reminderDaysBefore(int count);
+
+  /// No description provided for @reminderHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyone with a share gets a notification.'**
+  String get reminderHelper;
+
+  /// No description provided for @upcomingPaymentsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming payments'**
+  String get upcomingPaymentsTitle;
+
+  /// No description provided for @upcomingPaymentsMore.
+  ///
+  /// In en, this message translates to:
+  /// **'+{count} more'**
+  String upcomingPaymentsMore(int count);
+
+  /// No description provided for @dueToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get dueToday;
+
+  /// No description provided for @dueTomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow'**
+  String get dueTomorrow;
+
+  /// No description provided for @dueInDays.
+  ///
+  /// In en, this message translates to:
+  /// **'In {count} days'**
+  String dueInDays(int count);
+
+  /// No description provided for @reminderNoteOff.
+  ///
+  /// In en, this message translates to:
+  /// **'No reminder'**
+  String get reminderNoteOff;
+
+  /// No description provided for @reminderNoteOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder: {when}'**
+  String reminderNoteOn(Object when);
+
+  /// No description provided for @recurringRunReminders.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 reminder sent} other{{count} reminders sent}}'**
+  String recurringRunReminders(int count);
+
+  /// No description provided for @notificationBillDueTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming payment: {name}'**
+  String notificationBillDueTitle(Object name);
+
+  /// No description provided for @notificationBillBodyPayer.
+  ///
+  /// In en, this message translates to:
+  /// **'{when} · {amount} · you pay it'**
+  String notificationBillBodyPayer(Object amount, Object when);
+
+  /// No description provided for @notificationBillBodyOther.
+  ///
+  /// In en, this message translates to:
+  /// **'{when} · {payer} pays · your share {share}'**
+  String notificationBillBodyOther(Object payer, Object share, Object when);
+
+  /// No description provided for @notificationBillFallbackName.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared bill'**
+  String get notificationBillFallbackName;
 }
 
 class _AppLocalizationsDelegate

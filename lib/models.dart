@@ -154,6 +154,9 @@ class Expense {
   final int? generatedFromId;
   // The day of the month this recurring chain repeats on. Null when the API does not send it.
   final int? recurrenceDay;
+  // Days before the due date that payers get a reminder: 0 is off, otherwise 1, 3 or 7.
+  // Defaults to 3 when the API does not send it.
+  final int reminderDaysBefore;
 
   Expense({
     required this.id,
@@ -171,6 +174,7 @@ class Expense {
     this.attachmentCount = 0,
     this.generatedFromId,
     this.recurrenceDay,
+    this.reminderDaysBefore = 3,
   });
 
   factory Expense.fromJson(Map<String, dynamic> json) {
@@ -194,6 +198,7 @@ class Expense {
       attachmentCount: _countValue(json['attachmentCount']),
       generatedFromId: json['generatedFromId'] as int?,
       recurrenceDay: json['recurrenceDay'] as int?,
+      reminderDaysBefore: (json['reminderDaysBefore'] as num?)?.toInt() ?? 3,
     );
   }
 }
@@ -405,6 +410,8 @@ class RecurringExpense {
   final int recurrenceDay;
   final DateTime? lastDate;
   final DateTime? nextDate;
+  // Days before the due date that payers get a reminder: 0 is off, otherwise 1, 3 or 7.
+  final int reminderDaysBefore;
 
   RecurringExpense({
     required this.expenseId,
@@ -416,6 +423,7 @@ class RecurringExpense {
     required this.recurrenceDay,
     required this.lastDate,
     required this.nextDate,
+    this.reminderDaysBefore = 3,
   });
 
   factory RecurringExpense.fromJson(Map<String, dynamic> json) {
@@ -429,6 +437,7 @@ class RecurringExpense {
       recurrenceDay: (json['recurrenceDay'] as num).toInt(),
       lastDate: _optionalDate(json['lastDate']),
       nextDate: _optionalDate(json['nextDate']),
+      reminderDaysBefore: (json['reminderDaysBefore'] as num?)?.toInt() ?? 3,
     );
   }
 }
@@ -740,6 +749,9 @@ enum NotificationType {
   choreTurn,
   // Someone asks me to do my chore turn. actorName sent the reminder.
   choreReminder,
+  // A recurring bill is due soon. daysLeft says how many days are left. shareAmount is my
+  // part, or null when I am the payer.
+  billDueSoon,
   unknown;
 
   static NotificationType fromApi(String value) => switch (value) {
@@ -753,6 +765,7 @@ enum NotificationType {
         'PAYMENT_UPDATED' => paymentUpdated,
         'CHORE_TURN' => choreTurn,
         'CHORE_REMINDER' => choreReminder,
+        'BILL_DUE_SOON' => billDueSoon,
         _ => unknown,
       };
 }
@@ -776,6 +789,12 @@ class AppNotification {
   final int? expenseId;
   final int? paymentId;
   final int? invitationId;
+  // The category code of the bill (BILL_DUE_SOON). Null when the API does not send it.
+  final String? category;
+  // How many days are left until the bill is due (BILL_DUE_SOON). Null otherwise.
+  final int? daysLeft;
+  // My part of the bill (BILL_DUE_SOON). Null when I am the payer, or for other types.
+  final double? shareAmount;
   // Changed on the phone when the user reads it, so the list updates at once.
   bool read;
   // Converted to the phone's time zone.
@@ -796,6 +815,9 @@ class AppNotification {
     required this.invitationId,
     required this.read,
     required this.createdAt,
+    this.category,
+    this.daysLeft,
+    this.shareAmount,
   });
 
   factory AppNotification.fromJson(Map<String, dynamic> json) {
@@ -814,6 +836,9 @@ class AppNotification {
       invitationId: json['invitationId'] as int?,
       read: json['read'] as bool? ?? false,
       createdAt: DateTime.parse(json['createdAt'] as String).toLocal(),
+      category: _optionalText(json['category']),
+      daysLeft: (json['daysLeft'] as num?)?.toInt(),
+      shareAmount: (json['shareAmount'] as num?)?.toDouble(),
     );
   }
 }

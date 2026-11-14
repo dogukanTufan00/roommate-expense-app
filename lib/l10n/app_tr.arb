@@ -1157,5 +1157,49 @@
       }
     }
   },
-  "errorShoppingRestoreSaved": "Bu ürün bir gidere eklendi, geri alınamaz. Listeye tekrar ekleyebilirsin."
+  "errorShoppingRestoreSaved": "Bu ürün bir gidere eklendi, geri alınamaz. Listeye tekrar ekleyebilirsin.",
+  "reminderLabel": "Hatırlatma",
+  "reminderOff": "Yok",
+  "reminderDaysBefore": "{count, plural, =1{1 gün önce} other{{count} gün önce}}",
+  "@reminderDaysBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reminderHelper": "Payı olan herkese bildirim gider.",
+  "upcomingPaymentsTitle": "Yaklaşan ödemeler",
+  "upcomingPaymentsMore": "+{count} daha",
+  "@upcomingPaymentsMore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dueToday": "Bugün",
+  "dueTomorrow": "Yarın",
+  "dueInDays": "{count} gün sonra",
+  "@dueInDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reminderNoteOff": "Hatırlatma yok",
+  "reminderNoteOn": "Hatırlatma: {when}",
+  "recurringRunReminders": "{count, plural, =1{1 hatırlatma gönderildi} other{{count} hatırlatma gönderildi}}",
+  "@recurringRunReminders": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notificationBillDueTitle": "Yaklaşan ödeme: {name}",
+  "notificationBillBodyPayer": "{when} · {amount} · ödeme sende",
+  "notificationBillBodyOther": "{when} · {payer} ödüyor · payın {share}",
+  "notificationBillFallbackName": "Ortak ödeme"
 }

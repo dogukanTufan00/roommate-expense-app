@@ -1,5 +1,7 @@
 import 'package:roommate_expense_app/l10n/app_localizations.dart';
 import 'package:roommate_expense_app/models.dart';
+import 'package:roommate_expense_app/utils/bill_reminder.dart';
+import 'package:roommate_expense_app/utils/category.dart';
 import 'package:roommate_expense_app/utils/format.dart';
 
 // The title and body of one notification, already in the current language.
@@ -100,6 +102,26 @@ NotificationText notificationText(
       return NotificationText(
         title: l10n.notificationChoreTitle(household),
         body: l10n.notificationChoreReminderBody(actor, detail ?? ''),
+      );
+    case NotificationType.billDueSoon:
+      // The bill's name: its description, else its category, else a generic word.
+      final billCategory = notification.category;
+      final billName = detail ??
+          (billCategory == null
+              ? l10n.notificationBillFallbackName
+              : categoryLabel(l10n, billCategory));
+      final billWhen = dueWhenLabel(l10n, notification.daysLeft ?? 0);
+      // shareAmount is my part. Null means I am the payer, so the body says so.
+      final billShare = notification.shareAmount;
+      return NotificationText(
+        title: l10n.notificationBillDueTitle(billName),
+        body: billShare == null
+            ? l10n.notificationBillBodyPayer(billWhen, amount)
+            : l10n.notificationBillBodyOther(
+                billWhen,
+                actor,
+                formatMoneyFor(l10n.localeName, billShare),
+              ),
       );
     case NotificationType.unknown:
       return NotificationText(title: l10n.notificationGenericTitle, body: '');

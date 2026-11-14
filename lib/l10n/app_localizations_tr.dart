@@ -1594,4 +1594,80 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get errorShoppingRestoreSaved =>
       'Bu ürün bir gidere eklendi, geri alınamaz. Listeye tekrar ekleyebilirsin.';
+
+  @override
+  String get reminderLabel => 'Hatırlatma';
+
+  @override
+  String get reminderOff => 'Yok';
+
+  @override
+  String reminderDaysBefore(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count gün önce',
+      one: '1 gün önce',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get reminderHelper => 'Payı olan herkese bildirim gider.';
+
+  @override
+  String get upcomingPaymentsTitle => 'Yaklaşan ödemeler';
+
+  @override
+  String upcomingPaymentsMore(int count) {
+    return '+$count daha';
+  }
+
+  @override
+  String get dueToday => 'Bugün';
+
+  @override
+  String get dueTomorrow => 'Yarın';
+
+  @override
+  String dueInDays(int count) {
+    return '$count gün sonra';
+  }
+
+  @override
+  String get reminderNoteOff => 'Hatırlatma yok';
+
+  @override
+  String reminderNoteOn(Object when) {
+    return 'Hatırlatma: $when';
+  }
+
+  @override
+  String recurringRunReminders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count hatırlatma gönderildi',
+      one: '1 hatırlatma gönderildi',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notificationBillDueTitle(Object name) {
+    return 'Yaklaşan ödeme: $name';
+  }
+
+  @override
+  String notificationBillBodyPayer(Object amount, Object when) {
+    return '$when · $amount · ödeme sende';
+  }
+
+  @override
+  String notificationBillBodyOther(Object payer, Object share, Object when) {
+    return '$when · $payer ödüyor · payın $share';
+  }
+
+  @override
+  String get notificationBillFallbackName => 'Ortak ödeme';
 }

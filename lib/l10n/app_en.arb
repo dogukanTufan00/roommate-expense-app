@@ -1256,5 +1256,49 @@
       }
     }
   },
-  "errorShoppingRestoreSaved": "This item was saved as an expense and cannot be brought back. You can add it to the list again."
+  "errorShoppingRestoreSaved": "This item was saved as an expense and cannot be brought back. You can add it to the list again.",
+  "reminderLabel": "Reminder",
+  "reminderOff": "None",
+  "reminderDaysBefore": "{count, plural, =1{1 day before} other{{count} days before}}",
+  "@reminderDaysBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reminderHelper": "Everyone with a share gets a notification.",
+  "upcomingPaymentsTitle": "Upcoming payments",
+  "upcomingPaymentsMore": "+{count} more",
+  "@upcomingPaymentsMore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dueToday": "Today",
+  "dueTomorrow": "Tomorrow",
+  "dueInDays": "In {count} days",
+  "@dueInDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reminderNoteOff": "No reminder",
+  "reminderNoteOn": "Reminder: {when}",
+  "recurringRunReminders": "{count, plural, =1{1 reminder sent} other{{count} reminders sent}}",
+  "@recurringRunReminders": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notificationBillDueTitle": "Upcoming payment: {name}",
+  "notificationBillBodyPayer": "{when} · {amount} · you pay it",
+  "notificationBillBodyOther": "{when} · {payer} pays · your share {share}",
+  "notificationBillFallbackName": "Shared bill"
 }

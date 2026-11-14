@@ -5,6 +5,7 @@ import 'package:roommate_expense_app/models.dart';
 import 'package:roommate_expense_app/screens/expense_form_screen.dart';
 import 'package:roommate_expense_app/session.dart';
 import 'package:roommate_expense_app/theme.dart';
+import 'package:roommate_expense_app/utils/bill_reminder.dart';
 import 'package:roommate_expense_app/utils/category.dart';
 import 'package:roommate_expense_app/utils/errors.dart';
 import 'package:roommate_expense_app/utils/format.dart';
@@ -77,13 +78,16 @@ class _RecurringExpensesScreenState extends State<RecurringExpensesScreen> {
     final l10n = AppLocalizations.of(context);
     setState(() => _running = true);
     try {
-      final generated = await Api.runRecurringNow(widget.householdId);
+      final result = await Api.runRecurringNow(widget.householdId);
       if (!mounted) return;
+      // Adds the new expenses and the reminders sent, joined with a dot. "None" when both are 0.
+      final parts = [
+        if (result.generated > 0) l10n.recurringRunAdded(result.generated),
+        if (result.remindersSent > 0) l10n.recurringRunReminders(result.remindersSent),
+      ];
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            generated == 0 ? l10n.recurringRunNone : l10n.recurringRunAdded(generated),
-          ),
+          content: Text(parts.isEmpty ? l10n.recurringRunNone : parts.join(' · ')),
         ),
       );
       setState(() => _running = false);
@@ -249,6 +253,30 @@ class _RecurringExpensesScreenState extends State<RecurringExpensesScreen> {
               schedule,
               overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.muted),
+            ),
+            // The reminder setting in small muted text, with a bell icon (crossed when off).
+            Row(
+              children: [
+                Icon(
+                  item.reminderDaysBefore == 0
+                      ? Icons.notifications_off_outlined
+                      : Icons.notifications_outlined,
+                  size: 14,
+                  color: AppColors.muted,
+                ),
+                const SizedBox(width: 4),
+                Flexible(
+                  child: Text(
+                    item.reminderDaysBefore == 0
+                        ? l10n.reminderNoteOff
+                        : l10n.reminderNoteOn(
+                            reminderChoiceLabel(l10n, item.reminderDaysBefore),
+                          ),
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.muted),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

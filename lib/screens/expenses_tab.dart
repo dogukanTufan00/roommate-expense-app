@@ -3,9 +3,11 @@ import 'package:roommate_expense_app/api/api.dart';
 import 'package:roommate_expense_app/l10n/app_localizations.dart';
 import 'package:roommate_expense_app/models.dart';
 import 'package:roommate_expense_app/screens/expense_form_screen.dart';
+import 'package:roommate_expense_app/screens/recurring_expenses_screen.dart';
 import 'package:roommate_expense_app/screens/shopping_list_screen.dart';
 import 'package:roommate_expense_app/session.dart';
 import 'package:roommate_expense_app/theme.dart';
+import 'package:roommate_expense_app/utils/bill_reminder.dart';
 import 'package:roommate_expense_app/utils/category.dart';
 import 'package:roommate_expense_app/utils/errors.dart';
 import 'package:roommate_expense_app/utils/format.dart';
@@ -45,6 +47,9 @@ class _ExpensesTabState extends State<ExpensesTab> {
   // How many shopping items are still open. Null when the shopping list could not be loaded,
   // then the card shows no count. The expenses still load.
   int? _openShoppingCount;
+  // Recurring bills due in the next 7 days (today included), soonest first, with the days left.
+  // Empty hides the "upcoming payments" card. A failed load also leaves it empty.
+  List<({RecurringExpense item, int daysLeft})> _dueSoon = const [];
 
   _PersonFilter _personFilter = _PersonFilter.all;
   // One category code from expenseCategories, or null for all categories.
@@ -65,13 +70,16 @@ class _ExpensesTabState extends State<ExpensesTab> {
       // Both requests start now and run side by side.
       final expensesFuture = Api.getExpenses(widget.householdId);
       final shoppingFuture = _fetchOpenShoppingCount();
+      final dueFuture = _fetchDueSoon();
       final expenses = await expensesFuture;
       final openShoppingCount = await shoppingFuture;
+      final dueSoon = await dueFuture;
       final myUserId = await _findMyUserId();
       if (!mounted) return;
       setState(() {
         _expenses = expenses;
         _openShoppingCount = openShoppingCount;
+        _dueSoon = dueSoon;
         _myUserId = myUserId;
         _loadError = null;
       });
@@ -98,6 +106,26 @@ class _ExpensesTabState extends State<ExpensesTab> {
     }
   }
 
+  // The recurring bills due in the next 7 days, with the days left. Never throws:
+  // a failure only hides the card.
+  Future<List<({RecurringExpense item, int daysLeft})>> _fetchDueSoon() async {
+    try {
+      final items = await Api.getRecurringExpenses(widget.householdId);
+      final now = DateTime.now();
+      final due = <({RecurringExpense item, int daysLeft})>[];
+      for (final item in items) {
+        final next = item.nextDate;
+        if (next == null) continue;
+        final daysLeft = daysUntil(next, now);
+        if (daysLeft >= 0 && daysLeft <= 7) due.add((item: item, daysLeft: daysLeft));
+      }
+      due.sort((a, b) => a.daysLeft.compareTo(b.daysLeft));
+      return due;
+    } catch (_) {
+      return const [];
+    }
+  }
+
   // Opens the shared shopping list. The list may have changed (expenses from checkout),
   // so this tab always reloads when the user comes back.
   Future<void> _openShoppingList() async {
@@ -105,6 +133,18 @@ class _ExpensesTabState extends State<ExpensesTab> {
       context,
       MaterialPageRoute(
         builder: (_) => ShoppingListScreen(householdId: widget.householdId),
+      ),
+    );
+    if (!mounted) return;
+    _load();
+  }
+
+  // Opens the recurring expenses list. It may have changed, so this tab reloads when the user comes back.
+  Future<void> _openRecurring() async {
+    await Navigator.push<void>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => RecurringExpensesScreen(householdId: widget.householdId),
       ),
     );
     if (!mounted) return;
@@ -124,6 +164,109 @@ class _ExpensesTabState extends State<ExpensesTab> {
         subtitle: count == null ? null : Text(l10n.shoppingCardSubtitle(count)),
         trailing: const Icon(Icons.chevron_right_rounded, color: AppColors.muted),
         onTap: _openShoppingList,
+      ),
+    );
+  }
+
+  // The "upcoming payments" card under the shopping card. Shows up to 3 bills, then "+N more".
+  // Tapping the card opens the recurring expenses list.
+  Widget _upcomingCard(BuildContext context, AppLocalizations l10n) {
+    final theme = Theme.of(context);
+    final due = _dueSoon;
+    final hiddenCount = due.length - 3;
+
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: _openRecurring,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.event_outlined, color: AppColors.mustard),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      l10n.upcomingPaymentsTitle,
+                      style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+                    ),
+                  ),
+                  const Icon(Icons.chevron_right_rounded, color: AppColors.muted),
+                ],
+              ),
+              const SizedBox(height: 8),
+              for (final entry in due.take(3))
+                _upcomingRow(context, l10n, entry.item, entry.daysLeft),
+              if (hiddenCount > 0)
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Text(
+                    l10n.upcomingPaymentsMore(hiddenCount),
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: AppColors.muted,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // One bill in the upcoming card: category icon, title, then amount and the due text on the right.
+  Widget _upcomingRow(
+    BuildContext context,
+    AppLocalizations l10n,
+    RecurringExpense item,
+    int daysLeft,
+  ) {
+    final theme = Theme.of(context);
+    final color = categoryColor(item.category);
+    final description = item.description ?? '';
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.18),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(categoryIcon(item.category), color: color, size: 22),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              description.isEmpty ? categoryLabel(l10n, item.category) : description,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontWeight: FontWeight.w700),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                formatMoney(context, item.amount),
+                style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.ink),
+              ),
+              Text(
+                dueWhenLabel(l10n, daysLeft),
+                style: theme.textTheme.bodySmall?.copyWith(color: AppColors.muted),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -313,6 +456,7 @@ class _ExpensesTabState extends State<ExpensesTab> {
           padding: const EdgeInsets.only(top: 8, bottom: 88),
           children: [
             _shoppingCard(l10n),
+            if (_dueSoon.isNotEmpty) _upcomingCard(context, l10n),
             Padding(
               padding: const EdgeInsets.fromLTRB(32, 40, 32, 0),
               child: Column(
@@ -349,8 +493,13 @@ class _ExpensesTabState extends State<ExpensesTab> {
 
     final groups = _groupByMonth(expenses.where(_matchesFilters).toList());
 
-    // The shopping card is first. The filter row scrolls away with the list. The month cards follow it.
-    final children = <Widget>[_shoppingCard(l10n), _filterRow(l10n)];
+    // The shopping card is first, then the upcoming payments card when there is one.
+    // The filter row scrolls away with the list. The month cards follow it.
+    final children = <Widget>[
+      _shoppingCard(l10n),
+      if (_dueSoon.isNotEmpty) _upcomingCard(context, l10n),
+      _filterRow(l10n),
+    ];
     if (groups.isEmpty) {
       children.add(_noMatchesView(l10n));
     } else {
