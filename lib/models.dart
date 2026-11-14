@@ -1157,3 +1157,53 @@ DateTime? _optionalDate(Object? value) {
   final text = _optionalText(value);
   return text == null ? null : DateTime.parse(text);
 }
+
+// One item on the home's shared shopping list. Open items are not bought yet.
+// A bought item may already be saved as an expense (expenseId is set then).
+class ShoppingItem {
+  final int id;
+  final String name;
+  // Optional, up to 100 characters. Null when there is none.
+  final String? note;
+  final int addedByUserId;
+  final String addedByName;
+  // Converted to the phone's time zone.
+  final DateTime createdAt;
+  final bool bought;
+  final int? boughtByUserId;
+  final String? boughtByName;
+  // Converted to the phone's time zone. Null while the item is open.
+  final DateTime? boughtAt;
+  // The expense this item was saved into, or null.
+  final int? expenseId;
+
+  ShoppingItem({
+    required this.id,
+    required this.name,
+    required this.note,
+    required this.addedByUserId,
+    required this.addedByName,
+    required this.createdAt,
+    required this.bought,
+    required this.boughtByUserId,
+    required this.boughtByName,
+    required this.boughtAt,
+    required this.expenseId,
+  });
+
+  factory ShoppingItem.fromJson(Map<String, dynamic> json) {
+    return ShoppingItem(
+      id: json['id'] as int,
+      name: json['name'] as String,
+      note: _optionalText(json['note']),
+      addedByUserId: json['addedByUserId'] as int,
+      addedByName: json['addedByName'] as String,
+      createdAt: DateTime.parse(json['createdAt'] as String).toLocal(),
+      bought: json['bought'] as bool? ?? false,
+      boughtByUserId: json['boughtByUserId'] as int?,
+      boughtByName: _optionalText(json['boughtByName']),
+      boughtAt: _optionalDate(json['boughtAt'])?.toLocal(),
+      expenseId: json['expenseId'] as int?,
+    );
+  }
+}

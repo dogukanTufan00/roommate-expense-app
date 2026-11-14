@@ -1150,5 +1150,111 @@
   "historyFieldRotation": "Rotation",
   "historyBefore": "Before",
   "historyAfter": "After",
-  "historyFieldCurrentUser": "Next up"
+  "historyFieldCurrentUser": "Next up",
+  "shoppingListTitle": "Shopping list",
+  "@shoppingListTitle": {},
+  "shoppingCardSubtitle": "{count, plural, =0{List is empty} =1{1 item to buy} other{{count} items to buy}}",
+  "@shoppingCardSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shoppingEmptyTitle": "Nothing on the list",
+  "@shoppingEmptyTitle": {},
+  "shoppingEmptyHint": "Missing something? Add it with +",
+  "@shoppingEmptyHint": {},
+  "shoppingAddFab": "Add item",
+  "@shoppingAddFab": {},
+  "shoppingNameLabel": "Item name",
+  "@shoppingNameLabel": {},
+  "shoppingNoteLabel": "Note (optional)",
+  "@shoppingNoteLabel": {},
+  "shoppingNoteHint": "e.g. 2 liters, half-fat",
+  "@shoppingNoteHint": {},
+  "shoppingAddButton": "Add",
+  "@shoppingAddButton": {},
+  "shoppingAddedNotice": "Added: {name}",
+  "@shoppingAddedNotice": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "shoppingAddedBy": "{name} added it",
+  "@shoppingAddedBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "shoppingBoughtBy": "{name} bought it",
+  "@shoppingBoughtBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "shoppingBoughtHeader": "Bought ({count})",
+  "@shoppingBoughtHeader": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shoppingClear": "Clear",
+  "@shoppingClear": {},
+  "shoppingClearConfirm": "Delete all bought items from the list?",
+  "@shoppingClearConfirm": {},
+  "shoppingBoughtNote": "Bought items are removed automatically after 7 days.",
+  "@shoppingBoughtNote": {},
+  "shoppingRestore": "Back to list",
+  "@shoppingRestore": {},
+  "shoppingSavedAsExpense": "Saved as expense",
+  "@shoppingSavedAsExpense": {},
+  "shoppingDeleteConfirm": "Delete this item from the list?",
+  "@shoppingDeleteConfirm": {},
+  "shoppingCheckoutButton": "Save as expense ({count})",
+  "@shoppingCheckoutButton": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shoppingPickTitle": "Which items are on this receipt?",
+  "@shoppingPickTitle": {},
+  "shoppingContinue": "Continue",
+  "@shoppingContinue": {},
+  "shoppingCheckoutTitle": "Save shopping as expense",
+  "@shoppingCheckoutTitle": {},
+  "shoppingCheckoutInfo": "{count, plural, =1{1 item will be linked to this expense} other{{count} items will be linked to this expense}}",
+  "@shoppingCheckoutInfo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shoppingExpenseSaved": "Expense saved",
+  "@shoppingExpenseSaved": {},
+  "errorShoppingFull": "The shopping list is full (100 items). Remove some items first.",
+  "@errorShoppingFull": {},
+  "errorShoppingAlreadySaved": "Some of these items were already saved as an expense.",
+  "@errorShoppingAlreadySaved": {},
+  "shoppingAddAgain": "Add to the list again",
+  "shoppingAddedAgain": "Added to the list again: {name}",
+  "@shoppingAddedAgain": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "errorShoppingRestoreSaved": "This item was saved as an expense and cannot be brought back. You can add it to the list again."
 }

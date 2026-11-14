@@ -221,6 +221,80 @@ class Api {
     await ApiClient.delete('/api/households/$householdId/expenses/$expenseId');
   }
 
+  // ---- Shopping list ----
+
+  // Open items first (oldest first), then bought items (newest bought first).
+  // The server deletes bought items older than 7 days on each call.
+  static Future<List<ShoppingItem>> getShoppingItems(int householdId) async {
+    final data = await ApiClient.get('/api/households/$householdId/shopping-items');
+    return _parseList(data, ShoppingItem.fromJson);
+  }
+
+  // note is optional and up to 100 characters. Null means no note. Max 100 items per home.
+  static Future<ShoppingItem> addShoppingItem(
+    int householdId,
+    String name,
+    String? note,
+  ) async {
+    final data = await ApiClient.post(
+      '/api/households/$householdId/shopping-items',
+      {'name': name, 'note': note},
+    );
+    return ShoppingItem.fromJson(data as Map<String, dynamic>);
+  }
+
+  static Future<ShoppingItem> updateShoppingItem(
+    int householdId,
+    int itemId,
+    String name,
+    String? note,
+  ) async {
+    final data = await ApiClient.put(
+      '/api/households/$householdId/shopping-items/$itemId',
+      {'name': name, 'note': note},
+    );
+    return ShoppingItem.fromJson(data as Map<String, dynamic>);
+  }
+
+  static Future<void> deleteShoppingItem(int householdId, int itemId) async {
+    await ApiClient.delete('/api/households/$householdId/shopping-items/$itemId');
+  }
+
+  // Marks the item as bought by the logged in user.
+  static Future<ShoppingItem> markShoppingItemBought(int householdId, int itemId) async {
+    final data = await ApiClient.post(
+      '/api/households/$householdId/shopping-items/$itemId/bought',
+    );
+    return ShoppingItem.fromJson(data as Map<String, dynamic>);
+  }
+
+  // Puts a bought item back on the open list. Its expense link is cleared.
+  static Future<ShoppingItem> restoreShoppingItem(int householdId, int itemId) async {
+    final data = await ApiClient.post(
+      '/api/households/$householdId/shopping-items/$itemId/restore',
+    );
+    return ShoppingItem.fromJson(data as Map<String, dynamic>);
+  }
+
+  // Deletes all bought items of the home.
+  static Future<void> clearBoughtShoppingItems(int householdId) async {
+    await ApiClient.delete('/api/households/$householdId/shopping-items/bought');
+  }
+
+  // Creates ONE expense from input and links the given items to it.
+  // Items not bought yet become bought. Fails with 409 if an item is already in an expense.
+  static Future<Expense> checkoutShopping(
+    int householdId,
+    List<int> itemIds,
+    ExpenseInput input,
+  ) async {
+    final data = await ApiClient.post(
+      '/api/households/$householdId/shopping-items/checkout',
+      {'itemIds': itemIds, 'expense': input.toJson()},
+    );
+    return Expense.fromJson(data as Map<String, dynamic>);
+  }
+
   // ---- Recurring expenses ----
 
   // One row per monthly chain. Any member may read them.

@@ -1471,4 +1471,127 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get historyFieldCurrentUser => 'Sıradaki';
+
+  @override
+  String get shoppingListTitle => 'Alışveriş listesi';
+
+  @override
+  String shoppingCardSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ürün alınacak',
+      one: '1 ürün alınacak',
+      zero: 'Liste boş',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get shoppingEmptyTitle => 'Listede ürün yok';
+
+  @override
+  String get shoppingEmptyHint => 'Eksik bir şey mi var? + ile ekle';
+
+  @override
+  String get shoppingAddFab => 'Ürün ekle';
+
+  @override
+  String get shoppingNameLabel => 'Ürün adı';
+
+  @override
+  String get shoppingNoteLabel => 'Not (isteğe bağlı)';
+
+  @override
+  String get shoppingNoteHint => 'örn. 2 litre, yarım yağlı';
+
+  @override
+  String get shoppingAddButton => 'Ekle';
+
+  @override
+  String shoppingAddedNotice(String name) {
+    return 'Eklendi: $name';
+  }
+
+  @override
+  String shoppingAddedBy(String name) {
+    return '$name ekledi';
+  }
+
+  @override
+  String shoppingBoughtBy(String name) {
+    return '$name aldı';
+  }
+
+  @override
+  String shoppingBoughtHeader(int count) {
+    return 'Alınanlar ($count)';
+  }
+
+  @override
+  String get shoppingClear => 'Temizle';
+
+  @override
+  String get shoppingClearConfirm => 'Alınanların hepsi listeden silinsin mi?';
+
+  @override
+  String get shoppingBoughtNote =>
+      'Alınanlar 7 gün sonra kendiliğinden silinir.';
+
+  @override
+  String get shoppingRestore => 'Listeye geri al';
+
+  @override
+  String get shoppingSavedAsExpense => 'Gidere eklendi';
+
+  @override
+  String get shoppingDeleteConfirm => 'Bu ürün listeden silinsin mi?';
+
+  @override
+  String shoppingCheckoutButton(int count) {
+    return 'Gider olarak kaydet ($count)';
+  }
+
+  @override
+  String get shoppingPickTitle => 'Hangi ürünler bu fişte?';
+
+  @override
+  String get shoppingContinue => 'Devam';
+
+  @override
+  String get shoppingCheckoutTitle => 'Alışverişi gider olarak kaydet';
+
+  @override
+  String shoppingCheckoutInfo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ürün bu gidere bağlanacak',
+      one: '1 ürün bu gidere bağlanacak',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get shoppingExpenseSaved => 'Gider kaydedildi';
+
+  @override
+  String get errorShoppingFull =>
+      'Alışveriş listesi dolu (en fazla 100 ürün). Önce bazı ürünleri silin.';
+
+  @override
+  String get errorShoppingAlreadySaved =>
+      'Bu ürünlerden bazıları zaten bir gidere eklenmiş.';
+
+  @override
+  String get shoppingAddAgain => 'Listeye tekrar ekle';
+
+  @override
+  String shoppingAddedAgain(String name) {
+    return 'Listeye tekrar eklendi: $name';
+  }
+
+  @override
+  String get errorShoppingRestoreSaved =>
+      'Bu ürün bir gidere eklendi, geri alınamaz. Listeye tekrar ekleyebilirsin.';
 }

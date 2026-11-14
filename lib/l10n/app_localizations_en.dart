@@ -1495,4 +1495,127 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get historyFieldCurrentUser => 'Next up';
+
+  @override
+  String get shoppingListTitle => 'Shopping list';
+
+  @override
+  String shoppingCardSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count items to buy',
+      one: '1 item to buy',
+      zero: 'List is empty',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get shoppingEmptyTitle => 'Nothing on the list';
+
+  @override
+  String get shoppingEmptyHint => 'Missing something? Add it with +';
+
+  @override
+  String get shoppingAddFab => 'Add item';
+
+  @override
+  String get shoppingNameLabel => 'Item name';
+
+  @override
+  String get shoppingNoteLabel => 'Note (optional)';
+
+  @override
+  String get shoppingNoteHint => 'e.g. 2 liters, half-fat';
+
+  @override
+  String get shoppingAddButton => 'Add';
+
+  @override
+  String shoppingAddedNotice(String name) {
+    return 'Added: $name';
+  }
+
+  @override
+  String shoppingAddedBy(String name) {
+    return '$name added it';
+  }
+
+  @override
+  String shoppingBoughtBy(String name) {
+    return '$name bought it';
+  }
+
+  @override
+  String shoppingBoughtHeader(int count) {
+    return 'Bought ($count)';
+  }
+
+  @override
+  String get shoppingClear => 'Clear';
+
+  @override
+  String get shoppingClearConfirm => 'Delete all bought items from the list?';
+
+  @override
+  String get shoppingBoughtNote =>
+      'Bought items are removed automatically after 7 days.';
+
+  @override
+  String get shoppingRestore => 'Back to list';
+
+  @override
+  String get shoppingSavedAsExpense => 'Saved as expense';
+
+  @override
+  String get shoppingDeleteConfirm => 'Delete this item from the list?';
+
+  @override
+  String shoppingCheckoutButton(int count) {
+    return 'Save as expense ($count)';
+  }
+
+  @override
+  String get shoppingPickTitle => 'Which items are on this receipt?';
+
+  @override
+  String get shoppingContinue => 'Continue';
+
+  @override
+  String get shoppingCheckoutTitle => 'Save shopping as expense';
+
+  @override
+  String shoppingCheckoutInfo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count items will be linked to this expense',
+      one: '1 item will be linked to this expense',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get shoppingExpenseSaved => 'Expense saved';
+
+  @override
+  String get errorShoppingFull =>
+      'The shopping list is full (100 items). Remove some items first.';
+
+  @override
+  String get errorShoppingAlreadySaved =>
+      'Some of these items were already saved as an expense.';
+
+  @override
+  String get shoppingAddAgain => 'Add to the list again';
+
+  @override
+  String shoppingAddedAgain(String name) {
+    return 'Added to the list again: $name';
+  }
+
+  @override
+  String get errorShoppingRestoreSaved =>
+      'This item was saved as an expense and cannot be brought back. You can add it to the list again.';
 }

@@ -3,6 +3,7 @@ import 'package:roommate_expense_app/api/api.dart';
 import 'package:roommate_expense_app/l10n/app_localizations.dart';
 import 'package:roommate_expense_app/models.dart';
 import 'package:roommate_expense_app/screens/expense_form_screen.dart';
+import 'package:roommate_expense_app/screens/shopping_list_screen.dart';
 import 'package:roommate_expense_app/session.dart';
 import 'package:roommate_expense_app/theme.dart';
 import 'package:roommate_expense_app/utils/category.dart';
@@ -41,6 +42,9 @@ class _ExpensesTabState extends State<ExpensesTab> {
   // The logged in user's id, for the "your share" line and the person filters.
   // Null if the members could not be loaded.
   int? _myUserId;
+  // How many shopping items are still open. Null when the shopping list could not be loaded,
+  // then the card shows no count. The expenses still load.
+  int? _openShoppingCount;
 
   _PersonFilter _personFilter = _PersonFilter.all;
   // One category code from expenseCategories, or null for all categories.
@@ -58,11 +62,16 @@ class _ExpensesTabState extends State<ExpensesTab> {
 
   Future<void> _load() async {
     try {
-      final expenses = await Api.getExpenses(widget.householdId);
+      // Both requests start now and run side by side.
+      final expensesFuture = Api.getExpenses(widget.householdId);
+      final shoppingFuture = _fetchOpenShoppingCount();
+      final expenses = await expensesFuture;
+      final openShoppingCount = await shoppingFuture;
       final myUserId = await _findMyUserId();
       if (!mounted) return;
       setState(() {
         _expenses = expenses;
+        _openShoppingCount = openShoppingCount;
         _myUserId = myUserId;
         _loadError = null;
       });
@@ -77,6 +86,46 @@ class _ExpensesTabState extends State<ExpensesTab> {
             .showSnackBar(SnackBar(content: Text(errorMessage(context, e))));
       }
     }
+  }
+
+  // The number of open shopping items. Never throws: a failure only hides the count.
+  Future<int?> _fetchOpenShoppingCount() async {
+    try {
+      final items = await Api.getShoppingItems(widget.householdId);
+      return items.where((item) => !item.bought).length;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  // Opens the shared shopping list. The list may have changed (expenses from checkout),
+  // so this tab always reloads when the user comes back.
+  Future<void> _openShoppingList() async {
+    await Navigator.push<void>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ShoppingListScreen(householdId: widget.householdId),
+      ),
+    );
+    if (!mounted) return;
+    _load();
+  }
+
+  // The card at the top of the tab: the shopping list with its open item count.
+  Widget _shoppingCard(AppLocalizations l10n) {
+    final count = _openShoppingCount;
+    return Card(
+      child: ListTile(
+        leading: const Icon(Icons.shopping_cart_outlined),
+        title: Text(
+          l10n.shoppingListTitle,
+          style: const TextStyle(fontWeight: FontWeight.w700),
+        ),
+        subtitle: count == null ? null : Text(l10n.shoppingCardSubtitle(count)),
+        trailing: const Icon(Icons.chevron_right_rounded, color: AppColors.muted),
+        onTap: _openShoppingList,
+      ),
+    );
   }
 
   // Finds the logged in user in the member list, the same way the members screen does.
@@ -253,58 +302,55 @@ class _ExpensesTabState extends State<ExpensesTab> {
     }
 
     // ListView keeps pull-to-refresh working even when the list is empty.
-    // Only a home with no expenses at all gets the big empty-state picture.
+    // The shopping card is always at the top. Only a home with no expenses at all
+    // gets the big empty-state picture below it.
     if (expenses.isEmpty) {
       final theme = Theme.of(context);
       return RefreshIndicator(
         onRefresh: _load,
-        child: LayoutBuilder(
-          builder: (context, constraints) => ListView(
-            children: [
-              SizedBox(
-                height: constraints.maxHeight,
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(32),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Illustration(
-                          'empty-expenses.png',
-                          fallbackIcon: Icons.receipt_long_rounded,
-                          height: 180,
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          l10n.noExpensesTitle,
-                          textAlign: TextAlign.center,
-                          style: theme.textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          l10n.noExpenses,
-                          textAlign: TextAlign.center,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: AppColors.muted,
-                          ),
-                        ),
-                      ],
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.only(top: 8, bottom: 88),
+          children: [
+            _shoppingCard(l10n),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(32, 40, 32, 0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Illustration(
+                    'empty-expenses.png',
+                    fallbackIcon: Icons.receipt_long_rounded,
+                    height: 180,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    l10n.noExpensesTitle,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w800,
                     ),
                   ),
-                ),
+                  const SizedBox(height: 8),
+                  Text(
+                    l10n.noExpenses,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: AppColors.muted,
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       );
     }
 
     final groups = _groupByMonth(expenses.where(_matchesFilters).toList());
 
-    // The filter row scrolls away with the list. The month cards follow it.
-    final children = <Widget>[_filterRow(l10n)];
+    // The shopping card is first. The filter row scrolls away with the list. The month cards follow it.
+    final children = <Widget>[_shoppingCard(l10n), _filterRow(l10n)];
     if (groups.isEmpty) {
       children.add(_noMatchesView(l10n));
     } else {

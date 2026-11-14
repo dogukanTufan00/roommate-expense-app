@@ -2515,6 +2515,186 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Next up'**
   String get historyFieldCurrentUser;
+
+  /// No description provided for @shoppingListTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shopping list'**
+  String get shoppingListTitle;
+
+  /// No description provided for @shoppingCardSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{List is empty} =1{1 item to buy} other{{count} items to buy}}'**
+  String shoppingCardSubtitle(int count);
+
+  /// No description provided for @shoppingEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing on the list'**
+  String get shoppingEmptyTitle;
+
+  /// No description provided for @shoppingEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing something? Add it with +'**
+  String get shoppingEmptyHint;
+
+  /// No description provided for @shoppingAddFab.
+  ///
+  /// In en, this message translates to:
+  /// **'Add item'**
+  String get shoppingAddFab;
+
+  /// No description provided for @shoppingNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Item name'**
+  String get shoppingNameLabel;
+
+  /// No description provided for @shoppingNoteLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Note (optional)'**
+  String get shoppingNoteLabel;
+
+  /// No description provided for @shoppingNoteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 2 liters, half-fat'**
+  String get shoppingNoteHint;
+
+  /// No description provided for @shoppingAddButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get shoppingAddButton;
+
+  /// No description provided for @shoppingAddedNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Added: {name}'**
+  String shoppingAddedNotice(String name);
+
+  /// No description provided for @shoppingAddedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} added it'**
+  String shoppingAddedBy(String name);
+
+  /// No description provided for @shoppingBoughtBy.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} bought it'**
+  String shoppingBoughtBy(String name);
+
+  /// No description provided for @shoppingBoughtHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Bought ({count})'**
+  String shoppingBoughtHeader(int count);
+
+  /// No description provided for @shoppingClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get shoppingClear;
+
+  /// No description provided for @shoppingClearConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete all bought items from the list?'**
+  String get shoppingClearConfirm;
+
+  /// No description provided for @shoppingBoughtNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Bought items are removed automatically after 7 days.'**
+  String get shoppingBoughtNote;
+
+  /// No description provided for @shoppingRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to list'**
+  String get shoppingRestore;
+
+  /// No description provided for @shoppingSavedAsExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved as expense'**
+  String get shoppingSavedAsExpense;
+
+  /// No description provided for @shoppingDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this item from the list?'**
+  String get shoppingDeleteConfirm;
+
+  /// No description provided for @shoppingCheckoutButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Save as expense ({count})'**
+  String shoppingCheckoutButton(int count);
+
+  /// No description provided for @shoppingPickTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Which items are on this receipt?'**
+  String get shoppingPickTitle;
+
+  /// No description provided for @shoppingContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get shoppingContinue;
+
+  /// No description provided for @shoppingCheckoutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Save shopping as expense'**
+  String get shoppingCheckoutTitle;
+
+  /// No description provided for @shoppingCheckoutInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 item will be linked to this expense} other{{count} items will be linked to this expense}}'**
+  String shoppingCheckoutInfo(int count);
+
+  /// No description provided for @shoppingExpenseSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense saved'**
+  String get shoppingExpenseSaved;
+
+  /// No description provided for @errorShoppingFull.
+  ///
+  /// In en, this message translates to:
+  /// **'The shopping list is full (100 items). Remove some items first.'**
+  String get errorShoppingFull;
+
+  /// No description provided for @errorShoppingAlreadySaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Some of these items were already saved as an expense.'**
+  String get errorShoppingAlreadySaved;
+
+  /// No description provided for @shoppingAddAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to the list again'**
+  String get shoppingAddAgain;
+
+  /// No description provided for @shoppingAddedAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to the list again: {name}'**
+  String shoppingAddedAgain(String name);
+
+  /// No description provided for @errorShoppingRestoreSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'This item was saved as an expense and cannot be brought back. You can add it to the list again.'**
+  String get errorShoppingRestoreSaved;
 }
 
 class _AppLocalizationsDelegate

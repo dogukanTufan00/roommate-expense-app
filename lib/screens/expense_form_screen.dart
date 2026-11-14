@@ -20,12 +20,33 @@ double? _parseAmount(String text) {
 // server or another time zone converts the value.
 DateTime _atNoon(DateTime date) => DateTime(date.year, date.month, date.day, 12);
 
+// The description for a shopping checkout: the item names joined with ", ".
+// At most 255 characters. Longer text is cut at a comma and "…" is added.
+String shoppingDescription(List<String> names) {
+  const maxLength = 255;
+  final full = names.join(', ');
+  if (full.length <= maxLength) return full;
+
+  // One character is kept for the "…" at the end.
+  final cut = full.substring(0, maxLength - 1);
+  final lastComma = cut.lastIndexOf(', ');
+  final head = lastComma > 0 ? cut.substring(0, lastComma) : cut;
+  return '$head…';
+}
+
 // expense == null means "create a new expense".
+// shoppingItems is only used when creating: the expense then comes from a shopping checkout.
 class ExpenseFormScreen extends StatefulWidget {
-  const ExpenseFormScreen({super.key, required this.householdId, this.expense});
+  const ExpenseFormScreen({
+    super.key,
+    required this.householdId,
+    this.expense,
+    this.shoppingItems,
+  });
 
   final int householdId;
   final Expense? expense;
+  final List<ShoppingItem>? shoppingItems;
 
   @override
   State<ExpenseFormScreen> createState() => _ExpenseFormScreenState();
@@ -72,6 +93,8 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
 
   // Create only: receipts picked before the expense exists. Uploaded right after it is saved.
   final List<UploadFile> _pendingFiles = [];
+  // Create only: shopping items this expense is made from. Empty for a normal expense.
+  late final List<ShoppingItem> _linkedItems;
   // Edit only: an attachment was added or deleted, so the list must refresh when the form closes.
   bool _attachmentsChanged = false;
 
@@ -79,12 +102,18 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
   void initState() {
     super.initState();
     final expense = widget.expense;
+    _linkedItems = expense == null ? (widget.shoppingItems ?? const []) : const [];
 
     if (expense == null) {
       _category = 'GROCERIES';
       _date = _atNoon(DateTime.now());
       _recurring = false;
       _splitType = 'EQUAL';
+      // A shopping checkout starts with the item names as the description.
+      if (_linkedItems.isNotEmpty) {
+        _descriptionController.text =
+            shoppingDescription([for (final item in _linkedItems) item.name]);
+      }
     } else {
       _amountController.text = expense.amount.toStringAsFixed(2);
       _descriptionController.text = expense.description ?? '';
@@ -411,7 +440,14 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
       final expense = widget.expense;
       var failedUploads = 0;
       if (expense == null) {
-        final created = await Api.createExpense(widget.householdId, input);
+        // A shopping checkout creates the expense and links the items in one request.
+        final created = _linkedItems.isEmpty
+            ? await Api.createExpense(widget.householdId, input)
+            : await Api.checkoutShopping(
+                widget.householdId,
+                [for (final item in _linkedItems) item.id],
+                input,
+              );
         failedUploads = await _uploadPendingFiles(created.id);
       } else {
         await Api.updateExpense(widget.householdId, expense.id, input);
@@ -487,6 +523,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final isEdit = widget.expense != null;
+    final isCheckout = _linkedItems.isNotEmpty;
 
     // Editing can add or delete receipts. Closing the form then reports a change,
     // so the expenses list refreshes its attachment counts.
@@ -497,7 +534,13 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(isEdit ? l10n.editExpense : l10n.addExpense),
+          title: Text(
+            isEdit
+                ? l10n.editExpense
+                : isCheckout
+                    ? l10n.shoppingCheckoutTitle
+                    : l10n.addExpense,
+          ),
           actions: [
             if (isEdit)
               IconButton(
@@ -541,6 +584,28 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            if (_linkedItems.isNotEmpty) ...[
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                decoration: BoxDecoration(
+                  color: AppColors.sage.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.shopping_cart_outlined, size: 18, color: AppColors.sage),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        l10n.shoppingCheckoutInfo(_linkedItems.length),
+                        style: const TextStyle(fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
             TextFormField(
               controller: _amountController,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),

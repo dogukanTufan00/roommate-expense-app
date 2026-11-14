@@ -1051,5 +1051,111 @@
   "historyFieldRotation": "Sıra",
   "historyBefore": "Önce",
   "historyAfter": "Sonra",
-  "historyFieldCurrentUser": "Sıradaki"
+  "historyFieldCurrentUser": "Sıradaki",
+  "shoppingListTitle": "Alışveriş listesi",
+  "@shoppingListTitle": {},
+  "shoppingCardSubtitle": "{count, plural, =0{Liste boş} =1{1 ürün alınacak} other{{count} ürün alınacak}}",
+  "@shoppingCardSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shoppingEmptyTitle": "Listede ürün yok",
+  "@shoppingEmptyTitle": {},
+  "shoppingEmptyHint": "Eksik bir şey mi var? + ile ekle",
+  "@shoppingEmptyHint": {},
+  "shoppingAddFab": "Ürün ekle",
+  "@shoppingAddFab": {},
+  "shoppingNameLabel": "Ürün adı",
+  "@shoppingNameLabel": {},
+  "shoppingNoteLabel": "Not (isteğe bağlı)",
+  "@shoppingNoteLabel": {},
+  "shoppingNoteHint": "örn. 2 litre, yarım yağlı",
+  "@shoppingNoteHint": {},
+  "shoppingAddButton": "Ekle",
+  "@shoppingAddButton": {},
+  "shoppingAddedNotice": "Eklendi: {name}",
+  "@shoppingAddedNotice": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "shoppingAddedBy": "{name} ekledi",
+  "@shoppingAddedBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "shoppingBoughtBy": "{name} aldı",
+  "@shoppingBoughtBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "shoppingBoughtHeader": "Alınanlar ({count})",
+  "@shoppingBoughtHeader": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shoppingClear": "Temizle",
+  "@shoppingClear": {},
+  "shoppingClearConfirm": "Alınanların hepsi listeden silinsin mi?",
+  "@shoppingClearConfirm": {},
+  "shoppingBoughtNote": "Alınanlar 7 gün sonra kendiliğinden silinir.",
+  "@shoppingBoughtNote": {},
+  "shoppingRestore": "Listeye geri al",
+  "@shoppingRestore": {},
+  "shoppingSavedAsExpense": "Gidere eklendi",
+  "@shoppingSavedAsExpense": {},
+  "shoppingDeleteConfirm": "Bu ürün listeden silinsin mi?",
+  "@shoppingDeleteConfirm": {},
+  "shoppingCheckoutButton": "Gider olarak kaydet ({count})",
+  "@shoppingCheckoutButton": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shoppingPickTitle": "Hangi ürünler bu fişte?",
+  "@shoppingPickTitle": {},
+  "shoppingContinue": "Devam",
+  "@shoppingContinue": {},
+  "shoppingCheckoutTitle": "Alışverişi gider olarak kaydet",
+  "@shoppingCheckoutTitle": {},
+  "shoppingCheckoutInfo": "{count, plural, =1{1 ürün bu gidere bağlanacak} other{{count} ürün bu gidere bağlanacak}}",
+  "@shoppingCheckoutInfo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shoppingExpenseSaved": "Gider kaydedildi",
+  "@shoppingExpenseSaved": {},
+  "errorShoppingFull": "Alışveriş listesi dolu (en fazla 100 ürün). Önce bazı ürünleri silin.",
+  "@errorShoppingFull": {},
+  "errorShoppingAlreadySaved": "Bu ürünlerden bazıları zaten bir gidere eklenmiş.",
+  "@errorShoppingAlreadySaved": {},
+  "shoppingAddAgain": "Listeye tekrar ekle",
+  "shoppingAddedAgain": "Listeye tekrar eklendi: {name}",
+  "@shoppingAddedAgain": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "errorShoppingRestoreSaved": "Bu ürün bir gidere eklendi, geri alınamaz. Listeye tekrar ekleyebilirsin."
 }

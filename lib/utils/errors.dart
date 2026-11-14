@@ -61,6 +61,12 @@ String errorMessage(BuildContext context, Object error) {
   if (status == 429) return l10n.errorReminderCooldown;
 
   if (status == 409) {
+    // Shopping list: an item already saved as an expense, or the 100 item limit.
+    // Matched on exact phrases: other 409s also mention "expense" (attachment limit, repeating expense).
+    final lowerMessage = message.toLowerCase();
+    if (lowerMessage.contains('already saved as an expense')) return l10n.errorShoppingAlreadySaved;
+    if (lowerMessage.contains('shopping items')) return l10n.errorShoppingFull;
+    if (lowerMessage.contains('add it to the list again')) return l10n.errorShoppingRestoreSaved;
     // A home can have at most 20 chores. Checked first, the message has no other keyword.
     if (message.contains('20 iş') || message.toLowerCase().contains('chore')) {
       return l10n.errorChoreLimit;
