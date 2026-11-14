@@ -137,6 +137,9 @@ class _StatementTabState extends State<StatementTab> {
       firstDate: _period.start.isBefore(firstYear) ? _period.start : firstYear,
       lastDate: DateTime(now.year + 1, 12, 31),
       initialDateRange: _period,
+      // Typing a date by hand (pencil icon) needs the "." key. The default date keyboard is a
+      // number pad without it on some phones (e.g. Samsung), so the full keyboard is asked for.
+      keyboardType: TextInputType.text,
     );
     if (!mounted || picked == null) return;
     _setPeriod(DateTimeRange(start: picked.start, end: picked.end));

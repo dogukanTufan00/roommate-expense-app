@@ -416,6 +416,8 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
       initialDate: _date,
       firstDate: DateTime(2020, 1, 1),
       lastDate: DateTime(now.year + 1, now.month, now.day),
+      // Same as the statement range picker: the full keyboard has the "." needed to type a date.
+      keyboardType: TextInputType.text,
     );
     if (picked == null || !mounted) return;
     setState(() => _date = _atNoon(picked));
