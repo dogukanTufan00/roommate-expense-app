@@ -48,6 +48,8 @@ class _BalancesTabState extends State<BalancesTab> {
 
   // Admins can edit and delete any payment, not only their own.
   bool _myIsAdmin = false;
+  // People who still live in the home (getMembers returns only active members).
+  Set<int> _activeUserIds = {};
 
   // Until when I may not remind each debtor again, keyed by the debtor's user id.
   // Only debtors I reminded in the last 24 hours are in it.
@@ -114,6 +116,7 @@ class _BalancesTabState extends State<BalancesTab> {
       _payments = payments;
       _myUserId = myId;
       _myIsAdmin = myIsAdmin;
+      _activeUserIds = {for (final m in members) m.userId};
       _reminderCooldowns = {
         for (final c in cooldowns) c.debtorUserId: c.nextAllowedAt,
       };
@@ -255,8 +258,16 @@ class _BalancesTabState extends State<BalancesTab> {
     await _refresh();
   }
 
-  // The original sender of a payment, or an admin, may edit or delete it.
-  bool _canEditPayment(Payment p) => p.fromUserId == _myUserId || _myIsAdmin;
+  // Same rule as the server (see canHandlePayment): sender or receiver, admin only if one of them left.
+  bool _mayHandle(int fromUserId, int toUserId) => canHandlePayment(
+        fromUserId: fromUserId,
+        toUserId: toUserId,
+        myUserId: _myUserId,
+        iAmAdmin: _myIsAdmin,
+        activeUserIds: _activeUserIds,
+      );
+
+  bool _canEditPayment(Payment p) => _mayHandle(p.fromUserId, p.toUserId);
 
   // The uploader, the sender of the payment, or an admin may delete one of its receipts.
   bool _canDeleteReceipt(Payment p, Attachment attachment) {
@@ -780,11 +791,14 @@ class _BalancesTabState extends State<BalancesTab> {
                   icon: const Icon(Icons.share_outlined, size: 20),
                   onPressed: () => _shareSettlement(s),
                 ),
-                const SizedBox(width: 4),
-                OutlinedButton(
-                  onPressed: () => _markAsPaid(s),
-                  child: Text(l10n.markAsPaid),
-                ),
+                // Only the payer or the receiver may mark it paid (see canHandlePayment).
+                if (_mayHandle(s.fromUserId, s.toUserId)) ...[
+                  const SizedBox(width: 4),
+                  OutlinedButton(
+                    onPressed: () => _markAsPaid(s),
+                    child: Text(l10n.markAsPaid),
+                  ),
+                ],
               ],
             ),
             // While the reminder cooldown runs, the time is shown in full under the buttons.
@@ -909,6 +923,22 @@ class _BalancesTabState extends State<BalancesTab> {
       ),
     );
   }
+}
+
+// Who may record, edit or remove a payment. Mirrors the server rule (PaymentService):
+// the sender or the receiver. Being an admin is not enough, except when the sender or the
+// receiver no longer lives in the home, so their old debt can still be settled.
+bool canHandlePayment({
+  required int fromUserId,
+  required int toUserId,
+  required int? myUserId,
+  required bool iAmAdmin,
+  required Set<int> activeUserIds,
+}) {
+  if (myUserId != null && (myUserId == fromUserId || myUserId == toUserId)) return true;
+  final someoneLeft =
+      !activeUserIds.contains(fromUserId) || !activeUserIds.contains(toUserId);
+  return iAmAdmin && someoneLeft;
 }
 
 // How much fromUserId owes toUserId, in hundredths, from a list of settlements. Settlements are

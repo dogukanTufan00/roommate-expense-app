@@ -3,6 +3,7 @@ import 'package:roommate_expense_app/api/api.dart';
 import 'package:roommate_expense_app/l10n/app_localizations.dart';
 import 'package:roommate_expense_app/models.dart';
 import 'package:roommate_expense_app/screens/balances_tab.dart';
+import 'package:roommate_expense_app/session.dart';
 import 'package:roommate_expense_app/theme.dart';
 import 'package:roommate_expense_app/utils/errors.dart';
 import 'package:roommate_expense_app/utils/format.dart';
@@ -428,6 +429,20 @@ class _MoveOutScreenState extends State<MoveOutScreen> {
     );
   }
 
+  bool _mayMarkPaid(Settlement s) {
+    Member? me;
+    for (final m in _members) {
+      if (m.email == Session.email) me = m;
+    }
+    return canHandlePayment(
+      fromUserId: s.fromUserId,
+      toUserId: s.toUserId,
+      myUserId: me?.userId,
+      iAmAdmin: me?.isAdmin ?? false,
+      activeUserIds: {for (final m in _members) m.userId},
+    );
+  }
+
   Widget _debtCard(Settlement s, AppLocalizations l10n) {
     return Card(
       child: Padding(
@@ -442,11 +457,14 @@ class _MoveOutScreenState extends State<MoveOutScreen> {
                 style: const TextStyle(fontWeight: FontWeight.w700),
               ),
             ),
-            const SizedBox(width: 8),
-            OutlinedButton(
-              onPressed: _busy ? null : () => _markPaid(s),
-              child: Text(l10n.moveOutMarkPaid),
-            ),
+            // Only the payer or the receiver may mark it paid (same rule as the Balances tab).
+            if (_mayMarkPaid(s)) ...[
+              const SizedBox(width: 8),
+              OutlinedButton(
+                onPressed: _busy ? null : () => _markPaid(s),
+                child: Text(l10n.moveOutMarkPaid),
+              ),
+            ],
           ],
         ),
       ),
