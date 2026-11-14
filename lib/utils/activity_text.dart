@@ -45,7 +45,7 @@ class ChangeLine {
 // Fields whose values are short enough to always fit on one line.
 const Set<String> _shortFields = {
   'amount', 'share', 'category', 'expenseDate', 'paidAt',
-  'recurring', 'splitType', 'role',
+  'recurring', 'splitType', 'role', 'totalAmount',
 };
 
 // Shown when a value is missing or empty.
@@ -86,14 +86,32 @@ ActivityText activityText(AppLocalizations l10n, ActivityEntry entry) {
     ActivityType.choreAdded => l10n.historyChoreAdded(actor, label),
     ActivityType.choreUpdated => l10n.historyChoreUpdated(actor, label),
     ActivityType.choreDeleted => l10n.historyChoreDeleted(actor, label),
+    ActivityType.depositUpdated => l10n.historyDepositUpdated(actor),
+    // The subject is the person who moved out or joined; a "direction" change says which one.
+    ActivityType.depositTransferred => _isDepositJoin(entry)
+        ? l10n.historyDepositJoined(subject, amount)
+        // Someone who hands over their own share gets a shorter sentence without their name twice.
+        : entry.actorUserId != null && entry.actorUserId == entry.subjectUserId
+            ? l10n.historyDepositPassedOwn(actor, amount)
+            : l10n.historyDepositTransferred(actor, subject, amount),
+    ActivityType.depositTransferDeleted =>
+      l10n.historyDepositTransferDeleted(actor),
     ActivityType.unknown => l10n.historyGeneric(actor),
   };
 
   return ActivityText(
     sentence: sentence,
-    changeLines: [for (final change in entry.changes) _changeLine(l10n, change)],
+    changeLines: [
+      for (final change in entry.changes)
+        // "direction" only picks the sentence above; it is not a change to show.
+        if (change.field != 'direction') _changeLine(l10n, change),
+    ],
   );
 }
+
+// A deposit transfer is either a move-out (MOVE_OUT) or a newcomer buying in (JOIN).
+bool _isDepositJoin(ActivityEntry entry) =>
+    entry.changes.any((c) => c.field == 'direction' && c.newValue == 'JOIN');
 
 // One change as label + "old → new". Old "shares" rows have no values, so they are a label only.
 ChangeLine _changeLine(AppLocalizations l10n, ActivityChange change) {
@@ -148,6 +166,7 @@ String? _fieldLabel(AppLocalizations l10n, String field) {
     'role' => l10n.historyFieldRole,
     'name' => l10n.historyFieldName,
     'currentUser' => l10n.historyFieldCurrentUser,
+    'totalAmount' => l10n.historyFieldDeposit,
     _ => null,
   };
 }
@@ -158,7 +177,7 @@ String _fieldValue(AppLocalizations l10n, String field, String? value) {
   final tag = l10n.localeName;
 
   switch (field) {
-    case 'amount':
+    case 'amount' || 'totalAmount':
       final number = double.tryParse(value);
       return number == null ? value : formatMoneyFor(tag, number);
     case 'category':

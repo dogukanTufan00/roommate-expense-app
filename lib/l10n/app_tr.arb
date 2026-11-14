@@ -1201,5 +1201,155 @@
   "notificationBillDueTitle": "Yaklaşan ödeme: {name}",
   "notificationBillBodyPayer": "{when} · {amount} · ödeme sende",
   "notificationBillBodyOther": "{when} · {payer} ödüyor · payın {share}",
-  "notificationBillFallbackName": "Ortak ödeme"
+  "notificationBillFallbackName": "Ortak ödeme",
+  "depositTitle": "Depozito",
+  "depositNone": "Depozito kaydı yok",
+  "depositAdd": "Depozito ekle",
+  "depositTotal": "Toplam",
+  "depositUnassigned": "Atanmamış: {amount}",
+  "@depositUnassigned": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "depositFormerMember": "(ayrıldı)",
+  "depositJoin": "Ortak et",
+  "depositJoinTitle": "Depozitoya ortak et",
+  "depositJoinExplain": "Bu tutar mevcut ortakların paylarından, payları oranında düşülür; {name} onlara borçlanır.",
+  "@depositJoinExplain": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "depositJoined": "Depozitoya ortak olundu.",
+  "depositTransfersTitle": "Devirler ({count})",
+  "@depositTransfersTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "depositTransferUndo": "Devri geri al",
+  "depositTransferUndoConfirm": "Bu devir geri alınsın mı? Tutar eski sahibine döner ve bu devirden doğan borçlar silinir.",
+  "depositTransferUndone": "Devir geri alındı.",
+  "depositSaved": "Depozito kaydedildi.",
+  "depositDeleted": "Depozito silindi.",
+  "depositDeleteAction": "Depozitoyu sil",
+  "depositDeleteConfirm": "Depozito kaydı silinsin mi? Bu işlem geri alınamaz.",
+  "depositTotalLabel": "Toplam depozito",
+  "depositSumLine": "Toplam: {sum} / {total}",
+  "@depositSumLine": {
+    "placeholders": {
+      "sum": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "depositEqualSplit": "Eşit böl",
+  "depositEqualSplitHint": "Toplamı aktif üyelere eşit böler. Ayrılmış üyelerin payları aynen kalır.",
+  "errorDepositSharesSum": "Paylar toplamı depozito tutarına eşit olmalı",
+  "errorDepositTransfersFirst": "Önce depozito devirlerini geri al",
+  "moveOutTitleSelf": "Evden ayrılıyorsun",
+  "moveOutTitleOther": "{name} taşınıyor",
+  "@moveOutTitleOther": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "moveOutDepositShare": "Depozitodaki pay: {amount}",
+  "@moveOutDepositShare": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "moveOutPassDeposit": "Payını kalanlara devret",
+  "moveOutPassHint": "Kalan {count} kişi eşit öder (kişi başı {perPerson}).",
+  "@moveOutPassHint": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "perPerson": {
+        "type": "String"
+      }
+    }
+  },
+  "moveOutDepositPassed": "Devredildi",
+  "moveOutNoOtherMembers": "Payı devredecek başka aktif üye yok.",
+  "moveOutDebtsTitle": "Açık borç ve alacaklar",
+  "moveOutNoOpenDebts": "Açık borç/alacak yok",
+  "moveOutMarkPaid": "Ödendi",
+  "moveOutRemoveButton": "{name} evden çıkar",
+  "@moveOutRemoveButton": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "historyDepositUpdated": "{actor} depozitoyu güncelledi",
+  "@historyDepositUpdated": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
+  },
+  "historyDepositTransferred": "{actor}, {target} adlı kişinin depozito payını kalanlara devretti · {amount}",
+  "@historyDepositTransferred": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "historyDepositTransferDeleted": "{actor} bir depozito devrini geri aldı",
+  "@historyDepositTransferDeleted": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
+  },
+  "historyFieldDeposit": "Depozito",
+  "historyDepositJoined": "{target} depozitoya ortak oldu · {amount}",
+  "@historyDepositJoined": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "historyDepositPassedOwn": "{actor} depozito payını kalanlara devretti · {amount}",
+  "@historyDepositPassedOwn": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  }
 }

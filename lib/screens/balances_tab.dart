@@ -160,42 +160,16 @@ class _BalancesTabState extends State<BalancesTab> {
   }
 
   Future<void> _markAsPaid(Settlement s) async {
-    // The dialog lets the user change the amount and add an optional note.
-    // Null means the user cancelled.
-    final edit = await showDialog<_PaymentEdit>(
-      context: context,
-      builder: (_) => _MarkAsPaidDialog(
-        settlement: s,
-        owedHundredths: _owedHundredths(s.fromUserId, s.toUserId),
-      ),
+    final result = await recordSettlementPayment(
+      context,
+      householdId: widget.householdId,
+      settlement: s,
+      owedHundredths: _owedHundredths(s.fromUserId, s.toUserId),
     );
-    if (edit == null || !mounted) return;
+    if (result == null || !mounted) return;
 
-    final Payment created;
-    try {
-      created = await Api.createPayment(
-        widget.householdId,
-        s.fromUserId,
-        s.toUserId,
-        edit.amount,
-        edit.note,
-      );
-    } catch (e) {
-      if (!mounted) return;
-      _showError(e);
-      return;
-    }
-    // Upload the receipts picked in the dialog. One failed upload must not undo the payment,
-    // so failures are only counted and reported.
-    var failed = 0;
-    for (final file in edit.files) {
-      try {
-        await Api.uploadPaymentAttachment(widget.householdId, created.id, file);
-      } catch (_) {
-        failed++;
-      }
-    }
-    if (!mounted) return;
+    final created = result.payment;
+    final failed = result.failedUploads;
     final l10n = AppLocalizations.of(context);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -205,7 +179,7 @@ class _BalancesTabState extends State<BalancesTab> {
               : l10n.paymentAttachmentsUploadFailed(failed),
         ),
         // If nothing was attached (or something failed), offer it once more right here.
-        action: edit.files.isEmpty || failed > 0
+        action: result.fileCount == 0 || failed > 0
             ? SnackBarAction(
                 label: l10n.attachReceipt,
                 onPressed: () => _openPaymentAttachments(created),
@@ -409,15 +383,7 @@ class _BalancesTabState extends State<BalancesTab> {
   // Settlements are already netted, so money going the other way is subtracted.
   // Zero or less means there is no debt in this direction.
   int _owedHundredths(int fromUserId, int toUserId) {
-    var owed = 0;
-    for (final s in _settlements) {
-      if (s.fromUserId == fromUserId && s.toUserId == toUserId) {
-        owed += toHundredths(s.amount);
-      } else if (s.fromUserId == toUserId && s.toUserId == fromUserId) {
-        owed -= toHundredths(s.amount);
-      }
-    }
-    return owed;
+    return owedHundredthsBetween(_settlements, fromUserId, toUserId);
   }
 
   @override
@@ -863,6 +829,90 @@ class _BalancesTabState extends State<BalancesTab> {
       ),
     );
   }
+}
+
+// How much fromUserId owes toUserId, in hundredths, from a list of settlements. Settlements are
+// already netted, so money going the other way is subtracted. Zero or less means no debt.
+int owedHundredthsBetween(
+  List<Settlement> settlements,
+  int fromUserId,
+  int toUserId,
+) {
+  var owed = 0;
+  for (final s in settlements) {
+    if (s.fromUserId == fromUserId && s.toUserId == toUserId) {
+      owed += toHundredths(s.amount);
+    } else if (s.fromUserId == toUserId && s.toUserId == fromUserId) {
+      owed -= toHundredths(s.amount);
+    }
+  }
+  return owed;
+}
+
+// What recordSettlementPayment saved: the payment, how many receipts were picked, and how many
+// of them could not be uploaded. The payment itself is kept even if some uploads fail.
+class SettlementPaymentResult {
+  const SettlementPaymentResult({
+    required this.payment,
+    required this.fileCount,
+    required this.failedUploads,
+  });
+
+  final Payment payment;
+  final int fileCount;
+  final int failedUploads;
+}
+
+// Records a payment for one settlement. This is the "mark as paid" flow of the Balances tab, so
+// other screens reuse it. The dialog asks for the amount, an optional note and receipts; then the
+// payment is saved and the receipts are uploaded. Returns null when the user cancels or the payment
+// cannot be saved (the error is shown in a SnackBar).
+Future<SettlementPaymentResult?> recordSettlementPayment(
+  BuildContext context, {
+  required int householdId,
+  required Settlement settlement,
+  required int owedHundredths,
+}) async {
+  // The dialog lets the user change the amount and add an optional note. Null means cancelled.
+  final edit = await showDialog<_PaymentEdit>(
+    context: context,
+    builder: (_) => _MarkAsPaidDialog(
+      settlement: settlement,
+      owedHundredths: owedHundredths,
+    ),
+  );
+  if (edit == null || !context.mounted) return null;
+
+  final Payment created;
+  try {
+    created = await Api.createPayment(
+      householdId,
+      settlement.fromUserId,
+      settlement.toUserId,
+      edit.amount,
+      edit.note,
+    );
+  } catch (e) {
+    if (!context.mounted) return null;
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(errorMessage(context, e))));
+    return null;
+  }
+  // Upload the receipts picked in the dialog. One failed upload must not undo the payment,
+  // so failures are only counted and reported.
+  var failed = 0;
+  for (final file in edit.files) {
+    try {
+      await Api.uploadPaymentAttachment(householdId, created.id, file);
+    } catch (_) {
+      failed++;
+    }
+  }
+  return SettlementPaymentResult(
+    payment: created,
+    fileCount: edit.files.length,
+    failedUploads: failed,
+  );
 }
 
 // True when a payment of [amount] is more than what the sender still owes.

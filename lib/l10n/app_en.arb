@@ -1300,5 +1300,155 @@
   "notificationBillDueTitle": "Upcoming payment: {name}",
   "notificationBillBodyPayer": "{when} · {amount} · you pay it",
   "notificationBillBodyOther": "{when} · {payer} pays · your share {share}",
-  "notificationBillFallbackName": "Shared bill"
+  "notificationBillFallbackName": "Shared bill",
+  "depositTitle": "Deposit",
+  "depositNone": "No deposit recorded",
+  "depositAdd": "Add deposit",
+  "depositTotal": "Total",
+  "depositUnassigned": "Unassigned: {amount}",
+  "@depositUnassigned": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "depositFormerMember": "(left)",
+  "depositJoin": "Join",
+  "depositJoinTitle": "Join the deposit",
+  "depositJoinExplain": "This amount is taken from the current shares, in proportion to each share. {name} owes it to them.",
+  "@depositJoinExplain": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "depositJoined": "Joined the deposit.",
+  "depositTransfersTitle": "Transfers ({count})",
+  "@depositTransfersTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "depositTransferUndo": "Undo transfer",
+  "depositTransferUndoConfirm": "Undo this transfer? The amount goes back to its original owner and the debts it created are removed.",
+  "depositTransferUndone": "Transfer undone.",
+  "depositSaved": "Deposit saved.",
+  "depositDeleted": "Deposit deleted.",
+  "depositDeleteAction": "Delete deposit",
+  "depositDeleteConfirm": "Delete the deposit record? This cannot be undone.",
+  "depositTotalLabel": "Total deposit",
+  "depositSumLine": "Total: {sum} / {total}",
+  "@depositSumLine": {
+    "placeholders": {
+      "sum": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "depositEqualSplit": "Split equally",
+  "depositEqualSplitHint": "Splits the total equally among the active members. Former members keep their amounts.",
+  "errorDepositSharesSum": "The shares must add up to the total deposit.",
+  "errorDepositTransfersFirst": "Undo the deposit transfers first.",
+  "moveOutTitleSelf": "You are moving out",
+  "moveOutTitleOther": "{name} is moving out",
+  "@moveOutTitleOther": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "moveOutDepositShare": "Deposit share: {amount}",
+  "@moveOutDepositShare": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "moveOutPassDeposit": "Pass the share on to the others",
+  "moveOutPassHint": "The other {count} members split it equally ({perPerson} each).",
+  "@moveOutPassHint": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "perPerson": {
+        "type": "String"
+      }
+    }
+  },
+  "moveOutDepositPassed": "Passed on",
+  "moveOutNoOtherMembers": "No other active member to pass it to.",
+  "moveOutDebtsTitle": "Open debts and credits",
+  "moveOutNoOpenDebts": "No open debts or credits",
+  "moveOutMarkPaid": "Paid",
+  "moveOutRemoveButton": "Remove {name} from home",
+  "@moveOutRemoveButton": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "historyDepositUpdated": "{actor} updated the deposit",
+  "@historyDepositUpdated": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
+  },
+  "historyDepositTransferred": "{actor} passed {target}'s deposit share to the others · {amount}",
+  "@historyDepositTransferred": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "historyDepositTransferDeleted": "{actor} undid a deposit transfer",
+  "@historyDepositTransferDeleted": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
+  },
+  "historyFieldDeposit": "Deposit",
+  "historyDepositJoined": "{target} joined the deposit · {amount}",
+  "@historyDepositJoined": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "historyDepositPassedOwn": "{actor} passed their deposit share to the others · {amount}",
+  "@historyDepositPassedOwn": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  }
 }

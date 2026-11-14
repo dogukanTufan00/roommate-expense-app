@@ -602,6 +602,70 @@ class Api {
     await ApiClient.post('/api/households/$householdId/chores/$choreId/remind');
   }
 
+  // ---- Deposit ----
+
+  // Any active member may read it. totalAmount is null when no deposit is recorded.
+  static Future<Deposit> getDeposit(int householdId) async {
+    final data = await ApiClient.get('/api/households/$householdId/deposit');
+    return Deposit.fromJson(data as Map<String, dynamic>);
+  }
+
+  // Sets the total and every share. The shares must add up to the total (the API checks it, 400).
+  static Future<Deposit> saveDeposit(
+    int householdId,
+    double totalAmount,
+    Map<int, double> shares,
+  ) async {
+    final data = await ApiClient.put('/api/households/$householdId/deposit', {
+      'totalAmount': _round2(totalAmount),
+      'shares': [
+        for (final entry in shares.entries)
+          {'userId': entry.key, 'amount': _round2(entry.value)},
+      ],
+    });
+    return Deposit.fromJson(data as Map<String, dynamic>);
+  }
+
+  // Removes the deposit. The API refuses (409) while transfers exist.
+  static Future<void> deleteDeposit(int householdId) async {
+    await ApiClient.delete('/api/households/$householdId/deposit');
+  }
+
+  // The user's whole share goes to the other active members, equally. They owe the user that money.
+  // Allowed for the user themself or an admin. The user may already be a former member.
+  static Future<Deposit> moveOutDeposit(int householdId, int userId) async {
+    final data = await ApiClient.post(
+      '/api/households/$householdId/deposit/move-out',
+      {'userId': userId},
+    );
+    return Deposit.fromJson(data as Map<String, dynamic>);
+  }
+
+  // An active member with no share buys in. Without amount the API uses the default.
+  // The holders give up part of their shares, and the newcomer owes them.
+  static Future<Deposit> joinDeposit(
+    int householdId,
+    int userId, {
+    double? amount,
+  }) async {
+    final data = await ApiClient.post(
+      '/api/households/$householdId/deposit/join',
+      {
+        'userId': userId,
+        if (amount != null) 'amount': _round2(amount),
+      },
+    );
+    return Deposit.fromJson(data as Map<String, dynamic>);
+  }
+
+  // Admins only. Undoes one transfer and returns the updated deposit.
+  static Future<Deposit> deleteDepositTransfer(int householdId, int transferId) async {
+    final data = await ApiClient.delete(
+      '/api/households/$householdId/deposit/transfers/$transferId',
+    );
+    return Deposit.fromJson(data as Map<String, dynamic>);
+  }
+
   // ---- Activity ----
 
   // The home's history, newest first. To load the next (older) page, pass the

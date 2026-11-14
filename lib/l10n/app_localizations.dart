@@ -2791,6 +2791,252 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Shared bill'**
   String get notificationBillFallbackName;
+
+  /// No description provided for @depositTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Deposit'**
+  String get depositTitle;
+
+  /// No description provided for @depositNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No deposit recorded'**
+  String get depositNone;
+
+  /// No description provided for @depositAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add deposit'**
+  String get depositAdd;
+
+  /// No description provided for @depositTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get depositTotal;
+
+  /// No description provided for @depositUnassigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Unassigned: {amount}'**
+  String depositUnassigned(String amount);
+
+  /// No description provided for @depositFormerMember.
+  ///
+  /// In en, this message translates to:
+  /// **'(left)'**
+  String get depositFormerMember;
+
+  /// No description provided for @depositJoin.
+  ///
+  /// In en, this message translates to:
+  /// **'Join'**
+  String get depositJoin;
+
+  /// No description provided for @depositJoinTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Join the deposit'**
+  String get depositJoinTitle;
+
+  /// No description provided for @depositJoinExplain.
+  ///
+  /// In en, this message translates to:
+  /// **'This amount is taken from the current shares, in proportion to each share. {name} owes it to them.'**
+  String depositJoinExplain(String name);
+
+  /// No description provided for @depositJoined.
+  ///
+  /// In en, this message translates to:
+  /// **'Joined the deposit.'**
+  String get depositJoined;
+
+  /// No description provided for @depositTransfersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfers ({count})'**
+  String depositTransfersTitle(int count);
+
+  /// No description provided for @depositTransferUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo transfer'**
+  String get depositTransferUndo;
+
+  /// No description provided for @depositTransferUndoConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo this transfer? The amount goes back to its original owner and the debts it created are removed.'**
+  String get depositTransferUndoConfirm;
+
+  /// No description provided for @depositTransferUndone.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer undone.'**
+  String get depositTransferUndone;
+
+  /// No description provided for @depositSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Deposit saved.'**
+  String get depositSaved;
+
+  /// No description provided for @depositDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Deposit deleted.'**
+  String get depositDeleted;
+
+  /// No description provided for @depositDeleteAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete deposit'**
+  String get depositDeleteAction;
+
+  /// No description provided for @depositDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete the deposit record? This cannot be undone.'**
+  String get depositDeleteConfirm;
+
+  /// No description provided for @depositTotalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Total deposit'**
+  String get depositTotalLabel;
+
+  /// No description provided for @depositSumLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Total: {sum} / {total}'**
+  String depositSumLine(String sum, String total);
+
+  /// No description provided for @depositEqualSplit.
+  ///
+  /// In en, this message translates to:
+  /// **'Split equally'**
+  String get depositEqualSplit;
+
+  /// No description provided for @depositEqualSplitHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Splits the total equally among the active members. Former members keep their amounts.'**
+  String get depositEqualSplitHint;
+
+  /// No description provided for @errorDepositSharesSum.
+  ///
+  /// In en, this message translates to:
+  /// **'The shares must add up to the total deposit.'**
+  String get errorDepositSharesSum;
+
+  /// No description provided for @errorDepositTransfersFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo the deposit transfers first.'**
+  String get errorDepositTransfersFirst;
+
+  /// No description provided for @moveOutTitleSelf.
+  ///
+  /// In en, this message translates to:
+  /// **'You are moving out'**
+  String get moveOutTitleSelf;
+
+  /// No description provided for @moveOutTitleOther.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is moving out'**
+  String moveOutTitleOther(String name);
+
+  /// No description provided for @moveOutDepositShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Deposit share: {amount}'**
+  String moveOutDepositShare(String amount);
+
+  /// No description provided for @moveOutPassDeposit.
+  ///
+  /// In en, this message translates to:
+  /// **'Pass the share on to the others'**
+  String get moveOutPassDeposit;
+
+  /// No description provided for @moveOutPassHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The other {count} members split it equally ({perPerson} each).'**
+  String moveOutPassHint(int count, String perPerson);
+
+  /// No description provided for @moveOutDepositPassed.
+  ///
+  /// In en, this message translates to:
+  /// **'Passed on'**
+  String get moveOutDepositPassed;
+
+  /// No description provided for @moveOutNoOtherMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'No other active member to pass it to.'**
+  String get moveOutNoOtherMembers;
+
+  /// No description provided for @moveOutDebtsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Open debts and credits'**
+  String get moveOutDebtsTitle;
+
+  /// No description provided for @moveOutNoOpenDebts.
+  ///
+  /// In en, this message translates to:
+  /// **'No open debts or credits'**
+  String get moveOutNoOpenDebts;
+
+  /// No description provided for @moveOutMarkPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid'**
+  String get moveOutMarkPaid;
+
+  /// No description provided for @moveOutRemoveButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {name} from home'**
+  String moveOutRemoveButton(String name);
+
+  /// No description provided for @historyDepositUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} updated the deposit'**
+  String historyDepositUpdated(String actor);
+
+  /// No description provided for @historyDepositTransferred.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} passed {target}\'s deposit share to the others · {amount}'**
+  String historyDepositTransferred(String actor, String target, String amount);
+
+  /// No description provided for @historyDepositTransferDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} undid a deposit transfer'**
+  String historyDepositTransferDeleted(String actor);
+
+  /// No description provided for @historyFieldDeposit.
+  ///
+  /// In en, this message translates to:
+  /// **'Deposit'**
+  String get historyFieldDeposit;
+
+  /// No description provided for @historyDepositJoined.
+  ///
+  /// In en, this message translates to:
+  /// **'{target} joined the deposit · {amount}'**
+  String historyDepositJoined(String target, String amount);
+
+  /// No description provided for @historyDepositPassedOwn.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} passed their deposit share to the others · {amount}'**
+  String historyDepositPassedOwn(String actor, String amount);
 }
 
 class _AppLocalizationsDelegate

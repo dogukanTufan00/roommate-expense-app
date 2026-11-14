@@ -16,6 +16,10 @@ String errorMessage(BuildContext context, Object error) {
 
   if (status == 0) return l10n.errorNetwork;
   if (status == 400) {
+    // Deposit: checked before the split keywords below, since "Shares" would match "share".
+    if (message.contains('Shares must add up to the total deposit')) {
+      return l10n.errorDepositSharesSum;
+    }
     // Chores: the API's messages are exact.
     if (message.contains('active member')) return l10n.errorChoreMembers;
     if (message.contains('It is your turn')) return l10n.errorChoreOwnTurn;
@@ -64,6 +68,10 @@ String errorMessage(BuildContext context, Object error) {
     // Shopping list: an item already saved as an expense, or the 100 item limit.
     // Matched on exact phrases: other 409s also mention "expense" (attachment limit, repeating expense).
     final lowerMessage = message.toLowerCase();
+    // Deposit: the record cannot be deleted while transfers exist.
+    if (message.contains('Delete the deposit transfers first')) {
+      return l10n.errorDepositTransfersFirst;
+    }
     if (lowerMessage.contains('already saved as an expense')) return l10n.errorShoppingAlreadySaved;
     if (lowerMessage.contains('shopping items')) return l10n.errorShoppingFull;
     if (lowerMessage.contains('add it to the list again')) return l10n.errorShoppingRestoreSaved;

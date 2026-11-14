@@ -450,6 +450,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
         const _TypeStyle(Icons.cleaning_services_rounded, AppColors.mustard),
       ActivityType.choreDeleted =>
         const _TypeStyle(Icons.delete_outline_rounded, AppColors.owes),
+      ActivityType.depositUpdated =>
+        const _TypeStyle(Icons.savings_rounded, AppColors.mustard),
+      ActivityType.depositTransferred =>
+        const _TypeStyle(Icons.swap_horiz_rounded, AppColors.ink),
+      ActivityType.depositTransferDeleted =>
+        const _TypeStyle(Icons.undo_rounded, AppColors.ink),
       ActivityType.unknown =>
         const _TypeStyle(Icons.history_rounded, AppColors.muted),
     };

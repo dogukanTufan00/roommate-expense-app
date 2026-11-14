@@ -945,6 +945,9 @@ enum ActivityType {
   choreAdded,
   choreUpdated,
   choreDeleted,
+  depositUpdated,
+  depositTransferred,
+  depositTransferDeleted,
   unknown;
 
   static ActivityType fromApi(String value) => switch (value) {
@@ -965,6 +968,9 @@ enum ActivityType {
         'CHORE_ADDED' => choreAdded,
         'CHORE_UPDATED' => choreUpdated,
         'CHORE_DELETED' => choreDeleted,
+        'DEPOSIT_UPDATED' => depositUpdated,
+        'DEPOSIT_TRANSFERRED' => depositTransferred,
+        'DEPOSIT_TRANSFER_DELETED' => depositTransferDeleted,
         _ => unknown,
       };
 }
@@ -1168,6 +1174,116 @@ class DeletionCheck {
   static List<Map<String, dynamic>> _list(Object? value) {
     final items = value as List<dynamic>? ?? const [];
     return [for (final item in items) item as Map<String, dynamic>];
+  }
+}
+
+// ---- Household deposit (GET /api/households/{id}/deposit) ----
+
+// One person's part of the household deposit. A former member keeps the share they had,
+// until it is passed on.
+class DepositShare {
+  final int userId;
+  final String name;
+  final double amount;
+  // False when the person has left the home.
+  final bool active;
+
+  DepositShare({
+    required this.userId,
+    required this.name,
+    required this.amount,
+    required this.active,
+  });
+
+  factory DepositShare.fromJson(Map<String, dynamic> json) {
+    return DepositShare(
+      userId: json['userId'] as int,
+      name: json['name'] as String,
+      amount: _numValue(json['amount']),
+      active: json['active'] as bool? ?? true,
+    );
+  }
+}
+
+// A share that was passed on to other people (when someone moved out).
+class DepositTransfer {
+  final int id;
+  final int fromUserId;
+  final String fromName;
+  final int toUserId;
+  final String toName;
+  final double amount;
+  // Converted to the phone's time zone.
+  final DateTime createdAt;
+  final String createdByName;
+
+  DepositTransfer({
+    required this.id,
+    required this.fromUserId,
+    required this.fromName,
+    required this.toUserId,
+    required this.toName,
+    required this.amount,
+    required this.createdAt,
+    required this.createdByName,
+  });
+
+  factory DepositTransfer.fromJson(Map<String, dynamic> json) {
+    return DepositTransfer(
+      id: json['id'] as int,
+      fromUserId: json['fromUserId'] as int,
+      fromName: json['fromName'] as String,
+      toUserId: json['toUserId'] as int,
+      toName: json['toName'] as String,
+      amount: _numValue(json['amount']),
+      createdAt: DateTime.parse(json['createdAt'] as String).toLocal(),
+      createdByName: json['createdByName'] as String? ?? '',
+    );
+  }
+}
+
+// The household deposit. totalAmount is null when no deposit is recorded.
+class Deposit {
+  final double? totalAmount;
+  // The part of the total that no share holds. Normally 0.
+  final double unassigned;
+  final List<DepositShare> shares;
+  final List<DepositTransfer> transfers;
+
+  Deposit({
+    required this.totalAmount,
+    required this.unassigned,
+    required this.shares,
+    required this.transfers,
+  });
+
+  // A home with no deposit recorded.
+  factory Deposit.none() {
+    return Deposit(
+      totalAmount: null,
+      unassigned: 0,
+      shares: const [],
+      transfers: const [],
+    );
+  }
+
+  bool get exists => totalAmount != null;
+
+  factory Deposit.fromJson(Map<String, dynamic> json) {
+    final rawShares = json['shares'] as List<dynamic>? ?? const [];
+    final rawTransfers = json['transfers'] as List<dynamic>? ?? const [];
+    return Deposit(
+      totalAmount: (json['totalAmount'] as num?)?.toDouble(),
+      unassigned: _numValue(json['unassigned']),
+      shares: [
+        for (final item in rawShares)
+          DepositShare.fromJson(item as Map<String, dynamic>),
+      ],
+      transfers: [
+        for (final item in rawTransfers)
+          DepositTransfer.fromJson(item as Map<String, dynamic>),
+      ],
+    );
   }
 }
 

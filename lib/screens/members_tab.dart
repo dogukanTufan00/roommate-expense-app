@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:roommate_expense_app/api/api.dart';
 import 'package:roommate_expense_app/l10n/app_localizations.dart';
 import 'package:roommate_expense_app/models.dart';
+import 'package:roommate_expense_app/screens/deposit_form_screen.dart';
+import 'package:roommate_expense_app/screens/move_out_screen.dart';
 import 'package:roommate_expense_app/session.dart';
 import 'package:roommate_expense_app/theme.dart';
 import 'package:roommate_expense_app/utils/avatar.dart';
 import 'package:roommate_expense_app/utils/errors.dart';
-import 'package:roommate_expense_app/utils/format.dart';
 import 'package:roommate_expense_app/utils/iban.dart';
+import 'package:roommate_expense_app/widgets/deposit_card.dart';
 
 // The actions an admin can take on another member, from the popup menu.
 // "stepDown" is for the logged in user's own row. The others are for other members.
@@ -29,6 +31,9 @@ class _MembersTabState extends State<MembersTab> {
   List<Member> _members = [];
   List<Invitation> _invitations = [];
 
+  // The household deposit. Deposit.none() until the first load finishes.
+  Deposit _deposit = Deposit.none();
+
   // true only during the first load. Later reloads keep the list on screen.
   bool _loading = true;
 
@@ -47,11 +52,13 @@ class _MembersTabState extends State<MembersTab> {
       final results = await Future.wait<Object>([
         Api.getMembers(widget.householdId),
         Api.getHouseholdInvitations(widget.householdId),
+        Api.getDeposit(widget.householdId),
       ]);
       if (!mounted) return;
       setState(() {
         _members = results[0] as List<Member>;
         _invitations = results[1] as List<Invitation>;
+        _deposit = results[2] as Deposit;
         _loading = false;
         _loadErrorText = null;
       });
@@ -124,42 +131,6 @@ class _MembersTabState extends State<MembersTab> {
         .showSnackBar(SnackBar(content: Text(errorMessage(context, error))));
   }
 
-  // Looks up this member's net balance so the confirm dialogs can warn about open debts.
-  // Returns null if the balances cannot be loaded; the action still works, just without the warning.
-  Future<double?> _netBalanceOf(Member member) async {
-    try {
-      final balances = await Api.getBalances(widget.householdId);
-      for (final balance in balances) {
-        if (balance.userId == member.userId) return balance.netBalance;
-      }
-      return 0;
-    } catch (_) {
-      return null;
-    }
-  }
-
-  // The warning text for an open balance, or null when there is nothing to warn about.
-  // Removing someone (or leaving) with a debt is allowed: people do move out before settling
-  // up. The balance stays visible and can be settled later, so the dialog only names the amount.
-  Future<String?> _openBalanceWarning(
-    Member member, {
-    required bool leaving,
-  }) async {
-    final l10n = AppLocalizations.of(context);
-    final net = await _netBalanceOf(member);
-    if (!mounted || net == null || net.abs() < 0.01) return null;
-
-    final amount = formatMoney(context, net.abs());
-    if (leaving) {
-      return net < 0
-          ? l10n.leaveHomeOwesWarning(amount)
-          : l10n.leaveHomeGetsBackWarning(amount);
-    }
-    return net < 0
-        ? l10n.removeMemberOwesWarning(member.name, amount)
-        : l10n.removeMemberGetsBackWarning(member.name, amount);
-  }
-
   // A yes/no dialog. The optional warning is shown in red above the question.
   Future<bool> _confirmAction({
     required String title,
@@ -210,28 +181,26 @@ class _MembersTabState extends State<MembersTab> {
     return confirmed == true;
   }
 
-  // Admin only: removes another member.
-  Future<void> _removeMember(Member member) async {
-    final l10n = AppLocalizations.of(context);
-    final warning = await _openBalanceWarning(member, leaving: false);
-    if (!mounted) return;
-
-    final confirmed = await _confirmAction(
-      title: l10n.removeMember,
-      message: l10n.removeMemberConfirm(member.name),
-      warning: warning,
-      actionLabel: l10n.removeMember,
+  // Opens the move-out screen for a member (an admin removes them) or for myself (leaving).
+  // That screen handles the deposit share, the open debts and the final step. It pops true when
+  // the person is no longer a member of this home.
+  Future<void> _openMoveOut(Member member, {required bool isSelf}) async {
+    final removed = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        builder: (_) => MoveOutScreen(
+          householdId: widget.householdId,
+          userId: member.userId,
+          name: member.name,
+          isSelf: isSelf,
+        ),
+      ),
     );
-    if (!confirmed || !mounted) return;
-
-    try {
-      await Api.removeMember(widget.householdId, member.userId);
-    } catch (e) {
-      if (!mounted) return;
-      _showError(e);
+    if (removed != true || !mounted) return;
+    if (isSelf) {
+      // We are no longer a member, so go back to the homes list, which reloads itself.
+      Navigator.of(context).pop();
       return;
     }
-    if (!mounted) return;
     await _loadMembers();
   }
 
@@ -267,33 +236,75 @@ class _MembersTabState extends State<MembersTab> {
     await _loadMembers();
   }
 
-  // Any member: leaves the home. The API refuses if this is the last admin.
+  // Any member: leaves the home. This goes through the move-out screen, which also handles the
+  // deposit share and the open debts. The API refuses if this is the last admin.
   Future<void> _leaveHousehold() async {
-    final l10n = AppLocalizations.of(context);
     final me = _me;
     if (me == null) return;
+    await _openMoveOut(me, isSelf: true);
+  }
 
-    final warning = await _openBalanceWarning(me, leaving: true);
-    if (!mounted) return;
-
-    final confirmed = await _confirmAction(
-      title: l10n.leaveHome,
-      message: l10n.leaveHomeConfirm,
-      warning: warning,
-      actionLabel: l10n.leaveHome,
+  // Opens the deposit form. It pops true when the deposit was saved or deleted.
+  Future<void> _editDeposit() async {
+    final changed = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        builder: (_) => DepositFormScreen(householdId: widget.householdId),
+      ),
     );
-    if (!confirmed || !mounted) return;
+    if (changed != true || !mounted) return;
+    await _loadMembers();
+  }
+
+  // An active member with no share buys in. The suggested amount is total / (holders + 1),
+  // where the holders are the active members that hold money now.
+  Future<void> _joinDeposit(DepositShare share) async {
+    final l10n = AppLocalizations.of(context);
+    final total = _deposit.totalAmount;
+    if (total == null) return;
+    final holders = _deposit.shares.where((s) => s.active && s.amount > 0).length;
+    final suggested = (total / (holders + 1) * 100).round() / 100;
+
+    final amount = await showJoinDepositDialog(
+      context,
+      name: share.name,
+      suggestedAmount: suggested,
+    );
+    if (amount == null || !mounted) return;
 
     try {
-      await Api.leaveHousehold(widget.householdId, me.userId);
+      await Api.joinDeposit(widget.householdId, share.userId, amount: amount);
     } catch (e) {
       if (!mounted) return;
       _showError(e);
       return;
     }
     if (!mounted) return;
-    // We are no longer a member, so go back to the homes list, which reloads itself.
-    Navigator.of(context).pop();
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(l10n.depositJoined)));
+    await _loadMembers();
+  }
+
+  // Admin only: undoes one passed-on share after a confirmation.
+  Future<void> _undoTransfer(DepositTransfer transfer) async {
+    final l10n = AppLocalizations.of(context);
+    final confirmed = await _confirmAction(
+      title: l10n.depositTransferUndo,
+      message: l10n.depositTransferUndoConfirm,
+      actionLabel: l10n.depositTransferUndo,
+    );
+    if (!confirmed || !mounted) return;
+
+    try {
+      await Api.deleteDepositTransfer(widget.householdId, transfer.id);
+    } catch (e) {
+      if (!mounted) return;
+      _showError(e);
+      return;
+    }
+    if (!mounted) return;
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(l10n.depositTransferUndone)));
+    await _loadMembers();
   }
 
   // Any admin: takes their own admin role away. The API refuses if this is the last admin.
@@ -355,7 +366,7 @@ class _MembersTabState extends State<MembersTab> {
       case _MemberAction.toggleAdmin:
         _changeRole(member);
       case _MemberAction.remove:
-        _removeMember(member);
+        _openMoveOut(member, isSelf: false);
       case _MemberAction.transferOwnership:
         _transferOwnership(member);
       case _MemberAction.stepDown:
@@ -484,6 +495,15 @@ class _MembersTabState extends State<MembersTab> {
             for (final invitation in _invitations)
               _buildInvitationCard(invitation, l10n),
           ],
+          // The deposit comes after the members, so the member list stays the main part of the tab.
+          DepositCard(
+            deposit: _deposit,
+            canEdit: _me != null,
+            isAdmin: _iAmAdmin,
+            onEdit: _editDeposit,
+            onJoin: _joinDeposit,
+            onUndoTransfer: _undoTransfer,
+          ),
           if (_me != null)
             Padding(
               padding: const EdgeInsets.only(top: 24),

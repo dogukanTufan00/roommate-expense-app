@@ -1694,4 +1694,157 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notificationBillFallbackName => 'Shared bill';
+
+  @override
+  String get depositTitle => 'Deposit';
+
+  @override
+  String get depositNone => 'No deposit recorded';
+
+  @override
+  String get depositAdd => 'Add deposit';
+
+  @override
+  String get depositTotal => 'Total';
+
+  @override
+  String depositUnassigned(String amount) {
+    return 'Unassigned: $amount';
+  }
+
+  @override
+  String get depositFormerMember => '(left)';
+
+  @override
+  String get depositJoin => 'Join';
+
+  @override
+  String get depositJoinTitle => 'Join the deposit';
+
+  @override
+  String depositJoinExplain(String name) {
+    return 'This amount is taken from the current shares, in proportion to each share. $name owes it to them.';
+  }
+
+  @override
+  String get depositJoined => 'Joined the deposit.';
+
+  @override
+  String depositTransfersTitle(int count) {
+    return 'Transfers ($count)';
+  }
+
+  @override
+  String get depositTransferUndo => 'Undo transfer';
+
+  @override
+  String get depositTransferUndoConfirm =>
+      'Undo this transfer? The amount goes back to its original owner and the debts it created are removed.';
+
+  @override
+  String get depositTransferUndone => 'Transfer undone.';
+
+  @override
+  String get depositSaved => 'Deposit saved.';
+
+  @override
+  String get depositDeleted => 'Deposit deleted.';
+
+  @override
+  String get depositDeleteAction => 'Delete deposit';
+
+  @override
+  String get depositDeleteConfirm =>
+      'Delete the deposit record? This cannot be undone.';
+
+  @override
+  String get depositTotalLabel => 'Total deposit';
+
+  @override
+  String depositSumLine(String sum, String total) {
+    return 'Total: $sum / $total';
+  }
+
+  @override
+  String get depositEqualSplit => 'Split equally';
+
+  @override
+  String get depositEqualSplitHint =>
+      'Splits the total equally among the active members. Former members keep their amounts.';
+
+  @override
+  String get errorDepositSharesSum =>
+      'The shares must add up to the total deposit.';
+
+  @override
+  String get errorDepositTransfersFirst => 'Undo the deposit transfers first.';
+
+  @override
+  String get moveOutTitleSelf => 'You are moving out';
+
+  @override
+  String moveOutTitleOther(String name) {
+    return '$name is moving out';
+  }
+
+  @override
+  String moveOutDepositShare(String amount) {
+    return 'Deposit share: $amount';
+  }
+
+  @override
+  String get moveOutPassDeposit => 'Pass the share on to the others';
+
+  @override
+  String moveOutPassHint(int count, String perPerson) {
+    return 'The other $count members split it equally ($perPerson each).';
+  }
+
+  @override
+  String get moveOutDepositPassed => 'Passed on';
+
+  @override
+  String get moveOutNoOtherMembers => 'No other active member to pass it to.';
+
+  @override
+  String get moveOutDebtsTitle => 'Open debts and credits';
+
+  @override
+  String get moveOutNoOpenDebts => 'No open debts or credits';
+
+  @override
+  String get moveOutMarkPaid => 'Paid';
+
+  @override
+  String moveOutRemoveButton(String name) {
+    return 'Remove $name from home';
+  }
+
+  @override
+  String historyDepositUpdated(String actor) {
+    return '$actor updated the deposit';
+  }
+
+  @override
+  String historyDepositTransferred(String actor, String target, String amount) {
+    return '$actor passed $target\'s deposit share to the others · $amount';
+  }
+
+  @override
+  String historyDepositTransferDeleted(String actor) {
+    return '$actor undid a deposit transfer';
+  }
+
+  @override
+  String get historyFieldDeposit => 'Deposit';
+
+  @override
+  String historyDepositJoined(String target, String amount) {
+    return '$target joined the deposit · $amount';
+  }
+
+  @override
+  String historyDepositPassedOwn(String actor, String amount) {
+    return '$actor passed their deposit share to the others · $amount';
+  }
 }

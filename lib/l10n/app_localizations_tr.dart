@@ -1670,4 +1670,157 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get notificationBillFallbackName => 'Ortak ödeme';
+
+  @override
+  String get depositTitle => 'Depozito';
+
+  @override
+  String get depositNone => 'Depozito kaydı yok';
+
+  @override
+  String get depositAdd => 'Depozito ekle';
+
+  @override
+  String get depositTotal => 'Toplam';
+
+  @override
+  String depositUnassigned(String amount) {
+    return 'Atanmamış: $amount';
+  }
+
+  @override
+  String get depositFormerMember => '(ayrıldı)';
+
+  @override
+  String get depositJoin => 'Ortak et';
+
+  @override
+  String get depositJoinTitle => 'Depozitoya ortak et';
+
+  @override
+  String depositJoinExplain(String name) {
+    return 'Bu tutar mevcut ortakların paylarından, payları oranında düşülür; $name onlara borçlanır.';
+  }
+
+  @override
+  String get depositJoined => 'Depozitoya ortak olundu.';
+
+  @override
+  String depositTransfersTitle(int count) {
+    return 'Devirler ($count)';
+  }
+
+  @override
+  String get depositTransferUndo => 'Devri geri al';
+
+  @override
+  String get depositTransferUndoConfirm =>
+      'Bu devir geri alınsın mı? Tutar eski sahibine döner ve bu devirden doğan borçlar silinir.';
+
+  @override
+  String get depositTransferUndone => 'Devir geri alındı.';
+
+  @override
+  String get depositSaved => 'Depozito kaydedildi.';
+
+  @override
+  String get depositDeleted => 'Depozito silindi.';
+
+  @override
+  String get depositDeleteAction => 'Depozitoyu sil';
+
+  @override
+  String get depositDeleteConfirm =>
+      'Depozito kaydı silinsin mi? Bu işlem geri alınamaz.';
+
+  @override
+  String get depositTotalLabel => 'Toplam depozito';
+
+  @override
+  String depositSumLine(String sum, String total) {
+    return 'Toplam: $sum / $total';
+  }
+
+  @override
+  String get depositEqualSplit => 'Eşit böl';
+
+  @override
+  String get depositEqualSplitHint =>
+      'Toplamı aktif üyelere eşit böler. Ayrılmış üyelerin payları aynen kalır.';
+
+  @override
+  String get errorDepositSharesSum =>
+      'Paylar toplamı depozito tutarına eşit olmalı';
+
+  @override
+  String get errorDepositTransfersFirst => 'Önce depozito devirlerini geri al';
+
+  @override
+  String get moveOutTitleSelf => 'Evden ayrılıyorsun';
+
+  @override
+  String moveOutTitleOther(String name) {
+    return '$name taşınıyor';
+  }
+
+  @override
+  String moveOutDepositShare(String amount) {
+    return 'Depozitodaki pay: $amount';
+  }
+
+  @override
+  String get moveOutPassDeposit => 'Payını kalanlara devret';
+
+  @override
+  String moveOutPassHint(int count, String perPerson) {
+    return 'Kalan $count kişi eşit öder (kişi başı $perPerson).';
+  }
+
+  @override
+  String get moveOutDepositPassed => 'Devredildi';
+
+  @override
+  String get moveOutNoOtherMembers => 'Payı devredecek başka aktif üye yok.';
+
+  @override
+  String get moveOutDebtsTitle => 'Açık borç ve alacaklar';
+
+  @override
+  String get moveOutNoOpenDebts => 'Açık borç/alacak yok';
+
+  @override
+  String get moveOutMarkPaid => 'Ödendi';
+
+  @override
+  String moveOutRemoveButton(String name) {
+    return '$name evden çıkar';
+  }
+
+  @override
+  String historyDepositUpdated(String actor) {
+    return '$actor depozitoyu güncelledi';
+  }
+
+  @override
+  String historyDepositTransferred(String actor, String target, String amount) {
+    return '$actor, $target adlı kişinin depozito payını kalanlara devretti · $amount';
+  }
+
+  @override
+  String historyDepositTransferDeleted(String actor) {
+    return '$actor bir depozito devrini geri aldı';
+  }
+
+  @override
+  String get historyFieldDeposit => 'Depozito';
+
+  @override
+  String historyDepositJoined(String target, String amount) {
+    return '$target depozitoya ortak oldu · $amount';
+  }
+
+  @override
+  String historyDepositPassedOwn(String actor, String amount) {
+    return '$actor depozito payını kalanlara devretti · $amount';
+  }
 }
