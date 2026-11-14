@@ -3115,6 +3115,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Share this payment'**
   String get shareSettlement;
+
+  /// No description provided for @showIbanQr.
+  ///
+  /// In en, this message translates to:
+  /// **'Show as QR code'**
+  String get showIbanQr;
+
+  /// No description provided for @ibanQrTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Show QR code'**
+  String get ibanQrTooltip;
+
+  /// No description provided for @ibanQrHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan it with your phone\'s camera to copy the IBAN.'**
+  String get ibanQrHint;
+
+  /// No description provided for @ibanQrCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get ibanQrCopy;
+
+  /// No description provided for @ibanQrShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get ibanQrShare;
+
+  /// No description provided for @ibanShareText.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} IBAN: {iban}'**
+  String ibanShareText(String name, String iban);
 }
 
 class _AppLocalizationsDelegate

@@ -1486,5 +1486,21 @@
       }
     }
   },
-  "shareSettlement": "Share this payment"
+  "shareSettlement": "Share this payment",
+  "showIbanQr": "Show as QR code",
+  "ibanQrTooltip": "Show QR code",
+  "ibanQrHint": "Scan it with your phone's camera to copy the IBAN.",
+  "ibanQrCopy": "Copy",
+  "ibanQrShare": "Share",
+  "ibanShareText": "{name} IBAN: {iban}",
+  "@ibanShareText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "iban": {
+        "type": "String"
+      }
+    }
+  }
 }

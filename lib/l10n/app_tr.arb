@@ -1387,5 +1387,21 @@
       }
     }
   },
-  "shareSettlement": "Bu ödemeyi paylaş"
+  "shareSettlement": "Bu ödemeyi paylaş",
+  "showIbanQr": "QR olarak göster",
+  "ibanQrTooltip": "QR kodu göster",
+  "ibanQrHint": "Telefon kamerasıyla okutup IBAN'ı kopyalayabilirsin.",
+  "ibanQrCopy": "Kopyala",
+  "ibanQrShare": "Paylaş",
+  "ibanShareText": "{name} IBAN: {iban}",
+  "@ibanShareText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "iban": {
+        "type": "String"
+      }
+    }
+  }
 }

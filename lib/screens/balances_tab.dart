@@ -15,6 +15,7 @@ import 'package:roommate_expense_app/utils/iban.dart';
 import 'package:roommate_expense_app/utils/split.dart';
 import 'package:roommate_expense_app/utils/summary_text.dart';
 import 'package:roommate_expense_app/widgets/attachments_section.dart';
+import 'package:roommate_expense_app/widgets/iban_qr_sheet.dart';
 import 'package:roommate_expense_app/widgets/illustration.dart';
 
 // What the share summary sheet returns: copy the text, or share it.
@@ -765,6 +766,20 @@ class _BalancesTabState extends State<BalancesTab> {
                       color: AppColors.muted,
                     ),
                     onPressed: () => copyIban(context, toIban),
+                  ),
+                  IconButton(
+                    tooltip: l10n.ibanQrTooltip,
+                    visualDensity: VisualDensity.compact,
+                    icon: const Icon(
+                      Icons.qr_code_2_rounded,
+                      size: 18,
+                      color: AppColors.muted,
+                    ),
+                    onPressed: () => showIbanQrSheet(
+                      context,
+                      name: s.toName,
+                      iban: toIban,
+                    ),
                   ),
                 ],
               )

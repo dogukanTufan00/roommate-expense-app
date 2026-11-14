@@ -10,6 +10,7 @@ import 'package:roommate_expense_app/session.dart';
 import 'package:roommate_expense_app/theme.dart';
 import 'package:roommate_expense_app/utils/errors.dart';
 import 'package:roommate_expense_app/utils/iban.dart';
+import 'package:roommate_expense_app/widgets/iban_qr_sheet.dart';
 import 'package:roommate_expense_app/widgets/language_menu_button.dart';
 
 // The user's own profile: name, IBAN (roommates use it to pay them) and password.
@@ -220,6 +221,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
               return null;
             },
           ),
+          // Shows the saved IBAN (not unsaved typing) as a QR code for roommates to scan.
+          if (profile.iban != null && normalizeIban(profile.iban!).isNotEmpty)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton.icon(
+                onPressed: () => showIbanQrSheet(
+                  context,
+                  name: profile.name,
+                  iban: profile.iban!,
+                ),
+                icon: const Icon(Icons.qr_code_2_rounded),
+                label: Text(l10n.showIbanQr),
+              ),
+            ),
           const SizedBox(height: 24),
           SizedBox(
             width: double.infinity,

@@ -1866,4 +1866,25 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get shareSettlement => 'Bu ödemeyi paylaş';
+
+  @override
+  String get showIbanQr => 'QR olarak göster';
+
+  @override
+  String get ibanQrTooltip => 'QR kodu göster';
+
+  @override
+  String get ibanQrHint =>
+      'Telefon kamerasıyla okutup IBAN\'ı kopyalayabilirsin.';
+
+  @override
+  String get ibanQrCopy => 'Kopyala';
+
+  @override
+  String get ibanQrShare => 'Paylaş';
+
+  @override
+  String ibanShareText(String name, String iban) {
+    return '$name IBAN: $iban';
+  }
 }
