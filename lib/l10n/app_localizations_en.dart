@@ -1911,4 +1911,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String ibanShareText(String name, String iban) {
     return '$name IBAN: $iban';
   }
+
+  @override
+  String get appearance => 'Appearance';
+
+  @override
+  String get themeLight => 'Light';
+
+  @override
+  String get themeDark => 'Dark';
+
+  @override
+  String get themeSystem => 'System';
 }

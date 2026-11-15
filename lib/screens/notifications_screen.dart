@@ -245,6 +245,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     AppLocalizations l10n,
   ) {
     if (items.isEmpty) return const [];
+    final palette = context.palette;
     return [
       Padding(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
@@ -252,7 +253,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           title,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w800,
-                color: AppColors.muted,
+                color: palette.muted,
               ),
         ),
       ),
@@ -264,12 +265,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     final text = notificationText(l10n, item);
     final style = _styleFor(item.type);
     final theme = Theme.of(context);
+    final palette = context.palette;
 
     return Card(
       // Unread items get a warm tint, so they stand out from the read ones.
       color: item.read
-          ? AppColors.paper
-          : AppColors.terracotta.withValues(alpha: 0.10),
+          ? palette.paper
+          : palette.terracotta.withValues(alpha: 0.10),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () => _onTap(item),
@@ -303,15 +305,15 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     const SizedBox(height: 4),
                     Text(
                       _relativeTime(l10n, item.createdAt),
-                      style: theme.textTheme.bodySmall?.copyWith(color: AppColors.muted),
+                      style: theme.textTheme.bodySmall?.copyWith(color: palette.muted),
                     ),
                   ],
                 ),
               ),
               if (!item.read)
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(left: 8, top: 6),
-                  child: CircleAvatar(radius: 4, backgroundColor: AppColors.terracotta),
+                  child: CircleAvatar(radius: 4, backgroundColor: palette.terracotta),
                 ),
             ],
           ),
@@ -322,32 +324,33 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   // The icon and color for each kind of notification.
   _TypeStyle _styleFor(NotificationType type) {
+    final palette = context.palette;
     return switch (type) {
       NotificationType.expenseAdded =>
-        const _TypeStyle(Icons.receipt_long_rounded, AppColors.terracotta),
+        _TypeStyle(Icons.receipt_long_rounded, palette.terracotta),
       NotificationType.paymentRecorded =>
-        const _TypeStyle(Icons.payments_rounded, AppColors.sage),
+        _TypeStyle(Icons.payments_rounded, palette.sage),
       NotificationType.invitationReceived =>
-        const _TypeStyle(Icons.mail_rounded, AppColors.mustard),
+        _TypeStyle(Icons.mail_rounded, palette.mustard),
       NotificationType.invitationAccepted =>
-        const _TypeStyle(Icons.person_add_rounded, AppColors.sage),
+        _TypeStyle(Icons.person_add_rounded, palette.sage),
       NotificationType.recurringExpenseAdded =>
-        const _TypeStyle(Icons.autorenew_rounded, AppColors.ink),
+        _TypeStyle(Icons.autorenew_rounded, palette.ink),
       NotificationType.paymentReminder =>
-        const _TypeStyle(Icons.notifications_active_rounded, AppColors.mustard),
+        _TypeStyle(Icons.notifications_active_rounded, palette.mustard),
       // Edits use the same edit icon and color as in the history screen.
       NotificationType.expenseUpdated =>
-        const _TypeStyle(Icons.edit_rounded, AppColors.mustard),
+        _TypeStyle(Icons.edit_rounded, palette.mustard),
       NotificationType.paymentUpdated =>
-        const _TypeStyle(Icons.edit_rounded, AppColors.mustard),
+        _TypeStyle(Icons.edit_rounded, palette.mustard),
       NotificationType.choreTurn =>
-        const _TypeStyle(Icons.cleaning_services_rounded, AppColors.sage),
+        _TypeStyle(Icons.cleaning_services_rounded, palette.sage),
       NotificationType.choreReminder =>
-        const _TypeStyle(Icons.touch_app_rounded, AppColors.mustard),
+        _TypeStyle(Icons.touch_app_rounded, palette.mustard),
       NotificationType.billDueSoon =>
-        const _TypeStyle(Icons.event_outlined, AppColors.mustard),
+        _TypeStyle(Icons.event_outlined, palette.mustard),
       NotificationType.unknown =>
-        const _TypeStyle(Icons.notifications_rounded, AppColors.muted),
+        _TypeStyle(Icons.notifications_rounded, palette.muted),
     };
   }
 
@@ -366,17 +369,18 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   Widget _buildEmptyState(AppLocalizations l10n) {
     final theme = Theme.of(context);
+    final palette = context.palette;
     return Padding(
       padding: const EdgeInsets.fromLTRB(32, 80, 32, 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.notifications_none_rounded, size: 72, color: AppColors.muted),
+          Icon(Icons.notifications_none_rounded, size: 72, color: palette.muted),
           const SizedBox(height: 16),
           Text(
             l10n.notificationsEmpty,
             textAlign: TextAlign.center,
-            style: theme.textTheme.bodyLarge?.copyWith(color: AppColors.muted),
+            style: theme.textTheme.bodyLarge?.copyWith(color: palette.muted),
           ),
         ],
       ),

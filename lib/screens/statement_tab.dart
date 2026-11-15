@@ -312,11 +312,12 @@ class _StatementTabState extends State<StatementTab> {
   // The hero card: total spent in the period, and the payments next to it.
   Widget _summaryCard(Statement s, AppLocalizations l10n, String tag) {
     final theme = Theme.of(context);
+    final palette = context.palette;
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 8, 16, 8),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.terracotta.withValues(alpha: 0.10),
+        color: palette.terracotta.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(24),
       ),
       child: Column(
@@ -325,7 +326,7 @@ class _StatementTabState extends State<StatementTab> {
           Text(
             l10n.statementTotalSpent,
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: AppColors.muted,
+              color: palette.muted,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -341,7 +342,7 @@ class _StatementTabState extends State<StatementTab> {
           Text(
             l10n.statementExpenseCount(s.expenseCount),
             style: theme.textTheme.bodyLarge?.copyWith(
-              color: AppColors.ink,
+              color: palette.ink,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -349,7 +350,7 @@ class _StatementTabState extends State<StatementTab> {
           Text(
             l10n.statementPaymentsTotal,
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: AppColors.muted,
+              color: palette.muted,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -362,7 +363,7 @@ class _StatementTabState extends State<StatementTab> {
           ),
           Text(
             l10n.statementPaymentCount(s.paymentCount),
-            style: theme.textTheme.bodySmall?.copyWith(color: AppColors.muted),
+            style: theme.textTheme.bodySmall?.copyWith(color: palette.muted),
           ),
         ],
       ),
@@ -371,6 +372,7 @@ class _StatementTabState extends State<StatementTab> {
 
   // The mustard tip: who made most of the payments in this period.
   Widget _insightCard(DominantPayer payer, AppLocalizations l10n, String tag) {
+    final palette = context.palette;
     final percent = formatPercentFor(tag, payer.paidPercent);
     final text = payer.userId == _myUserId
         ? l10n.statementDominantPayerYou(percent)
@@ -380,19 +382,19 @@ class _StatementTabState extends State<StatementTab> {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.mustard.withValues(alpha: 0.25),
+        color: palette.mustard.withValues(alpha: 0.25),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.lightbulb_rounded, color: AppColors.ink),
+          Icon(Icons.lightbulb_rounded, color: palette.ink),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
               text,
-              style: const TextStyle(
-                color: AppColors.ink,
+              style: TextStyle(
+                color: palette.ink,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -431,6 +433,7 @@ class _StatementTabState extends State<StatementTab> {
   // One member: what they paid, a bar against the whole, and their share and difference.
   Widget _memberRow(StatementMember m, AppLocalizations l10n, String tag) {
     final theme = Theme.of(context);
+    final palette = context.palette;
     final color = avatarColor(m.userId);
     final isMe = m.userId == _myUserId;
     final name = [
@@ -441,10 +444,10 @@ class _StatementTabState extends State<StatementTab> {
 
     final settled = m.net.abs() < 0.005;
     final netColor = settled
-        ? AppColors.muted
+        ? palette.muted
         : m.net > 0
-            ? AppColors.getsBack
-            : AppColors.owes;
+            ? palette.getsBack
+            : palette.owes;
     final netSign = settled ? '' : (m.net > 0 ? '+' : '-');
 
     return Card(
@@ -486,7 +489,7 @@ class _StatementTabState extends State<StatementTab> {
                     Text(
                       '%${formatPercentFor(tag, m.paidPercent)}',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: AppColors.muted,
+                        color: palette.muted,
                       ),
                     ),
                   ],
@@ -502,13 +505,13 @@ class _StatementTabState extends State<StatementTab> {
                 Text(
                   l10n.statementShareLine(formatMoneyFor(tag, m.share)),
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: AppColors.muted,
+                    color: palette.muted,
                   ),
                 ),
                 Text(
                   '·',
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: AppColors.muted,
+                    color: palette.muted,
                   ),
                 ),
                 Text(
@@ -531,6 +534,7 @@ class _StatementTabState extends State<StatementTab> {
   // One category: icon, name, total, and a bar with its share of the period.
   Widget _categoryRow(StatementCategory c, AppLocalizations l10n, String tag) {
     final theme = Theme.of(context);
+    final palette = context.palette;
     final color = categoryColor(c.category);
 
     return Card(
@@ -573,7 +577,7 @@ class _StatementTabState extends State<StatementTab> {
                     '%${formatPercentFor(tag, c.percent)} · '
                     '${l10n.statementExpenseCount(c.count)}',
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: AppColors.muted,
+                      color: palette.muted,
                     ),
                   ),
                 ],
@@ -587,6 +591,7 @@ class _StatementTabState extends State<StatementTab> {
 
   // A thin rounded bar. fraction is 0 to 1.
   Widget _bar(double fraction, Color color) {
+    final palette = context.palette;
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: SizedBox(
@@ -594,7 +599,7 @@ class _StatementTabState extends State<StatementTab> {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            const ColoredBox(color: AppColors.line),
+            ColoredBox(color: palette.line),
             FractionallySizedBox(
               widthFactor: fraction.clamp(0.0, 1.0).toDouble(),
               alignment: Alignment.centerLeft,
@@ -683,6 +688,7 @@ class _StatementTabState extends State<StatementTab> {
     NumberFormat compact,
     String tag,
   ) {
+    final palette = context.palette;
     const barWidth = 22.0;
     const chartHeight = 110.0;
     final total = month.total;
@@ -690,7 +696,7 @@ class _StatementTabState extends State<StatementTab> {
 
     final Widget bar;
     if (total <= 0) {
-      bar = Container(width: barWidth, height: 2, color: AppColors.line);
+      bar = Container(width: barWidth, height: 2, color: palette.line);
     } else {
       bar = SizedBox(
         width: barWidth,
@@ -730,10 +736,10 @@ class _StatementTabState extends State<StatementTab> {
           fit: BoxFit.scaleDown,
           child: Text(
             DateFormat.MMM(tag).format(month.month),
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w700,
-              color: AppColors.muted,
+              color: palette.muted,
             ),
           ),
         ),
@@ -770,13 +776,14 @@ class _StatementTabState extends State<StatementTab> {
 
   // A section title, styled like the balances tab.
   Widget _sectionTitle(ThemeData theme, String text) {
+    final palette = context.palette;
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
       child: Text(
         text,
         style: theme.textTheme.titleMedium?.copyWith(
           fontWeight: FontWeight.w800,
-          color: AppColors.ink,
+          color: palette.ink,
         ),
       ),
     );

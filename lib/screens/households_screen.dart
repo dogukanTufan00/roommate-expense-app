@@ -240,6 +240,7 @@ class _HouseholdsScreenState extends State<HouseholdsScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final palette = context.palette;
 
     return Scaffold(
       appBar: AppBar(
@@ -248,7 +249,7 @@ class _HouseholdsScreenState extends State<HouseholdsScreen> {
           Badge.count(
             count: _unreadCount,
             isLabelVisible: _unreadCount > 0,
-            backgroundColor: AppColors.terracotta,
+            backgroundColor: palette.terracotta,
             child: IconButton(
               icon: const Icon(Icons.notifications_outlined),
               tooltip: l10n.notificationsTitle,
@@ -331,12 +332,13 @@ class _HouseholdsScreenState extends State<HouseholdsScreen> {
   // A warm, mustard-tinted card with the accept and decline buttons.
   Widget _buildInvitationCard(Invitation invitation, AppLocalizations l10n) {
     final busy = _busyInvitationIds.contains(invitation.id);
+    final palette = context.palette;
 
     return Card(
-      color: AppColors.mustard.withValues(alpha: 0.18),
+      color: palette.mustard.withValues(alpha: 0.18),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
-        side: BorderSide(color: AppColors.mustard.withValues(alpha: 0.7)),
+        side: BorderSide(color: palette.mustard.withValues(alpha: 0.7)),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -349,10 +351,10 @@ class _HouseholdsScreenState extends State<HouseholdsScreen> {
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
-                    color: AppColors.paper,
+                    color: palette.paper,
                     borderRadius: BorderRadius.circular(14),
                   ),
-                  child: const Icon(Icons.mail_rounded, color: AppColors.terracotta),
+                  child: Icon(Icons.mail_rounded, color: palette.terracotta),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -395,6 +397,7 @@ class _HouseholdsScreenState extends State<HouseholdsScreen> {
 
   Widget _buildEmptyState(AppLocalizations l10n) {
     final theme = Theme.of(context);
+    final palette = context.palette;
     return Padding(
       padding: const EdgeInsets.fromLTRB(32, 80, 32, 0),
       child: Column(
@@ -415,7 +418,7 @@ class _HouseholdsScreenState extends State<HouseholdsScreen> {
           Text(
             l10n.noHouseholds,
             textAlign: TextAlign.center,
-            style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted),
+            style: theme.textTheme.bodyMedium?.copyWith(color: palette.muted),
           ),
         ],
       ),
@@ -423,22 +426,23 @@ class _HouseholdsScreenState extends State<HouseholdsScreen> {
   }
 
   Widget _buildHouseholdCard(Household household) {
+    final palette = context.palette;
     return Card(
       child: ListTile(
         leading: Container(
           width: 44,
           height: 44,
           decoration: BoxDecoration(
-            color: AppColors.terracotta.withValues(alpha: 0.12),
+            color: palette.terracotta.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(14),
           ),
-          child: const Icon(Icons.house_rounded, color: AppColors.terracotta),
+          child: Icon(Icons.house_rounded, color: palette.terracotta),
         ),
         title: Text(
           household.name,
           style: const TextStyle(fontWeight: FontWeight.w700),
         ),
-        trailing: const Icon(Icons.chevron_right_rounded, color: AppColors.muted),
+        trailing: Icon(Icons.chevron_right_rounded, color: palette.muted),
         onTap: () => _openHousehold(household),
       ),
     );

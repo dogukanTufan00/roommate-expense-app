@@ -582,6 +582,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
 
   Widget _buildBody(AppLocalizations l10n) {
     final members = _members;
+    final palette = context.palette;
 
     if (members == null) {
       if (_loadError != null) {
@@ -616,15 +617,15 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                   vertical: 10,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.sage.withValues(alpha: 0.15),
+                  color: palette.sage.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.shopping_cart_outlined,
                       size: 18,
-                      color: AppColors.sage,
+                      color: palette.sage,
                     ),
                     const SizedBox(width: 8),
                     Expanded(
@@ -751,7 +752,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                   child: Text(
                     l10n.reminderHelper,
                     style: Theme.of(context).textTheme.bodySmall
-                        ?.copyWith(color: AppColors.muted),
+                        ?.copyWith(color: palette.muted),
                   ),
                 ),
             ],
@@ -762,7 +763,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                 child: Text(
                   l10n.recurringAutoHint(_date.day),
                   style: Theme.of(context).textTheme.bodySmall
-                      ?.copyWith(color: AppColors.muted),
+                      ?.copyWith(color: palette.muted),
                 ),
               ),
             const SizedBox(height: 16),
@@ -808,6 +809,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
     if (_readOnlySplit) return _buildStoredSplit(l10n, members);
 
     final theme = Theme.of(context);
+    final palette = context.palette;
     final amount = _amount;
     final remaining = _remainingUnits;
     final isEqual = _splitType == 'EQUAL';
@@ -838,7 +840,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
           const SizedBox(height: 8),
           Text(
             l10n.splitFormerMembers(_formerNames.join(', ')),
-            style: theme.textTheme.bodySmall?.copyWith(color: AppColors.owes),
+            style: theme.textTheme.bodySmall?.copyWith(color: palette.owes),
           ),
         ],
         const SizedBox(height: 12),
@@ -855,7 +857,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
           const SizedBox(height: 8),
           Text(
             l10n.splitDefaultApplied,
-            style: theme.textTheme.bodySmall?.copyWith(color: AppColors.muted),
+            style: theme.textTheme.bodySmall?.copyWith(color: palette.muted),
           ),
         ],
         const SizedBox(height: 8),
@@ -875,7 +877,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
             textAlign: TextAlign.end,
             style: theme.textTheme.titleSmall?.copyWith(
               fontWeight: FontWeight.w800,
-              color: remaining == 0 ? AppColors.getsBack : AppColors.owes,
+              color: remaining == 0 ? palette.getsBack : palette.owes,
             ),
           ),
         ],
@@ -884,7 +886,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
           Text(
             l10n.splitNotBalanced,
             textAlign: TextAlign.end,
-            style: theme.textTheme.bodySmall?.copyWith(color: AppColors.owes),
+            style: theme.textTheme.bodySmall?.copyWith(color: palette.owes),
           ),
         ],
       ],
@@ -894,6 +896,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
   // Edit only, untouched split: the stored shares, read-only. Former members get a tag.
   Widget _buildStoredSplit(AppLocalizations l10n, List<Member> members) {
     final theme = Theme.of(context);
+    final palette = context.palette;
     final expense = widget.expense!;
     final activeIds = {for (final m in members) m.userId};
 
@@ -927,7 +930,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                         Text(
                           l10n.movedOutTag,
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color: AppColors.muted,
+                            color: palette.muted,
                           ),
                         ),
                       ],
@@ -938,9 +941,9 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                   share.percent == null
                       ? formatMoney(context, share.owedAmount)
                       : '%${formatPercent(context, share.percent!)} · ${formatMoney(context, share.owedAmount)}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.w800,
-                    color: AppColors.ink,
+                    color: palette.ink,
                   ),
                 ),
               ],
@@ -950,7 +953,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
           const SizedBox(height: 4),
           Text(
             l10n.splitAmountChanged,
-            style: theme.textTheme.bodySmall?.copyWith(color: AppColors.owes),
+            style: theme.textTheme.bodySmall?.copyWith(color: palette.owes),
           ),
         ],
         Align(
@@ -972,6 +975,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
     bool isEqual,
   ) {
     final theme = Theme.of(context);
+    final palette = context.palette;
 
     if (isEqual) {
       final share = amount == null ? null : amount / _selected.length;
@@ -987,9 +991,9 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
             ),
             Text(
               share == null ? '' : formatMoney(context, share),
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w800,
-                color: AppColors.ink,
+                color: palette.ink,
               ),
             ),
           ],
@@ -1020,7 +1024,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                   Text(
                     hint,
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: AppColors.muted,
+                      color: palette.muted,
                     ),
                   ),
               ],

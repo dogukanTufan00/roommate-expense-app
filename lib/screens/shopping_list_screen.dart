@@ -256,6 +256,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
   }
 
   Widget _buildBody(AppLocalizations l10n) {
+    final palette = context.palette;
     if (_loading) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -301,7 +302,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                 l10n.shoppingBoughtNote,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColors.muted,
+                      color: palette.muted,
                     ),
               ),
             ),
@@ -314,6 +315,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
   // Shown when no item is open. Bought items may still be listed below it.
   Widget _emptyState(AppLocalizations l10n) {
     final theme = Theme.of(context);
+    final palette = context.palette;
     return Padding(
       padding: const EdgeInsets.fromLTRB(32, 32, 32, 16),
       child: Column(
@@ -334,7 +336,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
           Text(
             l10n.shoppingEmptyHint,
             textAlign: TextAlign.center,
-            style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted),
+            style: theme.textTheme.bodyMedium?.copyWith(color: palette.muted),
           ),
         ],
       ),
@@ -344,7 +346,8 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
   // One open item: a checkbox to tick it as bought, its name and a menu for edit and delete.
   Widget _openRow(ShoppingItem item, AppLocalizations l10n) {
     final theme = Theme.of(context);
-    final muted = theme.textTheme.bodySmall?.copyWith(color: AppColors.muted);
+    final palette = context.palette;
+    final muted = theme.textTheme.bodySmall?.copyWith(color: palette.muted);
     final busy = _busy.contains(item.id);
     final note = item.note;
     final errorColor = theme.colorScheme.error;
@@ -441,7 +444,8 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
   // One bought item: struck through, who bought it and when, and a button to put it back.
   Widget _boughtRow(ShoppingItem item, AppLocalizations l10n) {
     final theme = Theme.of(context);
-    final muted = theme.textTheme.bodySmall?.copyWith(color: AppColors.muted);
+    final palette = context.palette;
+    final muted = theme.textTheme.bodySmall?.copyWith(color: palette.muted);
     final busy = _busy.contains(item.id);
     final note = item.note;
     final boughtAt = item.boughtAt;
@@ -460,9 +464,9 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
           item.name,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
+          style: TextStyle(
             decoration: TextDecoration.lineThrough,
-            color: AppColors.muted,
+            color: palette.muted,
           ),
         ),
         subtitle: Column(
@@ -491,15 +495,15 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     decoration: BoxDecoration(
-                      color: AppColors.sage.withValues(alpha: 0.18),
+                      color: palette.sage.withValues(alpha: 0.18),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
                       l10n.shoppingSavedAsExpense,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.sage,
+                        color: palette.sage,
                       ),
                     ),
                   ),
@@ -611,6 +615,7 @@ class _ItemSheetState extends State<_ItemSheet> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final palette = context.palette;
     final canSave = !_saving && _nameController.text.trim().isNotEmpty;
 
     return Padding(
@@ -656,7 +661,7 @@ class _ItemSheetState extends State<_ItemSheet> {
             Text(
               l10n.shoppingAddedNotice(_lastAdded!),
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: AppColors.getsBack,
+                color: palette.getsBack,
                 fontWeight: FontWeight.w700,
               ),
             ),

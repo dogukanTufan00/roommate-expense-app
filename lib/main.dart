@@ -42,18 +42,25 @@ class _RoommateAppState extends State<RoommateApp> {
 
   @override
   Widget build(BuildContext context) {
-    // Rebuilds the whole app when the user changes the language.
+    // Rebuilds the whole app when the user changes the language or the theme.
     return ValueListenableBuilder<Locale?>(
       valueListenable: Session.locale,
       builder: (context, value, _) {
-        return MaterialApp(
-          navigatorKey: navigatorKey,
-          onGenerateTitle: (ctx) => AppLocalizations.of(ctx).appTitle,
-          locale: value, // null = follow the phone's language
-          supportedLocales: AppLocalizations.supportedLocales,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          theme: buildAppTheme(),
-          home: Session.isLoggedIn ? const HouseholdsScreen() : const LoginScreen(),
+        return ValueListenableBuilder<ThemeMode>(
+          valueListenable: Session.themeMode,
+          builder: (context, mode, _) {
+            return MaterialApp(
+              navigatorKey: navigatorKey,
+              onGenerateTitle: (ctx) => AppLocalizations.of(ctx).appTitle,
+              locale: value, // null = follow the phone's language
+              supportedLocales: AppLocalizations.supportedLocales,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              theme: buildAppTheme(),
+              darkTheme: buildDarkAppTheme(),
+              themeMode: mode, // light, dark, or follow the phone
+              home: Session.isLoggedIn ? const HouseholdsScreen() : const LoginScreen(),
+            );
+          },
         );
       },
     );

@@ -174,6 +174,7 @@ class _ChoreFormScreenState extends State<ChoreFormScreen> {
     }
 
     final theme = Theme.of(context);
+    final palette = context.palette;
     final current = _effectiveCurrentUserId;
     final isEdit = widget.chore != null;
 
@@ -198,7 +199,7 @@ class _ChoreFormScreenState extends State<ChoreFormScreen> {
           const SizedBox(height: 2),
           Text(
             l10n.choresPeopleHint,
-            style: theme.textTheme.bodySmall?.copyWith(color: AppColors.muted),
+            style: theme.textTheme.bodySmall?.copyWith(color: palette.muted),
           ),
           for (final member in members)
             CheckboxListTile(
@@ -226,11 +227,11 @@ class _ChoreFormScreenState extends State<ChoreFormScreen> {
                     contentPadding: EdgeInsets.zero,
                     leading: CircleAvatar(
                       radius: 14,
-                      backgroundColor: AppColors.mustard.withValues(alpha: 0.4),
+                      backgroundColor: palette.mustard.withValues(alpha: 0.4),
                       child: Text(
                         '${i + 1}',
-                        style: const TextStyle(
-                          color: AppColors.ink,
+                        style: TextStyle(
+                          color: palette.ink,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -238,9 +239,9 @@ class _ChoreFormScreenState extends State<ChoreFormScreen> {
                     title: Text(_nameOf(_order[i])),
                     trailing: ReorderableDragStartListener(
                       index: i,
-                      child: const Padding(
+                      child: Padding(
                         padding: EdgeInsets.all(8),
-                        child: Icon(Icons.drag_handle_rounded, color: AppColors.muted),
+                        child: Icon(Icons.drag_handle_rounded, color: palette.muted),
                       ),
                     ),
                   ),

@@ -1887,4 +1887,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String ibanShareText(String name, String iban) {
     return '$name IBAN: $iban';
   }
+
+  @override
+  String get appearance => 'Görünüm';
+
+  @override
+  String get themeLight => 'Açık';
+
+  @override
+  String get themeDark => 'Koyu';
+
+  @override
+  String get themeSystem => 'Sistem';
 }

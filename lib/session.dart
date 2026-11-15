@@ -17,8 +17,12 @@ class Session {
   // The app language. null means "follow the phone's language".
   static final ValueNotifier<Locale?> locale = ValueNotifier(null);
 
+  // The app theme. ThemeMode.system means "follow the phone's dark mode setting".
+  static final ValueNotifier<ThemeMode> themeMode = ValueNotifier(ThemeMode.system);
+
   static const String _tokenKey = 'token';
   static const String _languageKey = 'language';
+  static const String _themeKey = 'theme_mode';
 
   static bool get isLoggedIn => token != null;
 
@@ -27,6 +31,7 @@ class Session {
     final prefs = await SharedPreferences.getInstance();
 
     locale.value = _localeFromCode(prefs.getString(_languageKey));
+    themeMode.value = _themeModeFromCode(prefs.getString(_themeKey));
 
     final savedToken = prefs.getString(_tokenKey);
     if (savedToken == null || _isExpired(savedToken)) {
@@ -67,6 +72,25 @@ class Session {
     }
 
     locale.value = value;
+  }
+
+  // Changes the theme. Saving ThemeMode.system removes the saved choice.
+  static Future<void> setThemeMode(ThemeMode value) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (value == ThemeMode.system) {
+      await prefs.remove(_themeKey);
+    } else {
+      await prefs.setString(_themeKey, value == ThemeMode.dark ? 'dark' : 'light');
+    }
+
+    themeMode.value = value;
+  }
+
+  // Only "light" and "dark" are saved. Anything else means "follow the phone".
+  static ThemeMode _themeModeFromCode(String? code) {
+    if (code == 'light') return ThemeMode.light;
+    if (code == 'dark') return ThemeMode.dark;
+    return ThemeMode.system;
   }
 
   // Only "tr" and "en" are supported. Anything else means "phone language".

@@ -310,7 +310,7 @@ class _BalancesTabState extends State<BalancesTab> {
               ),
               Text(
                 formatDate(context, p.paidAt),
-                style: const TextStyle(color: AppColors.muted),
+                style: TextStyle(color: context.palette.muted),
               ),
               if (note != null) ...[
                 const SizedBox(height: 8),
@@ -339,8 +339,8 @@ class _BalancesTabState extends State<BalancesTab> {
                         icon: const Icon(Icons.delete_outline),
                         label: Text(l10n.delete),
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: AppColors.owes,
-                          side: const BorderSide(color: AppColors.owes),
+                          foregroundColor: context.palette.owes,
+                          side: BorderSide(color: context.palette.owes),
                         ),
                         onPressed: () => Navigator.pop(sheetContext, 'delete'),
                       ),
@@ -550,16 +550,16 @@ class _BalancesTabState extends State<BalancesTab> {
     final Color amountColor;
     final String line;
     if (net.abs() < 0.005) {
-      background = AppColors.mustard.withValues(alpha: 0.20);
-      amountColor = AppColors.ink;
+      background = context.palette.mustard.withValues(alpha: 0.20);
+      amountColor = context.palette.ink;
       line = l10n.summarySettled;
     } else if (net > 0) {
-      background = AppColors.getsBack.withValues(alpha: 0.12);
-      amountColor = AppColors.getsBack;
+      background = context.palette.getsBack.withValues(alpha: 0.12);
+      amountColor = context.palette.getsBack;
       line = l10n.summaryGetsBack;
     } else {
-      background = AppColors.owes.withValues(alpha: 0.10);
-      amountColor = AppColors.owes;
+      background = context.palette.owes.withValues(alpha: 0.10);
+      amountColor = context.palette.owes;
       line = l10n.summaryOwes;
     }
 
@@ -576,7 +576,7 @@ class _BalancesTabState extends State<BalancesTab> {
           Text(
             l10n.summaryTitle,
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: AppColors.muted,
+              color: context.palette.muted,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -593,7 +593,7 @@ class _BalancesTabState extends State<BalancesTab> {
           Text(
             line,
             style: theme.textTheme.bodyLarge?.copyWith(
-              color: AppColors.ink,
+              color: context.palette.ink,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -608,7 +608,7 @@ class _BalancesTabState extends State<BalancesTab> {
       text,
       style: theme.textTheme.titleMedium?.copyWith(
         fontWeight: FontWeight.w800,
-        color: AppColors.ink,
+        color: context.palette.ink,
       ),
     );
     if (trailing == null) {
@@ -654,13 +654,13 @@ class _BalancesTabState extends State<BalancesTab> {
     final Color color;
     if (b.netBalance.abs() < 0.005) {
       label = l10n.settled;
-      color = AppColors.muted;
+      color = context.palette.muted;
     } else if (b.netBalance > 0) {
       label = l10n.getsBack;
-      color = AppColors.getsBack;
+      color = context.palette.getsBack;
     } else {
       label = l10n.owes;
-      color = AppColors.owes;
+      color = context.palette.owes;
     }
 
     return Card(
@@ -721,11 +721,11 @@ class _BalancesTabState extends State<BalancesTab> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(child: _settlementPerson(s.fromUserId, s.fromName)),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(top: 8),
                   child: Icon(
                     Icons.arrow_forward_rounded,
-                    color: AppColors.muted,
+                    color: context.palette.muted,
                   ),
                 ),
                 Expanded(child: _settlementPerson(s.toUserId, s.toName)),
@@ -736,7 +736,7 @@ class _BalancesTabState extends State<BalancesTab> {
               formatMoney(context, s.amount),
               textAlign: TextAlign.center,
               style: theme.textTheme.headlineSmall?.copyWith(
-                color: AppColors.ink,
+                color: context.palette.ink,
                 fontWeight: FontWeight.w800,
               ),
             ),
@@ -751,7 +751,7 @@ class _BalancesTabState extends State<BalancesTab> {
                       formatIban(toIban),
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: AppColors.muted,
+                        color: context.palette.muted,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.8,
                       ),
@@ -760,20 +760,20 @@ class _BalancesTabState extends State<BalancesTab> {
                   IconButton(
                     tooltip: l10n.copyIban,
                     visualDensity: VisualDensity.compact,
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.copy_rounded,
                       size: 18,
-                      color: AppColors.muted,
+                      color: context.palette.muted,
                     ),
                     onPressed: () => copyIban(context, toIban),
                   ),
                   IconButton(
                     tooltip: l10n.ibanQrTooltip,
                     visualDensity: VisualDensity.compact,
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.qr_code_2_rounded,
                       size: 18,
-                      color: AppColors.muted,
+                      color: context.palette.muted,
                     ),
                     onPressed: () => showIbanQrSheet(
                       context,
@@ -788,7 +788,7 @@ class _BalancesTabState extends State<BalancesTab> {
                 l10n.addIbanHint,
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: AppColors.muted,
+                  color: context.palette.muted,
                 ),
               ),
             const SizedBox(height: 8),
@@ -823,7 +823,7 @@ class _BalancesTabState extends State<BalancesTab> {
                 child: Text(
                   _reminderAgainLabel(l10n, _activeCooldown(s)!),
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.bodySmall?.copyWith(color: AppColors.muted),
+                  style: theme.textTheme.bodySmall?.copyWith(color: context.palette.muted),
                 ),
               ),
           ],
@@ -872,7 +872,7 @@ class _BalancesTabState extends State<BalancesTab> {
     final theme = Theme.of(context);
     final note = p.note;
 
-    final muted = theme.textTheme.bodySmall?.copyWith(color: AppColors.muted);
+    final muted = theme.textTheme.bodySmall?.copyWith(color: context.palette.muted);
 
     // A quiet row: who paid whom and the amount on top, date / note / receipt count below.
     // The actions (receipts, edit, delete) live in the details sheet that opens on tap; three
@@ -903,10 +903,10 @@ class _BalancesTabState extends State<BalancesTab> {
                         Text(formatDate(context, p.paidAt), style: muted),
                         if (p.attachmentCount > 0) ...[
                           const SizedBox(width: 8),
-                          const Icon(
+                          Icon(
                             Icons.attach_file_rounded,
                             size: 14,
-                            color: AppColors.muted,
+                            color: context.palette.muted,
                           ),
                           Text(
                             '${p.attachmentCount}',
@@ -929,7 +929,7 @@ class _BalancesTabState extends State<BalancesTab> {
               Text(
                 formatMoney(context, p.amount),
                 style: theme.textTheme.titleSmall?.copyWith(
-                  color: AppColors.ink,
+                  color: context.palette.ink,
                 ),
               ),
             ],
@@ -1295,8 +1295,8 @@ class _EditPaymentDialogState extends State<_EditPaymentDialog> {
           children: [
             Text(
               l10n.paymentFromTo(payment.fromUserName, payment.toUserName),
-              style: const TextStyle(
-                color: AppColors.muted,
+              style: TextStyle(
+                color: context.palette.muted,
                 fontWeight: FontWeight.w700,
               ),
             ),

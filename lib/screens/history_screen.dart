@@ -108,6 +108,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final palette = context.palette;
 
     return Scaffold(
       appBar: AppBar(
@@ -118,7 +119,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
             Text(l10n.historyTitle),
             Text(
               widget.householdName,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.muted),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: palette.muted),
             ),
           ],
         ),
@@ -162,6 +163,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   // A day header before the first item of each day. The list is already newest first.
   List<Widget> _buildGroups(AppLocalizations l10n) {
+    final palette = context.palette;
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final yesterday = today.subtract(const Duration(days: 1));
@@ -179,7 +181,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
             _dayTitle(l10n, day, today, yesterday),
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w800,
-                  color: AppColors.muted,
+                  color: palette.muted,
                 ),
           ),
         ));
@@ -212,6 +214,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     final text = activityText(l10n, entry);
     final style = _styleFor(entry.type);
     final theme = Theme.of(context);
+    final palette = context.palette;
 
     return Card(
       clipBehavior: Clip.antiAlias,
@@ -242,7 +245,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 const SizedBox(width: 8),
                 Text(
                   DateFormat.Hm(l10n.localeName).format(entry.createdAt),
-                  style: theme.textTheme.bodySmall?.copyWith(color: AppColors.muted),
+                  style: theme.textTheme.bodySmall?.copyWith(color: palette.muted),
                 ),
               ],
             ),
@@ -265,9 +268,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
   // instead. Shares come under one "Paylar" heading with only the names. Free text (a note,
   // a description) does not fit a table cell well, so it follows as normal wrapping lines.
   Widget _changes(ThemeData theme, AppLocalizations l10n, List<ChangeLine> lines) {
-    final labelStyle = theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted);
+    final palette = context.palette;
+    final labelStyle = theme.textTheme.bodyMedium?.copyWith(color: palette.muted);
     final valueStyle = labelStyle?.copyWith(
-      color: AppColors.ink,
+      color: palette.ink,
       fontWeight: FontWeight.w600,
       fontFeatures: const [FontFeature.tabularFigures()],
     );
@@ -336,6 +340,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   //     Sonra  [1 Bülent Aksoy] [2 Doğukan Tufan] ...
   // A chip never breaks in the middle of a name; if the row is full, the whole chip moves down.
   Widget _listChange(ThemeData theme, AppLocalizations l10n, ChangeLine line, TextStyle? labelStyle) {
+    final palette = context.palette;
     Widget chips(List<String> names, {required bool after}) {
       if (names.isEmpty) return Text('—', style: labelStyle);
       return Wrap(
@@ -347,14 +352,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               decoration: BoxDecoration(
                 color: after
-                    ? AppColors.mustard.withValues(alpha: 0.30)
-                    : AppColors.muted.withValues(alpha: 0.12),
+                    ? palette.mustard.withValues(alpha: 0.30)
+                    : palette.muted.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(999),
               ),
               child: Text(
                 '${i + 1}  ${names[i]}',
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: after ? AppColors.ink : AppColors.muted,
+                  color: after ? palette.ink : palette.muted,
                   fontWeight: after ? FontWeight.w700 : FontWeight.w600,
                 ),
               ),
@@ -373,7 +378,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
               width: 48,
               child: Padding(
                 padding: const EdgeInsets.only(top: 2),
-                child: Text(label, style: theme.textTheme.bodySmall?.copyWith(color: AppColors.muted)),
+                child: Text(label, style: theme.textTheme.bodySmall?.copyWith(color: palette.muted)),
               ),
             ),
             Expanded(child: content),
@@ -415,74 +420,76 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   // The icon and color for each kind of item. Adds are green, edits yellow, deletes red.
   _TypeStyle _styleFor(ActivityType type) {
+    final palette = context.palette;
     return switch (type) {
       ActivityType.householdCreated =>
-        const _TypeStyle(Icons.home_rounded, AppColors.sage),
+        _TypeStyle(Icons.home_rounded, palette.sage),
       ActivityType.householdRenamed =>
-        const _TypeStyle(Icons.edit_rounded, AppColors.mustard),
+        _TypeStyle(Icons.edit_rounded, palette.mustard),
       ActivityType.ownershipTransferred =>
-        const _TypeStyle(Icons.workspace_premium_rounded, AppColors.mustard),
+        _TypeStyle(Icons.workspace_premium_rounded, palette.mustard),
       ActivityType.memberJoined =>
-        const _TypeStyle(Icons.person_add_rounded, AppColors.sage),
+        _TypeStyle(Icons.person_add_rounded, palette.sage),
       ActivityType.memberLeft =>
-        const _TypeStyle(Icons.person_remove_rounded, AppColors.ink),
+        _TypeStyle(Icons.person_remove_rounded, palette.ink),
       ActivityType.memberRemoved =>
-        const _TypeStyle(Icons.person_remove_rounded, AppColors.terracotta),
+        _TypeStyle(Icons.person_remove_rounded, palette.terracotta),
       ActivityType.memberRoleChanged =>
-        const _TypeStyle(Icons.person_rounded, AppColors.ink),
+        _TypeStyle(Icons.person_rounded, palette.ink),
       ActivityType.expenseAdded =>
-        const _TypeStyle(Icons.add_circle_rounded, AppColors.sage),
+        _TypeStyle(Icons.add_circle_rounded, palette.sage),
       ActivityType.expenseUpdated =>
-        const _TypeStyle(Icons.edit_rounded, AppColors.mustard),
+        _TypeStyle(Icons.edit_rounded, palette.mustard),
       ActivityType.expenseDeleted =>
-        const _TypeStyle(Icons.delete_outline_rounded, AppColors.owes),
+        _TypeStyle(Icons.delete_outline_rounded, palette.owes),
       ActivityType.recurringExpenseGenerated =>
-        const _TypeStyle(Icons.autorenew_rounded, AppColors.ink),
+        _TypeStyle(Icons.autorenew_rounded, palette.ink),
       ActivityType.paymentAdded =>
-        const _TypeStyle(Icons.add_circle_rounded, AppColors.sage),
+        _TypeStyle(Icons.add_circle_rounded, palette.sage),
       ActivityType.paymentUpdated =>
-        const _TypeStyle(Icons.edit_rounded, AppColors.mustard),
+        _TypeStyle(Icons.edit_rounded, palette.mustard),
       ActivityType.paymentDeleted =>
-        const _TypeStyle(Icons.delete_outline_rounded, AppColors.owes),
+        _TypeStyle(Icons.delete_outline_rounded, palette.owes),
       ActivityType.choreAdded =>
-        const _TypeStyle(Icons.cleaning_services_rounded, AppColors.sage),
+        _TypeStyle(Icons.cleaning_services_rounded, palette.sage),
       ActivityType.choreUpdated =>
-        const _TypeStyle(Icons.cleaning_services_rounded, AppColors.mustard),
+        _TypeStyle(Icons.cleaning_services_rounded, palette.mustard),
       ActivityType.choreDeleted =>
-        const _TypeStyle(Icons.delete_outline_rounded, AppColors.owes),
+        _TypeStyle(Icons.delete_outline_rounded, palette.owes),
       ActivityType.depositUpdated =>
-        const _TypeStyle(Icons.savings_rounded, AppColors.mustard),
+        _TypeStyle(Icons.savings_rounded, palette.mustard),
       ActivityType.depositTransferred =>
-        const _TypeStyle(Icons.swap_horiz_rounded, AppColors.ink),
+        _TypeStyle(Icons.swap_horiz_rounded, palette.ink),
       ActivityType.depositTransferDeleted =>
-        const _TypeStyle(Icons.undo_rounded, AppColors.ink),
+        _TypeStyle(Icons.undo_rounded, palette.ink),
       ActivityType.unknown =>
-        const _TypeStyle(Icons.history_rounded, AppColors.muted),
+        _TypeStyle(Icons.history_rounded, palette.muted),
     };
   }
 
   Widget _buildEmptyState(AppLocalizations l10n) {
     final theme = Theme.of(context);
+    final palette = context.palette;
     return Padding(
       padding: const EdgeInsets.fromLTRB(32, 72, 32, 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.history_rounded, size: 96, color: AppColors.muted),
+          Icon(Icons.history_rounded, size: 96, color: palette.muted),
           const SizedBox(height: 20),
           Text(
             l10n.historyEmpty,
             textAlign: TextAlign.center,
             style: theme.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.w800,
-              color: AppColors.muted,
+              color: palette.muted,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             l10n.historyEmptyHint,
             textAlign: TextAlign.center,
-            style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted),
+            style: theme.textTheme.bodyMedium?.copyWith(color: palette.muted),
           ),
         ],
       ),
@@ -492,7 +499,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
 // The icon and color of one history kind.
 class _TypeStyle {
-  const _TypeStyle(this.icon, this.color);
+  _TypeStyle(this.icon, this.color);
 
   final IconData icon;
   final Color color;

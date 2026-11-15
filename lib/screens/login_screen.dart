@@ -66,6 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final palette = context.palette;
 
     return Scaffold(
       appBar: AppBar(actions: const [LanguageMenuButton()]),
@@ -83,20 +84,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 16),
                   Text(
                     l10n.appTitle,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 40,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.terracotta,
+                      color: palette.terracotta,
                     ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
                   Text(
                     l10n.loginTagline,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.muted,
+                      color: palette.muted,
                     ),
                     textAlign: TextAlign.center,
                   ),

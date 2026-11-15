@@ -162,6 +162,7 @@ class _ExpensesTabState extends State<ExpensesTab> {
 
   // The card at the top of the tab: the shopping list with its open item count.
   Widget _shoppingCard(AppLocalizations l10n) {
+    final palette = context.palette;
     final count = _openShoppingCount;
     return Card(
       child: ListTile(
@@ -171,7 +172,7 @@ class _ExpensesTabState extends State<ExpensesTab> {
           style: const TextStyle(fontWeight: FontWeight.w700),
         ),
         subtitle: count == null ? null : Text(l10n.shoppingCardSubtitle(count)),
-        trailing: const Icon(Icons.chevron_right_rounded, color: AppColors.muted),
+        trailing: Icon(Icons.chevron_right_rounded, color: palette.muted),
         onTap: _openShoppingList,
       ),
     );
@@ -181,6 +182,7 @@ class _ExpensesTabState extends State<ExpensesTab> {
   // Tapping the card opens the recurring expenses list.
   Widget _upcomingCard(BuildContext context, AppLocalizations l10n) {
     final theme = Theme.of(context);
+    final palette = context.palette;
     final due = _dueSoon;
     final hiddenCount = due.length - 3;
 
@@ -195,7 +197,7 @@ class _ExpensesTabState extends State<ExpensesTab> {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.event_outlined, color: AppColors.mustard),
+                  Icon(Icons.event_outlined, color: palette.mustard),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -203,7 +205,7 @@ class _ExpensesTabState extends State<ExpensesTab> {
                       style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
                     ),
                   ),
-                  const Icon(Icons.chevron_right_rounded, color: AppColors.muted),
+                  Icon(Icons.chevron_right_rounded, color: palette.muted),
                 ],
               ),
               const SizedBox(height: 8),
@@ -215,7 +217,7 @@ class _ExpensesTabState extends State<ExpensesTab> {
                   child: Text(
                     l10n.upcomingPaymentsMore(hiddenCount),
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: AppColors.muted,
+                      color: palette.muted,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -235,6 +237,7 @@ class _ExpensesTabState extends State<ExpensesTab> {
     int daysLeft,
   ) {
     final theme = Theme.of(context);
+    final palette = context.palette;
     final color = categoryColor(item.category);
     final description = item.description ?? '';
 
@@ -267,11 +270,11 @@ class _ExpensesTabState extends State<ExpensesTab> {
             children: [
               Text(
                 formatMoney(context, item.amount),
-                style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.ink),
+                style: TextStyle(fontWeight: FontWeight.w800, color: palette.ink),
               ),
               Text(
                 dueWhenLabel(l10n, daysLeft),
-                style: theme.textTheme.bodySmall?.copyWith(color: AppColors.muted),
+                style: theme.textTheme.bodySmall?.copyWith(color: palette.muted),
               ),
             ],
           ),
@@ -493,6 +496,7 @@ class _ExpensesTabState extends State<ExpensesTab> {
     // gets the big empty-state picture below it.
     if (expenses.isEmpty) {
       final theme = Theme.of(context);
+    final palette = context.palette;
       return RefreshIndicator(
         onRefresh: _load,
         child: ListView(
@@ -524,7 +528,7 @@ class _ExpensesTabState extends State<ExpensesTab> {
                     l10n.noExpenses,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: AppColors.muted,
+                      color: palette.muted,
                     ),
                   ),
                 ],
@@ -658,6 +662,7 @@ class _ExpensesTabState extends State<ExpensesTab> {
   // Shown when expenses exist but none match the filters. A small text is enough here.
   Widget _noMatchesView(AppLocalizations l10n) {
     final theme = Theme.of(context);
+    final palette = context.palette;
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
       child: Column(
@@ -665,7 +670,7 @@ class _ExpensesTabState extends State<ExpensesTab> {
           Text(
             l10n.noExpensesMatchFilter,
             textAlign: TextAlign.center,
-            style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted),
+            style: theme.textTheme.bodyMedium?.copyWith(color: palette.muted),
           ),
           const SizedBox(height: 12),
           OutlinedButton(
@@ -681,6 +686,7 @@ class _ExpensesTabState extends State<ExpensesTab> {
   // Tapping it opens or closes the month's expenses.
   Widget _monthHeader(_MonthGroup group, AppLocalizations l10n) {
     final theme = Theme.of(context);
+    final palette = context.palette;
     final open = _isMonthOpen(group.month);
 
     return Padding(
@@ -708,14 +714,14 @@ class _ExpensesTabState extends State<ExpensesTab> {
                   ),
                   textAlign: TextAlign.end,
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: AppColors.muted,
+                    color: palette.muted,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
               Icon(
                 open ? Icons.expand_less_rounded : Icons.expand_more_rounded,
-                color: AppColors.muted,
+                color: palette.muted,
               ),
             ],
           ),
@@ -726,6 +732,7 @@ class _ExpensesTabState extends State<ExpensesTab> {
 
   // One expense. Tapping it opens the form to edit it.
   Widget _expenseCard(BuildContext context, AppLocalizations l10n, Expense e) {
+    final palette = context.palette;
     final description = e.description ?? '';
     final color = categoryColor(e.category);
     final splitLine = _splitLine(context, l10n, e);
@@ -759,16 +766,16 @@ class _ExpensesTabState extends State<ExpensesTab> {
                 ),
                 if (e.recurring) ...[
                   const SizedBox(width: 4),
-                  const Icon(Icons.autorenew_rounded, size: 16, color: AppColors.muted),
+                  Icon(Icons.autorenew_rounded, size: 16, color: palette.muted),
                 ],
                 // Tiny muted tag on copies the server created by itself.
                 if (e.generatedFromId != null) ...[
                   const SizedBox(width: 6),
                   Text(
                     l10n.recurringAutoTag,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 11,
-                      color: AppColors.muted,
+                      color: palette.muted,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -776,16 +783,16 @@ class _ExpensesTabState extends State<ExpensesTab> {
                 // Paperclip and count when receipts are attached.
                 if (e.attachmentCount > 0) ...[
                   const SizedBox(width: 8),
-                  const Icon(
+                  Icon(
                     Icons.attach_file_rounded,
                     size: 16,
-                    color: AppColors.muted,
+                    color: palette.muted,
                   ),
                   const SizedBox(width: 2),
                   Text(
                     '${e.attachmentCount}',
-                    style: const TextStyle(
-                      color: AppColors.muted,
+                    style: TextStyle(
+                      color: palette.muted,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -797,15 +804,15 @@ class _ExpensesTabState extends State<ExpensesTab> {
                 splitLine,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.bodySmall
-                    ?.copyWith(color: AppColors.muted),
+                    ?.copyWith(color: palette.muted),
               ),
           ],
         ),
         trailing: Text(
           formatMoney(context, e.amount),
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.w800,
-            color: AppColors.ink,
+            color: palette.ink,
           ),
         ),
         onTap: () => _openForm(expense: e),

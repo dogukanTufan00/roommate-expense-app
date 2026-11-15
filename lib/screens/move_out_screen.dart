@@ -172,6 +172,7 @@ class _MoveOutScreenState extends State<MoveOutScreen> {
 
   // Confirms the leave or the removal. Open money gets a warning in red above the question.
   Future<bool> _confirmLeave(AppLocalizations l10n, double? net) async {
+    final palette = context.palette;
     String? warning;
     if (net != null && net.abs() >= 0.01) {
       final amount = formatMoney(context, net.abs());
@@ -201,8 +202,8 @@ class _MoveOutScreenState extends State<MoveOutScreen> {
             if (warning != null) ...[
               Text(
                 warning,
-                style: const TextStyle(
-                  color: AppColors.owes,
+                style: TextStyle(
+                  color: palette.owes,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -289,6 +290,7 @@ class _MoveOutScreenState extends State<MoveOutScreen> {
     }
 
     final theme = Theme.of(context);
+    final palette = context.palette;
     final showDeposit = _share >= 0.005 || _passed;
 
     // Cards bring their own side margins, so only the other widgets get the 16 px gutter.
@@ -316,7 +318,7 @@ class _MoveOutScreenState extends State<MoveOutScreen> {
               l10n.moveOutDebtsTitle,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w800,
-                color: AppColors.ink,
+                color: palette.ink,
               ),
             ),
           ),
@@ -327,7 +329,7 @@ class _MoveOutScreenState extends State<MoveOutScreen> {
               width: double.infinity,
               child: FilledButton(
                 style: FilledButton.styleFrom(
-                  backgroundColor: theme.colorScheme.error,
+                  backgroundColor: palette.owes,
                 ),
                 onPressed: _busy ? null : _finish,
                 child: Text(
@@ -345,6 +347,7 @@ class _MoveOutScreenState extends State<MoveOutScreen> {
 
   // Step 1: the deposit share. Shows the amount and the button to pass it on, or a check once done.
   Widget _depositStep(AppLocalizations l10n, ThemeData theme) {
+    final palette = context.palette;
     final others = _others;
     final perPerson = others.isEmpty ? 0.0 : _share / others.length;
 
@@ -357,12 +360,12 @@ class _MoveOutScreenState extends State<MoveOutScreen> {
             if (_passed)
               Row(
                 children: [
-                  const Icon(Icons.check_circle_rounded, color: AppColors.getsBack),
+                  Icon(Icons.check_circle_rounded, color: palette.getsBack),
                   const SizedBox(width: 8),
                   Text(
                     l10n.moveOutDepositPassed,
                     style: theme.textTheme.titleMedium?.copyWith(
-                      color: AppColors.getsBack,
+                      color: palette.getsBack,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -384,7 +387,7 @@ class _MoveOutScreenState extends State<MoveOutScreen> {
                         others.length,
                         formatMoney(context, perPerson),
                       ),
-                style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted),
+                style: theme.textTheme.bodyMedium?.copyWith(color: palette.muted),
               ),
               const SizedBox(height: 12),
               SizedBox(
@@ -403,6 +406,7 @@ class _MoveOutScreenState extends State<MoveOutScreen> {
 
   // Step 2: the open debts that involve this person. Each one can be marked as paid.
   Widget _debtsStep(AppLocalizations l10n) {
+    final palette = context.palette;
     final debts = _myDebts;
     if (debts.isEmpty) {
       return Card(
@@ -410,7 +414,7 @@ class _MoveOutScreenState extends State<MoveOutScreen> {
           padding: const EdgeInsets.all(16),
           child: Row(
             children: [
-              const Icon(Icons.check_circle_rounded, color: AppColors.getsBack),
+              Icon(Icons.check_circle_rounded, color: palette.getsBack),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(

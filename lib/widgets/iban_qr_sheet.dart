@@ -46,6 +46,7 @@ class _IbanQrSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final palette = context.palette;
     final grouped = formatIban(iban);
 
     return SafeArea(
@@ -65,7 +66,7 @@ class _IbanQrSheet extends StatelessWidget {
               l10n.iban,
               textAlign: TextAlign.center,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: AppColors.muted,
+                color: palette.muted,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -108,7 +109,7 @@ class _IbanQrSheet extends StatelessWidget {
             Text(
               l10n.ibanQrHint,
               textAlign: TextAlign.center,
-              style: theme.textTheme.bodySmall?.copyWith(color: AppColors.muted),
+              style: theme.textTheme.bodySmall?.copyWith(color: palette.muted),
             ),
             const SizedBox(height: 20),
             // Two buttons side by side. Expanded keeps them on one line on a 360dp phone.

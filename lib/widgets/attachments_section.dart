@@ -345,6 +345,7 @@ class _AttachmentsSectionState extends State<AttachmentsSection> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final palette = context.palette;
     final items = _items;
     final full = ((items?.length ?? 0) + _uploading) >= maxAttachmentsPerOwner;
 
@@ -371,7 +372,7 @@ class _AttachmentsSectionState extends State<AttachmentsSection> {
             alignment: Alignment.centerRight,
             child: Text(
               l10n.attachmentMaxHint,
-              style: theme.textTheme.bodySmall?.copyWith(color: AppColors.muted),
+              style: theme.textTheme.bodySmall?.copyWith(color: palette.muted),
             ),
           ),
         const SizedBox(height: 8),
@@ -381,6 +382,7 @@ class _AttachmentsSectionState extends State<AttachmentsSection> {
   }
 
   Widget _buildContent(AppLocalizations l10n, List<Attachment>? items) {
+    final palette = context.palette;
     if (items == null) {
       if (_loadError != null) {
         return Row(
@@ -388,7 +390,7 @@ class _AttachmentsSectionState extends State<AttachmentsSection> {
             Expanded(
               child: Text(
                 _loadError!,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.owes),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: palette.owes),
               ),
             ),
             TextButton(onPressed: _load, child: Text(l10n.retry)),
@@ -404,7 +406,7 @@ class _AttachmentsSectionState extends State<AttachmentsSection> {
     if (items.isEmpty && _uploading == 0) {
       return Text(
         l10n.attachmentEmpty,
-        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.muted),
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: palette.muted),
       );
     }
 
@@ -463,6 +465,7 @@ class PendingAttachmentsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final palette = context.palette;
     final full = files.length >= maxAttachmentsPerOwner;
 
     return Column(
@@ -488,13 +491,13 @@ class PendingAttachmentsSection extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: Text(
               l10n.attachmentMaxHint,
-              style: theme.textTheme.bodySmall?.copyWith(color: AppColors.muted),
+              style: theme.textTheme.bodySmall?.copyWith(color: palette.muted),
             ),
           ),
         if (files.isEmpty)
           Text(
             l10n.attachmentEmpty,
-            style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted),
+            style: theme.textTheme.bodyMedium?.copyWith(color: palette.muted),
           )
         else ...[
           Wrap(
@@ -522,7 +525,7 @@ class PendingAttachmentsSection extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             l10n.attachmentsPendingHint,
-            style: theme.textTheme.bodySmall?.copyWith(color: AppColors.muted),
+            style: theme.textTheme.bodySmall?.copyWith(color: palette.muted),
           ),
         ],
       ],
@@ -573,14 +576,15 @@ class _AttachmentThumbState extends State<_AttachmentThumb> {
   @override
   Widget build(BuildContext context) {
     final attachment = widget.attachment;
+    final palette = context.palette;
     final Widget content;
     if (!attachment.isImage) {
       content = _PdfTile(name: attachment.originalFilename);
     } else if (_bytes != null) {
       content = Image.memory(_bytes!, fit: BoxFit.cover, gaplessPlayback: true);
     } else if (_failed) {
-      content = const Center(
-        child: Icon(Icons.broken_image_outlined, color: AppColors.muted),
+      content = Center(
+        child: Icon(Icons.broken_image_outlined, color: palette.muted),
       );
     } else {
       content = const Center(
@@ -618,6 +622,7 @@ class _TileFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.palette;
     return SizedBox(
       width: 96,
       height: 112,
@@ -625,10 +630,10 @@ class _TileFrame extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Material(
-              color: AppColors.paper,
+              color: palette.paper,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
-                side: const BorderSide(color: AppColors.line),
+                side: BorderSide(color: palette.line),
               ),
               clipBehavior: Clip.antiAlias,
               child: InkWell(
@@ -669,12 +674,13 @@ class _PdfTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final palette = context.palette;
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.picture_as_pdf_rounded, size: 36, color: AppColors.terracotta),
+          Icon(Icons.picture_as_pdf_rounded, size: 36, color: palette.terracotta),
           const SizedBox(height: 6),
           Text(
             name,

@@ -177,6 +177,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     final profile = _profile!;
     final theme = Theme.of(context);
+    final palette = context.palette;
 
     return Form(
       key: _formKey,
@@ -250,6 +251,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
           const SizedBox(height: 32),
+          // Light, dark, or follow the phone. The choice is saved on this device.
+          Text(
+            l10n.appearance,
+            style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+          ),
+          const SizedBox(height: 8),
+          Card(
+            margin: EdgeInsets.zero,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: ValueListenableBuilder<ThemeMode>(
+                valueListenable: Session.themeMode,
+                builder: (context, mode, _) {
+                  return SizedBox(
+                    width: double.infinity,
+                    child: SegmentedButton<ThemeMode>(
+                      showSelectedIcon: false,
+                      segments: [
+                        ButtonSegment(
+                          value: ThemeMode.light,
+                          icon: const Icon(Icons.light_mode_rounded),
+                          label: Text(l10n.themeLight),
+                        ),
+                        ButtonSegment(
+                          value: ThemeMode.dark,
+                          icon: const Icon(Icons.dark_mode_rounded),
+                          label: Text(l10n.themeDark),
+                        ),
+                        ButtonSegment(
+                          value: ThemeMode.system,
+                          icon: const Icon(Icons.brightness_auto_rounded),
+                          label: Text(l10n.themeSystem),
+                        ),
+                      ],
+                      selected: {mode},
+                      onSelectionChanged: (selection) =>
+                          Session.setThemeMode(selection.first),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          const SizedBox(height: 32),
           Text(
             l10n.securityTitle,
             style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
@@ -258,9 +303,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Card(
             margin: EdgeInsets.zero,
             child: ListTile(
-              leading: const Icon(Icons.lock_outline, color: AppColors.terracotta),
+              leading: Icon(Icons.lock_outline, color: palette.terracotta),
               title: Text(l10n.changePassword),
-              trailing: const Icon(Icons.chevron_right_rounded, color: AppColors.muted),
+              trailing: Icon(Icons.chevron_right_rounded, color: palette.muted),
               onTap: _openChangePassword,
             ),
           ),
@@ -278,7 +323,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Center(
             child: TextButton(
               onPressed: _openDeleteAccount,
-              style: TextButton.styleFrom(foregroundColor: AppColors.owes),
+              style: TextButton.styleFrom(foregroundColor: palette.owes),
               child: Text(l10n.deleteAccount),
             ),
           ),

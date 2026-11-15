@@ -113,6 +113,7 @@ class _SplitDefaultsScreenState extends State<SplitDefaultsScreen> {
     }
 
     final theme = Theme.of(context);
+    final palette = context.palette;
     final isAdmin = _isAdmin;
 
     return RefreshIndicator(
@@ -122,13 +123,13 @@ class _SplitDefaultsScreenState extends State<SplitDefaultsScreen> {
         children: [
           Text(
             l10n.splitDefaultsIntro,
-            style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted),
+            style: theme.textTheme.bodyMedium?.copyWith(color: palette.muted),
           ),
           if (!isAdmin) ...[
             const SizedBox(height: 8),
             Text(
               l10n.splitDefaultsReadOnly,
-              style: theme.textTheme.bodySmall?.copyWith(color: AppColors.muted),
+              style: theme.textTheme.bodySmall?.copyWith(color: palette.muted),
             ),
           ],
           const SizedBox(height: 12),
@@ -303,6 +304,7 @@ class _SplitDefaultDialogState extends State<_SplitDefaultDialog> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final palette = context.palette;
     final remaining = _remainingUnits;
     final valid = _valid;
 
@@ -348,7 +350,7 @@ class _SplitDefaultDialogState extends State<_SplitDefaultDialog> {
               textAlign: TextAlign.end,
               style: theme.textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.w800,
-                color: remaining == 0 ? AppColors.getsBack : AppColors.owes,
+                color: remaining == 0 ? palette.getsBack : palette.owes,
               ),
             ),
             if (!valid) ...[
@@ -356,7 +358,7 @@ class _SplitDefaultDialogState extends State<_SplitDefaultDialog> {
               Text(
                 l10n.splitNotBalanced,
                 textAlign: TextAlign.end,
-                style: theme.textTheme.bodySmall?.copyWith(color: AppColors.owes),
+                style: theme.textTheme.bodySmall?.copyWith(color: palette.owes),
               ),
             ],
           ],

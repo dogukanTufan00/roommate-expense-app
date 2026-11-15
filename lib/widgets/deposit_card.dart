@@ -32,7 +32,7 @@ class DepositCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final total = deposit.totalAmount;
-    final muted = theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted);
+    final muted = theme.textTheme.bodyMedium?.copyWith(color: context.palette.muted);
 
     return Card(
       child: Padding(
@@ -42,7 +42,7 @@ class DepositCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                const Icon(Icons.savings_outlined, color: AppColors.ink),
+                Icon(Icons.savings_outlined, color: context.palette.ink),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
@@ -99,7 +99,7 @@ class DepositCard extends StatelessWidget {
                       formatMoney(context, deposit.unassigned.abs()),
                     ),
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: AppColors.owes,
+                      color: context.palette.owes,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -136,7 +136,7 @@ class DepositCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: share.active
                   ? null
-                  : theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted),
+                  : theme.textTheme.bodyMedium?.copyWith(color: context.palette.muted),
             ),
           ),
           if (canJoin)
@@ -193,7 +193,7 @@ class DepositCard extends StatelessWidget {
                       Text(
                         formatDate(context, transfer.createdAt),
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: AppColors.muted,
+                          color: context.palette.muted,
                         ),
                       ),
                     ],
@@ -211,7 +211,7 @@ class DepositCard extends StatelessWidget {
                   IconButton(
                     tooltip: l10n.depositTransferUndo,
                     visualDensity: VisualDensity.compact,
-                    icon: const Icon(Icons.undo_rounded, color: AppColors.muted),
+                    icon: Icon(Icons.undo_rounded, color: context.palette.muted),
                     onPressed: () => onUndoTransfer(transfer),
                   ),
               ],

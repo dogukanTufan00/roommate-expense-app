@@ -308,13 +308,14 @@ class _DepositFormScreenState extends State<DepositFormScreen> {
     }
 
     final theme = Theme.of(context);
+    final palette = context.palette;
     final total = _total;
     final sum = _sumHundredths;
     // Red when the shares do not add up to the total. Muted while there is no total yet.
     final matches = total != null && toHundredths(total) == sum;
     final Color sumColor = total == null
-        ? AppColors.muted
-        : (matches ? AppColors.getsBack : AppColors.owes);
+        ? palette.muted
+        : (matches ? palette.getsBack : palette.owes);
     final totalText = total == null ? '—' : formatMoney(context, total);
 
     return ListView(
@@ -347,7 +348,7 @@ class _DepositFormScreenState extends State<DepositFormScreen> {
         ),
         Text(
           l10n.depositEqualSplitHint,
-          style: theme.textTheme.bodySmall?.copyWith(color: AppColors.muted),
+          style: theme.textTheme.bodySmall?.copyWith(color: palette.muted),
         ),
         const SizedBox(height: 16),
         for (final field in _fields)

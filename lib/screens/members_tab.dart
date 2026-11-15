@@ -140,6 +140,7 @@ class _MembersTabState extends State<MembersTab> {
     bool destructive = true,
   }) async {
     final l10n = AppLocalizations.of(context);
+    final palette = context.palette;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -151,8 +152,8 @@ class _MembersTabState extends State<MembersTab> {
             if (warning != null) ...[
               Text(
                 warning,
-                style: const TextStyle(
-                  color: AppColors.owes,
+                style: TextStyle(
+                  color: palette.owes,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -535,6 +536,7 @@ class _MembersTabState extends State<MembersTab> {
 
   Widget _buildMemberCard(Member member, AppLocalizations l10n) {
     final theme = Theme.of(context);
+    final palette = context.palette;
     final isMe = _isMe(member);
     final name = isMe ? '${member.name} (${l10n.you})' : member.name;
     final iban = member.iban;
@@ -576,8 +578,10 @@ class _MembersTabState extends State<MembersTab> {
                             _RoleBadge(
                               icon: Icons.workspace_premium_rounded,
                               label: l10n.founder,
-                              color: const Color(0xFF8A6A1F),
-                              background: AppColors.mustard.withValues(
+                              color: Theme.of(context).brightness == Brightness.dark
+                                  ? palette.mustard
+                                  : const Color(0xFF8A6A1F),
+                              background: palette.mustard.withValues(
                                 alpha: 0.35,
                               ),
                             ),
@@ -585,8 +589,8 @@ class _MembersTabState extends State<MembersTab> {
                             _RoleBadge(
                               icon: Icons.star_rounded,
                               label: l10n.admin,
-                              color: AppColors.terracotta,
-                              background: AppColors.terracotta.withValues(
+                              color: palette.terracotta,
+                              background: palette.terracotta.withValues(
                                 alpha: 0.12,
                               ),
                             ),
@@ -596,7 +600,7 @@ class _MembersTabState extends State<MembersTab> {
                       Text(
                         member.email,
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: AppColors.muted,
+                          color: palette.muted,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -620,7 +624,7 @@ class _MembersTabState extends State<MembersTab> {
                         child: Text(
                           formatIban(iban),
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color: AppColors.ink,
+                            color: palette.ink,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 0.6,
                           ),
@@ -630,10 +634,10 @@ class _MembersTabState extends State<MembersTab> {
                     IconButton(
                       tooltip: l10n.copyIban,
                       visualDensity: VisualDensity.compact,
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.copy_rounded,
                         size: 18,
-                        color: AppColors.muted,
+                        color: palette.muted,
                       ),
                       onPressed: () => copyIban(context, iban),
                     ),
@@ -775,6 +779,7 @@ class _InviteDialogState extends State<_InviteDialog> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final palette = context.palette;
 
     return AlertDialog(
       title: Text(l10n.inviteMember),
@@ -782,7 +787,7 @@ class _InviteDialogState extends State<_InviteDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(l10n.inviteMemberHint, style: TextStyle(color: AppColors.muted)),
+          Text(l10n.inviteMemberHint, style: TextStyle(color: palette.muted)),
           const SizedBox(height: 16),
           Form(
             key: _formKey,

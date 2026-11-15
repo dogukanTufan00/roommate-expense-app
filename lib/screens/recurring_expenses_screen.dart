@@ -182,6 +182,7 @@ class _RecurringExpensesScreenState extends State<RecurringExpensesScreen> {
     }
 
     final theme = Theme.of(context);
+    final palette = context.palette;
 
     return RefreshIndicator(
       onRefresh: _load,
@@ -190,7 +191,7 @@ class _RecurringExpensesScreenState extends State<RecurringExpensesScreen> {
         children: [
           Text(
             l10n.recurringExplainer,
-            style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted),
+            style: theme.textTheme.bodyMedium?.copyWith(color: palette.muted),
           ),
           const SizedBox(height: 12),
           if (items.isEmpty)
@@ -198,12 +199,12 @@ class _RecurringExpensesScreenState extends State<RecurringExpensesScreen> {
               padding: const EdgeInsets.only(top: 24),
               child: Column(
                 children: [
-                  const Icon(Icons.autorenew_rounded, size: 48, color: AppColors.muted),
+                  Icon(Icons.autorenew_rounded, size: 48, color: palette.muted),
                   const SizedBox(height: 12),
                   Text(
                     l10n.recurringEmpty,
                     textAlign: TextAlign.center,
-                    style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted),
+                    style: theme.textTheme.bodyMedium?.copyWith(color: palette.muted),
                   ),
                 ],
               ),
@@ -217,6 +218,7 @@ class _RecurringExpensesScreenState extends State<RecurringExpensesScreen> {
 
   // One chain: category icon, description, amount, payer, and the repeat day with the next date.
   Widget _buildCard(AppLocalizations l10n, RecurringExpense item) {
+    final palette = context.palette;
     final color = categoryColor(item.category);
     final description = item.description ?? '';
     final next = item.nextDate;
@@ -252,7 +254,7 @@ class _RecurringExpensesScreenState extends State<RecurringExpensesScreen> {
             Text(
               schedule,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.muted),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: palette.muted),
             ),
             // The reminder setting in small muted text, with a bell icon (crossed when off).
             Row(
@@ -262,7 +264,7 @@ class _RecurringExpensesScreenState extends State<RecurringExpensesScreen> {
                       ? Icons.notifications_off_outlined
                       : Icons.notifications_outlined,
                   size: 14,
-                  color: AppColors.muted,
+                  color: palette.muted,
                 ),
                 const SizedBox(width: 4),
                 Flexible(
@@ -273,7 +275,7 @@ class _RecurringExpensesScreenState extends State<RecurringExpensesScreen> {
                             reminderChoiceLabel(l10n, item.reminderDaysBefore),
                           ),
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.muted),
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(color: palette.muted),
                   ),
                 ),
               ],
@@ -282,7 +284,7 @@ class _RecurringExpensesScreenState extends State<RecurringExpensesScreen> {
         ),
         trailing: Text(
           formatMoney(context, item.amount),
-          style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.ink),
+          style: TextStyle(fontWeight: FontWeight.w800, color: palette.ink),
         ),
       ),
     );

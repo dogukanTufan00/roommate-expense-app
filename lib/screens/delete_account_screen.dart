@@ -164,6 +164,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
       );
     }
 
+    final palette = context.palette;
     final check = _check!;
     final blocked = check.blockers.isNotEmpty;
     final canDelete = !blocked &&
@@ -215,8 +216,8 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
         const SizedBox(height: 8),
         Text(
           l10n.deleteAccountIrreversible,
-          style: const TextStyle(
-            color: AppColors.owes,
+          style: TextStyle(
+            color: palette.owes,
             fontWeight: FontWeight.w800,
           ),
         ),
@@ -256,7 +257,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
         SizedBox(
           width: double.infinity,
           child: FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: AppColors.owes),
+            style: FilledButton.styleFrom(backgroundColor: palette.owes),
             onPressed: canDelete ? _deleteAccount : null,
             child: _deleting
                 ? const SizedBox(
@@ -286,19 +287,20 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
         ? l10n.blockerFounderWithMembers(blocker.householdName)
         : l10n.blockerLastAdminWithMembers(blocker.householdName);
 
+    final palette = context.palette;
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
-      color: AppColors.owes.withValues(alpha: 0.08),
+      color: palette.owes.withValues(alpha: 0.08),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
-        side: BorderSide(color: AppColors.owes.withValues(alpha: 0.5)),
+        side: BorderSide(color: palette.owes.withValues(alpha: 0.5)),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Icon(Icons.warning_amber_rounded, color: AppColors.owes),
+            Icon(Icons.warning_amber_rounded, color: palette.owes),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
@@ -311,7 +313,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                   const SizedBox(height: 4),
                   Text(
                     l10n.blockerHint,
-                    style: const TextStyle(color: AppColors.muted),
+                    style: TextStyle(color: palette.muted),
                   ),
                 ],
               ),
@@ -324,9 +326,10 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
 
   // The money still open in one home. Red when the user owes, green when the user is owed.
   Widget _buildBalanceCard(DeletionOpenBalance balance, AppLocalizations l10n) {
+    final palette = context.palette;
     final amount = formatMoney(context, balance.net.abs());
     final owes = balance.net < 0;
-    final color = owes ? AppColors.owes : AppColors.getsBack;
+    final color = owes ? palette.owes : palette.getsBack;
     final message = owes
         ? l10n.balanceOwesWarning(balance.householdName, amount)
         : l10n.balanceGetsBackWarning(balance.householdName, amount);
@@ -364,14 +367,15 @@ class _Bullet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.palette;
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(top: 7, right: 10, left: 4),
-            child: CircleAvatar(radius: 3, backgroundColor: AppColors.muted),
+            child: CircleAvatar(radius: 3, backgroundColor: palette.muted),
           ),
           Expanded(child: Text(text)),
         ],

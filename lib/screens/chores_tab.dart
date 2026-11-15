@@ -301,6 +301,7 @@ class _ChoresTabState extends State<ChoresTab> {
 
   Widget _emptyState(AppLocalizations l10n) {
     final theme = Theme.of(context);
+    final palette = context.palette;
     return Padding(
       padding: const EdgeInsets.fromLTRB(32, 40, 32, 0),
       child: Column(
@@ -321,7 +322,7 @@ class _ChoresTabState extends State<ChoresTab> {
           Text(
             l10n.choresEmptyBody,
             textAlign: TextAlign.center,
-            style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.muted),
+            style: theme.textTheme.bodyMedium?.copyWith(color: palette.muted),
           ),
           const SizedBox(height: 20),
           FilledButton.icon(
@@ -337,7 +338,8 @@ class _ChoresTabState extends State<ChoresTab> {
   // One card: the name, whose turn it is, the rotation, the last completion and the buttons.
   Widget _choreCard(Chore chore, AppLocalizations l10n) {
     final theme = Theme.of(context);
-    final muted = theme.textTheme.bodySmall?.copyWith(color: AppColors.muted);
+    final palette = context.palette;
+    final muted = theme.textTheme.bodySmall?.copyWith(color: palette.muted);
     final errorColor = theme.colorScheme.error;
     final isMine = chore.currentUserId != null && chore.currentUserId == _myUserId;
     final busy = _busy.contains(chore.id);
@@ -417,7 +419,7 @@ class _ChoresTabState extends State<ChoresTab> {
               turnText,
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.w800,
-                color: isMine ? AppColors.terracotta : AppColors.ink,
+                color: isMine ? palette.terracotta : palette.ink,
               ),
             ),
             const SizedBox(height: 10),
@@ -517,18 +519,19 @@ class _ChoresTabState extends State<ChoresTab> {
   // One name in the rotation. The current person has a filled color.
   Widget _rotationChip(String name, {required bool current}) {
     final theme = Theme.of(context);
+    final palette = context.palette;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: current
-            ? AppColors.terracotta
-            : AppColors.mustard.withValues(alpha: 0.25),
+            ? palette.terracotta
+            : palette.mustard.withValues(alpha: 0.25),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Text(
         name,
         style: theme.textTheme.bodySmall?.copyWith(
-          color: current ? Colors.white : AppColors.ink,
+          color: current ? Colors.white : palette.ink,
           fontWeight: FontWeight.w700,
         ),
       ),
