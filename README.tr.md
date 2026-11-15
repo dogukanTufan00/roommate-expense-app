@@ -11,12 +11,13 @@ Backend [dogukanTufan00/shared-expense-tracking-system](https://github.com/doguk
 - **Giriş yapma ve kayıt olma.** Uygulamayı kapatsanız bile oturumunuz açık kalır. Uygulama açılırken kayıtlı oturum belirtecinin (JWT) süresi kontrol edilir; süresi dolmuşsa yeniden giriş yapmanız istenir.
 - **Evler ve davetler.** Evlerinizin listesi; davetleri kabul edebileceğiniz veya reddedebileceğiniz davet kartları. Üst çubuktaki bildirim simgesinde okunmamış bildirim sayısı görünür.
 - **Ev ekranı, beş sekmeli:**
-  - **Giderler:** Üstte, hâlâ alınacak ürün sayısını gösteren bir alışveriş listesi kartı bulunur. Karta dokunarak ortak listeyi açabilirsiniz: alınan ürünleri işaretleyip alınanları tek bir gider olarak kaydedebilirsiniz. Bunun altında "Yaklaşan ödemeler" kartı, yaklaşan faturaları listeler (en fazla üç tane, sonra "+N tane daha"). Giderler aylara göre gruplanır; filtrelenebilir ve arama kutusuyla aranabilir. Arama; açıklamayı, kategoriyi, ödeyeni, paylaşan kişilerin adlarını ve tutarı kontrol eder, Türkçe harf farklarını yok sayar (böylece "irmak" da "Irmak"ı bulur). Fiş eklenmiş giderler (ataş simgesi), tekrarlanan giderler ve otomatik oluşturulan giderler rozetlerle işaretlenir.
+  - **Giderler:** Üstte, hâlâ alınacak ürün sayısını gösteren bir alışveriş listesi kartı bulunur. Karta dokunarak ortak listeyi açabilirsiniz: alınan ürünleri işaretleyip alınanları tek bir gider olarak kaydedebilirsiniz. Bunun altında "Yaklaşan ödemeler" kartı, yaklaşan faturaları listeler (en fazla üç tane, sonra "+N tane daha"). Giderler aylara göre gruplanır; filtrelenebilir ve arama kutusuyla aranabilir. Arama; açıklamayı, ürün listesini, kategoriyi, ödeyeni, paylaşan kişilerin adlarını ve tutarı kontrol eder, Türkçe harf farklarını yok sayar (böylece "irmak" da "Irmak"ı bulur). Fiş eklenmiş giderler (ataş simgesi), tekrarlanan giderler ve otomatik oluşturulan giderler rozetlerle işaretlenir.
   - **Bakiyeler:** Kimin kime ne ödeyeceği; iki kişi arasındaki her borç için bir satır. Ödemeyi yalnızca ödeyen veya alan kişi ödendi olarak işaretleyebilir; yönetici ise yalnızca bu ikisinden biri evden ayrıldıysa işaretleyebilir. Alıcının IBAN'ını tek dokunuşla kopyalayabilir, QR kod olarak gösterebilir ve önerilen tutarla ödeme kaydedebilirsiniz (fazla ödeme yapılırsa uyarı verilir). Tek bir ödemeyi veya tüm özeti WhatsApp'a ya da başka bir uygulamaya gönderebilirsiniz. Alacaklı kişi "Hatırlat" düğmesine dokunarak borçluya nazik bir hatırlatma bildirimi gönderebilir; bu, 24 saatte bir yapılabilir. Ödeme ayrıntıları penceresinde fişler görüntülenir.
   - **İşler:** Çöp çıkarma, bulaşık gibi ev işleri; sırayla dönerek kendiliğinden ilerler. Işe katılan kişileri işaretleyip sıra düzenine sürükleyin. Bir iş "yapıldı" olarak işaretlendiğinde sıra ilerler; sırası gelen kişiye hatırlatma gönderebilirsiniz. Her işin kendi geçmişi tutulur.
   - **Özet:** Bir ay veya özel bir tarih aralığı seçerek kişi bazında çubukları, en çok ödeyen kişiyi, kategori dağılımını ve 6 aylık grafiği görebilirsiniz. Özet PDF olarak dışa aktarılabilir ve paylaşılabilir.
   - **Üyeler:** Kurucu ve yönetici simgeleri (açıklama balonlarıyla), e-posta ile davet, rol değiştirme, evin sahipliğini devretme, üye çıkarma (üyenin hâlâ açık borcu varsa uyarı gösterilir) ve evden ayrılma. Depozito kartı, evin depozitosunu ve her kişinin elinde tuttuğu tutarı gösterir; yöneticiler depozito aktarımını geri alabilir. Evden ayrılmak veya bir üyeyi çıkarmak, taşınma ekranını açar: kişinin depozito payı diğerlerine devredilir, açık borçları kapatılır ve sonra ev terk edilir.
-- **Gider formu.** Gidere dahil edilecek üyeleri seçin ve paylaşım yöntemini belirleyin: Eşit, Yüzde veya Tutar. Varsayılan paylaşım oranları kaydedilip yeniden kullanılabilir. Gider tekrarlanacak şekilde işaretlenebilir; fişler kameradan, galeriden veya PDF dosyası olarak eklenebilir. Tekrarlanan giderler için bir fatura hatırlatması da seçebilirsiniz (yok, ya da vade tarihinden 1, 3 veya 7 gün önce); payı olan herkese bildirim gider.
+- **Gider formu.** Gidere dahil edilecek üyeleri seçin ve paylaşım yöntemini belirleyin: Eşit, Yüzde veya Tutar. Varsayılan paylaşım oranları kaydedilip yeniden kullanılabilir. Gider tekrarlanacak şekilde işaretlenebilir; fişler kameradan, galeriden veya PDF dosyası olarak eklenebilir. Tekrarlanan giderler için bir fatura hatırlatması da seçebilirsiniz (yok, ya da vade tarihinden 1, 3 veya 7 gün önce); payı olan herkese bildirim gider. Her birinin kendi simgesi olan 12 kategori vardır: kira, faturalar, market, temizlik, yemek, abonelikler, eşya ve tamir, evcil hayvan, eğlence, ulaşım, sağlık ve kozmetik, diğer.
+- **Fiş tarama.** Gider eklerken "Fişten doldur" düğmesine dokunun ve fotoğraf çekin ya da galeriden seçin. Metin, Google ML Kit ile telefonda okunur; internet gerekmez ve ücretsizdir. Uygulama toplam tutarı, tarihi, mağaza adını ve ürün satırlarını bulur; kategoriyi bilinen zincirlerden (örneğin Migros veya A101) ya da fişteki kelimelerden tahmin eder. Bulunanlar bir pencerede gösterilir; istemediğiniz ürünlerin işaretini kaldırıp uygulayın. Form doldurulur, ürünler giderin ürün listesine eklenir ve fotoğraf fiş olarak iliştirilir. Kaydetmeden önce her şeyi kontrol edip düzeltebilirsiniz. Ürün listesi gider formundaki "Ürünler" alanında düzenlenebilir ve özet PDF'inde de yer alır.
 - **Tekrarlanan giderler.** Tekrarlanan giderleri görüntüleyip yönetebileceğiniz ekran.
 - **Varsayılan oranlar.** Her ev için varsayılan paylaşım oranlarını belirlediğiniz ekran.
 - **Profil.** Adınızı değiştirin, IBAN bilginizi girin (doğrulanır) ve QR kod olarak gösterin, şifrenizi değiştirin ve görünümü seçin: Açık, Koyu veya Sistem. Seçiminiz cihazda kaydedilir.
@@ -53,6 +54,7 @@ Backend [dogukanTufan00/shared-expense-tracking-system](https://github.com/doguk
 | `flutter_local_notifications` | ^23.0.1 | Uygulama açıkken push bildirimlerini gösterir ve bildirime dokunuşları yönetir |
 | `share_plus` | ^13.3.1 | Bakiye özetini ve tek bir ödemeyi başka uygulamalarla (örneğin WhatsApp) paylaşır; IBAN QR kodunu paylaşır |
 | `qr_flutter` | ^4.1.0 | IBAN'ı, bankacılık uygulamasının okuyabileceği bir QR koda dönüştürür |
+| `google_mlkit_text_recognition` | ^1.0.3 | Fiş fotoğrafındaki metni cihazda okur (Latin alfabesi modeli, internetsiz çalışır) |
 | `flutter_launcher_icons` (geliştirme) | ^0.14.4 | Android uygulama simgesini tüm boyutlarda üretir |
 | `flutter_native_splash` (geliştirme) | ^2.4.8 | Uygulama simgesiyle krem renkli açılış ekranını üretir |
 
@@ -66,6 +68,8 @@ lib/
 ├── l10n/                  # ARB çeviri dosyaları (app_en.arb, app_tr.arb) ve üretilen yerelleştirme sınıfları
 ├── push/
 │   └── push_service.dart  # Firebase kurulumu, push gösterimi, bildirime dokununca yönlendirme, cihaz belirteci kaydı
+├── services/
+│   └── receipt_scanner.dart   # Fiş fotoğrafını ML Kit ile okur, satırları ayrıştırıcıya verir
 ├── screens/
 │   ├── login_screen.dart, register_screen.dart
 │   ├── households_screen.dart        # Ev listesi, davet kartları, bildirim simgesi
@@ -92,12 +96,15 @@ lib/
 │   ├── errors.dart                   # API hatalarını yerelleştirilmiş mesajlara çevirir
 │   ├── format.dart                   # Geçerli dile göre para ve tarih biçimlendirme
 │   ├── notification_text.dart        # Sunucu verisinden bildirim cümleleri oluşturur
+│   ├── receipt_rows.dart             # Eğik çekilmiş fotoğrafı düzeltir, OCR satırlarını fişteki satırlara gruplar
+│   ├── receipt_parser.dart           # Satırlarda toplamı, tarihi, mağazayı, kategoriyi ve ürünleri bulur
 │   └── statement_pdf.dart            # Gömülü Nunito fontlu özet PDF'i
 ├── widgets/
 │   ├── language_menu_button.dart     # Uygulama çubuğundaki dil değiştirme menüsü
 │   ├── attachments_section.dart      # Fiş listesi ve görüntüleyici
 │   ├── deposit_card.dart             # Üyeler sekmesindeki depozito kartı
 │   ├── iban_qr_sheet.dart            # IBAN'ın QR kodu, paylaşma seçeneğiyle
+│   ├── receipt_result_sheet.dart     # Fişten okunanlar, ürün onay kutularıyla
 │   └── illustration.dart             # Illüstrasyonlar; koyu modda koyu sürümleriyle
 ├── config.dart            # API temel adresi (--dart-define ile ayarlanabilir)
 ├── models.dart            # fromJson fabrikalarına sahip veri sınıfları
@@ -105,7 +112,12 @@ lib/
 ├── theme.dart             # Açık ve koyu renkler (AppColors, AppPalette), yazı tipleri ve bileşen temaları
 └── main.dart              # Uygulama başlangıcı, tema ve giriş ile evler ekranı arasındaki yönlendirme
 test/
-└── summary_text_test.dart # Bakiye özeti metni için birim testi
+├── summary_text_test.dart     # Bakiye özeti metni
+├── category_test.dart         # Kategori kodları, etiketleri ve simgeleri
+├── receipt_parser_test.dart   # Temiz metin üzerinde fiş kuralları
+├── receipt_rows_test.dart     # Eğiklik düzeltme ve satır gruplama
+├── receipt_real_test.dart     # Taranmış gerçek fişlerin ML Kit çıktısı
+└── fixtures/                  # Kaydedilmiş OCR sonuçları (kişisel veriler değiştirildi)
 ```
 
 ## Uygulamayı Çalıştırma
@@ -152,6 +164,8 @@ flutter build apk --release --dart-define=API_BASE_URL=https://your-api.example.
 
 Yayın derlemesi şu anda hata ayıklama anahtarıyla imzalanmaktadır ve manifest, yerel geliştirme için düz HTTP trafiğine izin vermektedir. Herkese açık bir sürümden önce HTTPS'e geçilmeli, `usesCleartextTraffic` kaldırılmalı ve bir yayın imzalama yapılandırması eklenmelidir.
 
+APK, her Android cihazda çalışan evrensel (universal) bir derlemedir. Her işlemci türü için ML Kit metin tanıma modelini içerdiğinden boyutu yaklaşık 100 MB'tır.
+
 ## Push Bildirimleri
 
 Push bildirimleri Firebase Cloud Messaging ile çalışır (`firebase_core`, `firebase_messaging`, `flutter_local_notifications`). Android derlemesi Google services eklentisini uygular; bu nedenle **Firebase yapılandırma dosyası olmadan uygulama derlenmez**, push kullanmasanız bile. Her geliştirici bir kez şunları yapar:
@@ -166,6 +180,7 @@ Push bildirimleri Firebase Cloud Messaging ile çalışır (`firebase_core`, `fi
 
 - **Sunucu veri gönderir, metni uygulama oluşturur.** API yalnızca gerçekleri döndürür (kim ne yaptı, ne kadar, hangi ev). Bildirim cümlelerini uygulama geçerli dilde oluşturur (`lib/utils/notification_text.dart`); böylece metinler Türkçe ve İngilizcede tutarlı kalır.
 - **Ekler sunucudan gelir.** Fişler açıldığında API'den alınır. İndirilen veriler yalnızca bellekte (RAM) tutulur, diske yazılmaz; bu nedenle uygulama kapandığında silinirler.
+- **Fişler cihazda okunur.** Fiş tarama telefondaki Google ML Kit'i kullanır; fotoğraf hiçbir OCR servisine gönderilmez ve özellik internetsiz çalışır. Toplamı, tarihi ve ürünleri bulan kurallar düz Dart kodudur (`lib/utils/receipt_parser.dart`); bu yüzden gerçek fişlerin kaydedilmiş çıktıları dahil birim testleriyle sınanır. Fişlerde birden fazla toplam yazdığı için toplam bir öncelik sırasıyla seçilir ("ÖDENECEK", "GENEL TOPLAM"dan, o da "TOPLAM"dan önce gelir).
 - **PDF'ler cihazda üretilir.** Özet PDF'i, telefonda `pdf` paketi ve gömülü Nunito fontu kullanılarak oluşturulur; böylece Türkçe karakterler (ç, ğ, ı, ö, ş, ü) ve ₺ işareti doğru yazdırılır.
 - **Koyu mod temadan renk alır, sabit renk kullanmaz.** Uygulamada Açık, Koyu ve Sistem modları vardır. Ekranlar renklerini `context.palette` ile alır (örneğin `context.palette.muted`); bu, `lib/theme.dart` içindeki `AppPalette` tema uzantısının açık veya koyu setini döndürür.
 - **Koyu illüstrasyonlar.** Her illüstrasyonun yanında koyu bir sürümü vardır (örneğin `empty-homes-dark.png`) ve illüstrasyonların arka planı saydamdır. Koyu sürüm yoksa açık dosya kullanılır.

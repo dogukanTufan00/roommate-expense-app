@@ -11,12 +11,13 @@ The backend lives in [dogukanTufan00/shared-expense-tracking-system](https://git
 - **Login and sign up.** You stay logged in after closing the app. The saved token's expiry is checked at start-up, and an expired session asks you to log in again.
 - **Homes and invitations.** A list of your homes, with invitation cards you can accept or decline. A notification bell in the top bar shows an unread badge.
 - **Household screen with five tabs:**
-  - **Expenses:** a shopping list card at the top, with the number of items still to buy. Tap it to open the shared list: tick items as they are bought, then save the bought items together as one expense ("checkout"). Below it, an "Upcoming payments" card lists the next bills (up to three, then "+N more"). Expenses are grouped by month, with filters and a search box. Search checks the description, category, payer, share names and amount, and ignores Turkish letter differences (so "irmak" also finds "Irmak"). Badges mark expenses with a receipt (paperclip), recurring expenses, and automatically generated ones.
+  - **Expenses:** a shopping list card at the top, with the number of items still to buy. Tap it to open the shared list: tick items as they are bought, then save the bought items together as one expense ("checkout"). Below it, an "Upcoming payments" card lists the next bills (up to three, then "+N more"). Expenses are grouped by month, with filters and a search box. Search checks the description, product list, category, payer, share names and amount, and ignores Turkish letter differences (so "irmak" also finds "Irmak"). Badges mark expenses with a receipt (paperclip), recurring expenses, and automatically generated ones.
   - **Balances:** who pays whom, with one line per debt between two people. Only the payer or the receiver can mark a payment as paid (an admin can do it only when one of them has left the home). Copy the recipient's IBAN with one tap, show it as a QR code, and record a payment with a suggested amount (the app warns you about overpayment). Share a single payment, or the whole summary, to WhatsApp or any other app. The person who is owed can tap "Remind" to send the debtor a gentle reminder, once every 24 hours. A payment details sheet shows the receipts.
   - **Chores:** household chores (for example trash or dishes) with a rotation. Tick the people who take part and drag them into the turn order. The turn moves on when a chore is marked done, and you can remind the person whose turn it is. Each chore keeps its own history.
   - **Statement:** pick a month or a custom date range to see per-person bars, the dominant payer insight, a category breakdown, and a 6-month chart. The statement can be exported as PDF and shared.
   - **Members:** founder and admin icons (with tooltips), invite members by email, change roles, transfer ownership, remove members (with a warning if they still have open debts), and leave the home. The deposit card shows the home's deposit and what each person holds; admins can undo a deposit transfer. Leaving the home, or removing a member, opens the move-out screen: hand the person's deposit share to the others, settle their open debts, and then leave.
-- **Expense form.** Choose the members involved and a split: Equal, Percent or Amount. Default split ratios can be saved and reused. Expenses can be set to recur, and receipts can be attached from the camera, the gallery, or as PDF files. For recurring expenses, you can also choose a bill reminder (none, or 1, 3 or 7 days before the due date); everyone with a share gets a notification.
+- **Expense form.** Choose the members involved and a split: Equal, Percent or Amount. Default split ratios can be saved and reused. Expenses can be set to recur, and receipts can be attached from the camera, the gallery, or as PDF files. For recurring expenses, you can also choose a bill reminder (none, or 1, 3 or 7 days before the due date); everyone with a share gets a notification. There are 12 categories, each with its own icon: rent, utilities, groceries, cleaning, eating out, subscriptions, home items and repairs, pets, entertainment, transport, health and beauty, and other.
+- **Receipt scanning.** When adding an expense, tap "Fill from receipt" and take a photo or pick one from the gallery. The text is read on the phone with Google ML Kit, offline and free. The app finds the total, the date, the store name and the product lines, and guesses the category from known chains (for example Migros or A101) or from the words on the receipt. A sheet shows what was found; uncheck any product you do not want, then apply. The form is filled in, the products go into the expense's product list, and the photo is attached as the receipt. You can check and correct everything before saving. The product list stays editable in the "Products" field of the expense form, and it is also printed in the statement PDF.
 - **Recurring expenses.** A screen to review and manage recurring expenses.
 - **Default ratios.** A screen to set the default split ratios for each home.
 - **Profile.** Change your name, set your IBAN (validated) and show it as a QR code, change your password, and choose the appearance: Light, Dark or System. The choice is saved on the device.
@@ -53,6 +54,7 @@ The backend lives in [dogukanTufan00/shared-expense-tracking-system](https://git
 | `flutter_local_notifications` | ^23.0.1 | Shows push notifications while the app is open, and handles taps on them |
 | `share_plus` | ^13.3.1 | Shares the balance summary and single payments with other apps (for example WhatsApp), and shares the IBAN QR code |
 | `qr_flutter` | ^4.1.0 | Draws the IBAN as a QR code that a banking app can scan |
+| `google_mlkit_text_recognition` | ^1.0.3 | Reads the text of a receipt photo on the device (Latin script model, works offline) |
 | `flutter_launcher_icons` (dev) | ^0.14.4 | Generates the Android app icon in every size |
 | `flutter_native_splash` (dev) | ^2.4.8 | Generates the cream launch screen with the app icon |
 
@@ -66,6 +68,8 @@ lib/
 ├── l10n/                  # ARB translation files (app_en.arb, app_tr.arb) and generated localization classes
 ├── push/
 │   └── push_service.dart  # Firebase setup, push display, tap navigation, device token registration
+├── services/
+│   └── receipt_scanner.dart   # Reads a receipt photo with ML Kit and passes the rows to the parser
 ├── screens/
 │   ├── login_screen.dart, register_screen.dart
 │   ├── households_screen.dart        # Home list, invitation cards, notification bell
@@ -92,12 +96,15 @@ lib/
 │   ├── errors.dart                   # Maps API errors to localized messages
 │   ├── format.dart                   # Money and date formatting for the current language
 │   ├── notification_text.dart        # Builds notification sentences from server data
+│   ├── receipt_rows.dart             # Straightens a tilted photo and groups OCR lines into printed rows
+│   ├── receipt_parser.dart           # Finds the total, date, store, category and products in the rows
 │   └── statement_pdf.dart            # Statement PDF with the embedded Nunito font
 ├── widgets/
 │   ├── language_menu_button.dart     # Language switch in the app bar
 │   ├── attachments_section.dart      # Receipt list and viewer
 │   ├── deposit_card.dart             # Deposit card on the Members tab
 │   ├── iban_qr_sheet.dart            # IBAN as a QR code, with share
+│   ├── receipt_result_sheet.dart     # What was read from a receipt, with product checkboxes
 │   └── illustration.dart             # Illustrations, with dark versions in dark mode
 ├── config.dart            # API base URL (can be set with --dart-define)
 ├── models.dart            # Data classes with fromJson factories
@@ -105,7 +112,12 @@ lib/
 ├── theme.dart             # Light and dark colors (AppColors, AppPalette), typography and component themes
 └── main.dart              # App start, theme and routing between login and homes
 test/
-└── summary_text_test.dart # Unit test for the balance summary text
+├── summary_text_test.dart     # Balance summary text
+├── category_test.dart         # Category codes, labels and icons
+├── receipt_parser_test.dart   # Receipt rules on clean text
+├── receipt_rows_test.dart     # Tilt correction and row grouping
+├── receipt_real_test.dart     # Real ML Kit output of scanned receipts
+└── fixtures/                  # Saved OCR results (personal data replaced)
 ```
 
 ## Running the App
@@ -152,6 +164,8 @@ flutter build apk --release --dart-define=API_BASE_URL=https://your-api.example.
 
 The release build is currently signed with the debug key, and the manifest allows cleartext HTTP for local development. Before a public release, use HTTPS, remove `usesCleartextTraffic`, and add a release signing config.
 
+The APK is a universal build that runs on every Android device. Because it contains the ML Kit text recognition model for each processor type, it is about 100 MB.
+
 ## Push Notifications
 
 Push notifications use Firebase Cloud Messaging (`firebase_core`, `firebase_messaging`, `flutter_local_notifications`). The Android build applies the Google services plugin, so **the app does not build without a Firebase config file**, even if you do not use push. Setup, once per developer:
@@ -166,6 +180,7 @@ Push notifications use Firebase Cloud Messaging (`firebase_core`, `firebase_mess
 
 - **The server sends data, the app writes the text.** The API returns only facts (who did what, how much, which home). The app builds the notification sentences in the current language (`lib/utils/notification_text.dart`), so the wording stays consistent in Turkish and English.
 - **Attachments come from the server.** Receipts are fetched from the API when they are opened. The downloaded bytes are kept in memory only (RAM), not on disk, so they are cleared when the app closes.
+- **Receipts are read on the device.** Receipt scanning uses Google ML Kit on the phone, so the photo is not sent to any OCR service and the feature works without internet. The rules that find the total, date and products are plain Dart (`lib/utils/receipt_parser.dart`), so they are covered by unit tests, including saved output of real receipts. The total is chosen by priority ("ÖDENECEK" before "GENEL TOPLAM" before "TOPLAM"), because receipts print several totals.
 - **PDFs are generated on the device.** The statement PDF is built on the phone with the `pdf` package and the embedded Nunito font, so Turkish characters (ç, ğ, ı, ö, ş, ü) and the ₺ sign print correctly.
 - **Dark mode uses the theme, not fixed colors.** The app has Light, Dark and System modes. Screens read their colors with `context.palette` (for example `context.palette.muted`), which returns the light or dark set of the `AppPalette` theme extension in `lib/theme.dart`.
 - **Dark illustrations.** Each illustration has a dark version next to it (for example `empty-homes-dark.png`), and the illustrations have transparent backgrounds. If a dark version is missing, the light file is used.
