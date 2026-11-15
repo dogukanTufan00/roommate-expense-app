@@ -144,7 +144,7 @@ class _SplitDefaultsScreenState extends State<SplitDefaultsScreen> {
     final color = categoryColor(category);
     final def = _defaultFor(category);
 
-    // Example: "Doğukan %60 · Bülent %40", or "Split equally" when there is no default.
+    // Example: "Doğukan %60 · Mert %40", or "Split equally" when there is no default.
     final description = (def == null || def.shares.isEmpty)
         ? l10n.splitEqualSplit
         : def.shares

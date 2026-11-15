@@ -10,7 +10,7 @@ import 'package:roommate_expense_app/utils/iban.dart';
 // 🏠 Kadıköy ev · 15 Kas 2026
 //
 // Kim kime ne ödeyecek:
-// • Hatem → Doğukan: ₺1.250,00
+// • Kerem → Doğukan: ₺1.250,00
 //
 // IBAN'lar:
 // Doğukan Tufan: TR12 0006 4000 0011 2345 6789 01
@@ -60,8 +60,8 @@ String? _ibanSection(AppLocalizations l10n, List<Settlement> settlements) {
 
 // The message for ONE payment, to send straight to that person.
 // If the sharer is the one who gets the money, it speaks to the payer by first name:
-//   "Selam Bülent, Kadıköy ev hesabına göre bana ₺2.000,00 ödemen gerekiyor."
-// Anyone else gets a neutral line: "Kadıköy ev · Bülent → Doğukan: ₺2.000,00".
+//   "Selam Mert, Kadıköy ev hesabına göre bana ₺2.000,00 ödemen gerekiyor."
+// Anyone else gets a neutral line: "Kadıköy ev · Mert → Doğukan: ₺2.000,00".
 // The receiver's IBAN follows when they have one, then the footer.
 String buildSettlementMessage(
   AppLocalizations l10n, {
@@ -83,7 +83,7 @@ String buildSettlementMessage(
   return '${lines.join('\n')}\n\n${l10n.summaryFooter}';
 }
 
-// "Bülent Aksoy" -> "Bülent": a greeting uses the first name only.
+// "Mert Çelik" -> "Mert": a greeting uses the first name only.
 String _firstName(String fullName) {
   final trimmed = fullName.trim();
   final space = trimmed.indexOf(' ');

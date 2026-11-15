@@ -116,7 +116,7 @@ bool _isDepositJoin(ActivityEntry entry) =>
 // One change as label + "old → new". Old "shares" rows have no values, so they are a label only.
 ChangeLine _changeLine(AppLocalizations l10n, ActivityChange change) {
   if (change.field == 'shares') return ChangeLine(l10n.historySharesChanged, null);
-  // A chore's turn order as names, for example "Doğukan, Bülent → Doğukan, Bülent, Hatem".
+  // A chore's turn order as names, for example "Doğukan, Mert → Doğukan, Mert, Kerem".
   // Rows written before this had no values; they keep the short "Sıra değişti" line.
   if (change.field == 'rotation') {
     if (change.oldValue == null && change.newValue == null) {

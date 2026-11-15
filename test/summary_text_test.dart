@@ -40,8 +40,8 @@ void main() {
       householdName: 'Kadıköy ev',
       date: date,
       settlements: [
-        _settlement(from: 1, fromName: 'Hatem', to: 2, toName: 'Doğukan', amount: 1250, toIban: _iban),
-        _settlement(from: 3, fromName: 'Bülent', to: 2, toName: 'Doğukan', amount: 300, toIban: _iban),
+        _settlement(from: 1, fromName: 'Kerem', to: 2, toName: 'Doğukan', amount: 1250, toIban: _iban),
+        _settlement(from: 3, fromName: 'Mert', to: 2, toName: 'Doğukan', amount: 300, toIban: _iban),
       ],
     );
 
@@ -50,8 +50,8 @@ void main() {
       '🏠 Kadıköy ev · 15 Kas 2026\n'
       '\n'
       'Kim kime ne ödeyecek:\n'
-      '• Hatem → Doğukan: ₺1.250,00\n'
-      '• Bülent → Doğukan: ₺300,00\n'
+      '• Kerem → Doğukan: ₺1.250,00\n'
+      '• Mert → Doğukan: ₺300,00\n'
       '\n'
       "IBAN'lar:\n"
       'Doğukan: TR12 0006 4000 0011 2345 6789 01\n'
@@ -67,12 +67,12 @@ void main() {
       householdName: 'Flat',
       date: date,
       settlements: [
-        _settlement(from: 1, fromName: 'Hatem', to: 2, toName: 'Doğukan', amount: 10),
+        _settlement(from: 1, fromName: 'Kerem', to: 2, toName: 'Doğukan', amount: 10),
       ],
     );
 
     expect(text.contains('IBANs:'), isFalse);
-    expect(text, contains('• Hatem → Doğukan: ₺10.00'));
+    expect(text, contains('• Kerem → Doğukan: ₺10.00'));
   });
 
   test('no settlements gives the all-settled text', () {
@@ -92,10 +92,10 @@ void main() {
     final text = buildSettlementMessage(
       l10n,
       householdName: 'Kadıköy ev',
-      settlement: _settlement(from: 2, fromName: 'Bülent Aksoy', to: 1, toName: 'Doğukan Tufan', amount: 2000, toIban: _iban),
+      settlement: _settlement(from: 2, fromName: 'Mert Çelik', to: 1, toName: 'Doğukan Tufan', amount: 2000, toIban: _iban),
       myUserId: 1,
     );
-    expect(text, 'Selam Bülent, Kadıköy ev hesabına göre bana ₺2.000,00 ödemen gerekiyor.\n'
+    expect(text, 'Selam Mert, Kadıköy ev hesabına göre bana ₺2.000,00 ödemen gerekiyor.\n'
         'IBAN: TR12 0006 4000 0011 2345 6789 01 (Doğukan Tufan)\n\n'
         'Evce ile hesaplandı');
   });
@@ -105,9 +105,9 @@ void main() {
     final text = buildSettlementMessage(
       l10n,
       householdName: 'Kadıköy ev',
-      settlement: _settlement(from: 3, fromName: 'Hatem', to: 1, toName: 'Doğukan', amount: 2000),
+      settlement: _settlement(from: 3, fromName: 'Kerem', to: 1, toName: 'Doğukan', amount: 2000),
       myUserId: 2,
     );
-    expect(text, 'Kadıköy ev · Hatem → Doğukan: ₺2.000,00\n\nEvce ile hesaplandı');
+    expect(text, 'Kadıköy ev · Kerem → Doğukan: ₺2.000,00\n\nEvce ile hesaplandı');
   });
 }
