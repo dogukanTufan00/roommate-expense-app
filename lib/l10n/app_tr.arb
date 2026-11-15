@@ -1407,5 +1407,23 @@
   "appearance": "Görünüm",
   "themeLight": "Açık",
   "themeDark": "Koyu",
-  "themeSystem": "Sistem"
+  "themeSystem": "Sistem",
+  "receiptFillButton": "Fişten doldur",
+  "receiptSourceCamera": "Kamera",
+  "receiptSourceGallery": "Galeri",
+  "receiptReading": "Fiş okunuyor…",
+  "receiptResultTitle": "Fişten okunanlar",
+  "receiptStore": "Mağaza",
+  "itemsTextLabel": "Ürünler",
+  "itemsTextHint": "Her satıra bir ürün",
+  "receiptApply": "Uygula",
+  "receiptNothingFound": "Fişten bilgi okunamadı, bilgileri elle girebilirsin.",
+  "historyFieldItems": "Ürünler",
+  "historyLineCount": "{count} satır",
+  "@historyLineCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "receiptAccuracyNote": "Fiş okuma her zaman doğru sonuç vermeyebilir. Uygulamadan önce bilgileri kontrol et."
 }

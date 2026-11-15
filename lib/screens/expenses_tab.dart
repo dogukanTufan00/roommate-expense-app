@@ -390,13 +390,14 @@ class _ExpensesTabState extends State<ExpensesTab> {
 
   // ---- Search ----
 
-  // True when the query is empty or appears in the description, the category label (in the
-  // current language), the payer's name, any share person's name, or the amount.
+  // True when the query is empty or appears in the description, the products, the category
+  // label (in the current language), the payer's name, any share person's name, or the amount.
   // The query must already be normalized with normalizeForSearch.
   bool _matchesSearch(Expense e, AppLocalizations l10n, String query) {
     if (query.isEmpty) return true;
     if (normalizeForSearch(e.description ?? '').contains(query)) return true;
     if (normalizeForSearch(categoryLabel(l10n, e.category)).contains(query)) return true;
+    if (normalizeForSearch(e.itemsText ?? '').contains(query)) return true;
     if (normalizeForSearch(e.paidByName).contains(query)) return true;
     for (final share in e.shares) {
       if (normalizeForSearch(share.name).contains(query)) return true;

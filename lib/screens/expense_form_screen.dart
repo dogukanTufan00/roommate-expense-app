@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:roommate_expense_app/api/api.dart';
 import 'package:roommate_expense_app/api/api_client.dart';
 import 'package:roommate_expense_app/l10n/app_localizations.dart';
 import 'package:roommate_expense_app/models.dart';
+import 'package:roommate_expense_app/services/receipt_scanner.dart';
 import 'package:roommate_expense_app/session.dart';
 import 'package:roommate_expense_app/theme.dart';
 import 'package:roommate_expense_app/utils/bill_reminder.dart';
 import 'package:roommate_expense_app/utils/category.dart';
 import 'package:roommate_expense_app/utils/errors.dart';
 import 'package:roommate_expense_app/utils/format.dart';
+import 'package:roommate_expense_app/utils/receipt_parser.dart';
 import 'package:roommate_expense_app/utils/split.dart';
 import 'package:roommate_expense_app/widgets/attachments_section.dart';
+import 'package:roommate_expense_app/widgets/receipt_result_sheet.dart';
 
 // Parses "12,50" and "12.50" the same way.
 double? _parseAmount(String text) {
@@ -97,6 +101,10 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
 
   // Create only: receipts picked before the expense exists. Uploaded right after it is saved.
   final List<UploadFile> _pendingFiles = [];
+  // Create only: true while a receipt photo is being read on the phone.
+  bool _scanning = false;
+  // The products, one per line. Sent as itemsText.
+  final _itemsController = TextEditingController();
   // Create only: shopping items this expense is made from. Empty for a normal expense.
   late final List<ShoppingItem> _linkedItems;
   // Edit only: an attachment was added or deleted, so the list must refresh when the form closes.
@@ -125,6 +133,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
     } else {
       _amountController.text = expense.amount.toStringAsFixed(2);
       _descriptionController.text = expense.description ?? '';
+      _itemsController.text = expense.itemsText ?? '';
       _category = expense.category;
       _date = _atNoon(expense.expenseDate);
       _recurring = expense.recurring;
@@ -157,6 +166,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
   void dispose() {
     _amountController.dispose();
     _descriptionController.dispose();
+    _itemsController.dispose();
     for (final controller in _shareControllers.values) {
       controller.dispose();
     }
@@ -423,6 +433,118 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
     setState(() => _date = _atNoon(picked));
   }
 
+  // Create only: fills the form from a receipt photo. ML Kit reads the photo on the phone.
+  Future<void> _scanReceipt() async {
+    final l10n = AppLocalizations.of(context);
+    final source = await showModalBottomSheet<ImageSource>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetContext) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.photo_camera_outlined),
+              title: Text(l10n.receiptSourceCamera),
+              onTap: () => Navigator.pop(sheetContext, ImageSource.camera),
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library_outlined),
+              title: Text(l10n.receiptSourceGallery),
+              onTap: () => Navigator.pop(sheetContext, ImageSource.gallery),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (source == null || !mounted) return;
+
+    // Same size limits as the attachments section.
+    final photo = await ImagePicker().pickImage(
+      source: source,
+      maxWidth: 2000,
+      imageQuality: 80,
+    );
+    if (photo == null || !mounted) return;
+
+    setState(() => _scanning = true);
+    ReceiptData? scanned;
+    try {
+      scanned = await scanReceiptImage(photo.path);
+    } catch (_) {
+      // Reading failed. The photo is still attached, and the user types the details.
+      scanned = null;
+    }
+    if (!mounted) return;
+    setState(() => _scanning = false);
+
+    final data = scanned;
+    final foundAnything = data != null &&
+        (data.total != null ||
+            data.date != null ||
+            data.storeName != null ||
+            data.category != null ||
+            data.items.isNotEmpty);
+    if (data == null || !foundAnything) {
+      await _attachReceiptPhoto(photo);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(l10n.receiptNothingFound)));
+      return;
+    }
+
+    final chosen = await showModalBottomSheet<List<ReceiptItem>>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (_) => ReceiptResultSheet(data: data),
+    );
+    if (chosen == null || !mounted) return;
+    _applyReceipt(data, chosen);
+    await _attachReceiptPhoto(photo);
+  }
+
+  // Copies what the user kept checked from the receipt into the form.
+  void _applyReceipt(ReceiptData data, List<ReceiptItem> chosen) {
+    final members = _members;
+    setState(() {
+      final total = data.total;
+      if (total != null) _amountController.text = total.toStringAsFixed(2);
+      final date = data.date;
+      if (date != null) _date = _atNoon(date);
+      final category = data.category;
+      if (category != null && expenseCategories.contains(category)) {
+        _category = category;
+        // Same as the category dropdown: an untouched split follows the new category.
+        if (members != null) _applyCategoryDefault(members);
+      }
+      // The store name becomes the description, but never replaces a typed one.
+      final store = data.storeName;
+      if (store != null && _descriptionController.text.trim().isEmpty) {
+        _descriptionController.text = store;
+      }
+      if (chosen.isNotEmpty) {
+        final lines = [for (final item in chosen) formatReceiptItem(item)].join('\n');
+        final existing = _itemsController.text.trim();
+        _itemsController.text = existing.isEmpty ? lines : '$existing\n$lines';
+      }
+    });
+  }
+
+  // Adds the receipt photo to the pending files, the same way as a photo from the attachments.
+  Future<void> _attachReceiptPhoto(XFile photo) async {
+    if (_pendingFiles.length >= maxAttachmentsPerOwner) return;
+    try {
+      final file = await photoToUploadFile(photo);
+      if (!mounted) return;
+      setState(() => _pendingFiles.add(file));
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(errorMessage(context, e))));
+    }
+  }
+
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -450,6 +572,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
           ];
 
     final description = _descriptionController.text.trim();
+    final itemsText = _itemsController.text.trim();
     final input = ExpenseInput(
       paidByUserId: _paidByUserId!,
       amount: _parseAmount(_amountController.text)!,
@@ -461,6 +584,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
       splitType: keepStored ? null : _splitType,
       shares: shares,
       reminderDaysBefore: _reminderDaysBefore,
+      itemsText: itemsText.isEmpty ? null : itemsText,
     );
 
     setState(() => _saving = true);
@@ -610,6 +734,34 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            if (widget.expense == null) ...[
+              OutlinedButton.icon(
+                onPressed: _scanning ? null : _scanReceipt,
+                icon: _scanning
+                    ? const SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Icon(Icons.document_scanner_outlined),
+                label: Text(
+                  _scanning ? l10n.receiptReading : l10n.receiptFillButton,
+                ),
+              ),
+              // Sets the right expectation: OCR is a suggestion, not always correct.
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 6, 12, 0),
+                child: Text(
+                  l10n.receiptAccuracyNote,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall
+                      ?.copyWith(color: context.palette.muted),
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
             if (_linkedItems.isNotEmpty) ...[
               Container(
                 padding: const EdgeInsets.symmetric(
@@ -705,6 +857,17 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
             TextFormField(
               controller: _descriptionController,
               decoration: InputDecoration(labelText: l10n.description),
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _itemsController,
+              minLines: 2,
+              maxLines: 8,
+              maxLength: 2000,
+              decoration: InputDecoration(
+                labelText: l10n.itemsTextLabel,
+                hintText: l10n.itemsTextHint,
+              ),
             ),
             const SizedBox(height: 8),
             ListTile(

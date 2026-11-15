@@ -91,6 +91,12 @@ Future<UploadFile?> pickAttachment(BuildContext context) async {
     imageQuality: 80,
   );
   if (photo == null) return null;
+  return photoToUploadFile(photo);
+}
+
+// Turns a photo from the camera or the gallery into an upload. Throws ApiException when the
+// photo is too large or is not a JPEG, PNG or WEBP image.
+Future<UploadFile> photoToUploadFile(XFile photo) async {
   final bytes = await photo.readAsBytes();
   _checkSize(bytes.length);
   // The type comes from the bytes, not the file name, so the content type is always right.

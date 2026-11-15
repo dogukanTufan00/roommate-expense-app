@@ -1923,4 +1923,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get themeSystem => 'System';
+
+  @override
+  String get receiptFillButton => 'Fill from receipt';
+
+  @override
+  String get receiptSourceCamera => 'Camera';
+
+  @override
+  String get receiptSourceGallery => 'Gallery';
+
+  @override
+  String get receiptReading => 'Reading the receipt…';
+
+  @override
+  String get receiptResultTitle => 'Found on the receipt';
+
+  @override
+  String get receiptStore => 'Store';
+
+  @override
+  String get itemsTextLabel => 'Products';
+
+  @override
+  String get itemsTextHint => 'One product per line';
+
+  @override
+  String get receiptApply => 'Apply';
+
+  @override
+  String get receiptNothingFound =>
+      'Couldn\'t read the receipt, please enter the details by hand.';
+
+  @override
+  String get historyFieldItems => 'Products';
+
+  @override
+  String historyLineCount(int count) {
+    return '$count lines';
+  }
+
+  @override
+  String get receiptAccuracyNote =>
+      'Receipt reading isn\'t always accurate. Check the details before applying.';
 }

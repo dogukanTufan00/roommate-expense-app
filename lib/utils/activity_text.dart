@@ -167,6 +167,7 @@ String? _fieldLabel(AppLocalizations l10n, String field) {
     'name' => l10n.historyFieldName,
     'currentUser' => l10n.historyFieldCurrentUser,
     'totalAmount' => l10n.historyFieldDeposit,
+    'itemsText' => l10n.historyFieldItems,
     _ => null,
   };
 }
@@ -191,6 +192,10 @@ String _fieldValue(AppLocalizations l10n, String field, String? value) {
       return time == null
           ? value
           : DateFormat.yMMMd(tag).add_Hm().format(time.toLocal());
+    case 'itemsText':
+      // The server sends the number of lines, for example "3".
+      final lines = int.tryParse(value);
+      return lines == null ? value : l10n.historyLineCount(lines);
     case 'recurring':
       if (value == 'true') return l10n.historyYes;
       if (value == 'false') return l10n.historyNo;

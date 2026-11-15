@@ -154,6 +154,8 @@ class Expense {
   final int? generatedFromId;
   // The day of the month this recurring chain repeats on. Null when the API does not send it.
   final int? recurrenceDay;
+  // The products of a receipt, one per line. Null when there are none.
+  final String? itemsText;
   // Days before the due date that payers get a reminder: 0 is off, otherwise 1, 3 or 7.
   // Defaults to 3 when the API does not send it.
   final int reminderDaysBefore;
@@ -174,6 +176,7 @@ class Expense {
     this.attachmentCount = 0,
     this.generatedFromId,
     this.recurrenceDay,
+    this.itemsText,
     this.reminderDaysBefore = 3,
   });
 
@@ -198,6 +201,7 @@ class Expense {
       attachmentCount: _countValue(json['attachmentCount']),
       generatedFromId: json['generatedFromId'] as int?,
       recurrenceDay: json['recurrenceDay'] as int?,
+      itemsText: _optionalText(json['itemsText']),
       reminderDaysBefore: (json['reminderDaysBefore'] as num?)?.toInt() ?? 3,
     );
   }
@@ -600,6 +604,8 @@ class StatementExpense {
   // One of: EQUAL, PERCENT, AMOUNT
   final String splitType;
   final List<StatementShare> shares;
+  // The products of a receipt, one per line. Null when there are none.
+  final String? itemsText;
 
   StatementExpense({
     required this.id,
@@ -610,6 +616,7 @@ class StatementExpense {
     required this.paidByName,
     required this.splitType,
     required this.shares,
+    this.itemsText,
   });
 
   factory StatementExpense.fromJson(Map<String, dynamic> json) {
@@ -621,6 +628,7 @@ class StatementExpense {
       category: json['category'] as String,
       amount: _numValue(json['amount']),
       paidByName: json['paidByName'] as String,
+      itemsText: _optionalText(json['itemsText']),
       splitType: json['splitType'] as String? ?? 'EQUAL',
       shares: [
         for (final item in rawShares)

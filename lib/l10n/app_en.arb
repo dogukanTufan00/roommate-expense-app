@@ -1506,5 +1506,23 @@
   "appearance": "Appearance",
   "themeLight": "Light",
   "themeDark": "Dark",
-  "themeSystem": "System"
+  "themeSystem": "System",
+  "receiptFillButton": "Fill from receipt",
+  "receiptSourceCamera": "Camera",
+  "receiptSourceGallery": "Gallery",
+  "receiptReading": "Reading the receipt…",
+  "receiptResultTitle": "Found on the receipt",
+  "receiptStore": "Store",
+  "itemsTextLabel": "Products",
+  "itemsTextHint": "One product per line",
+  "receiptApply": "Apply",
+  "receiptNothingFound": "Couldn't read the receipt, please enter the details by hand.",
+  "historyFieldItems": "Products",
+  "historyLineCount": "{count} lines",
+  "@historyLineCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "receiptAccuracyNote": "Receipt reading isn't always accurate. Check the details before applying."
 }

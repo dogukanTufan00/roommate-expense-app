@@ -186,7 +186,7 @@ Future<Uint8List> buildStatementPdf({
               for (final e in statement.expenses)
                 [
                   formatDateFor(localeTag, e.date),
-                  e.description ?? '-',
+                  _descriptionCell(e),
                   categoryLabel(l10n, e.category),
                   e.paidByName,
                   money(e.amount),
@@ -228,6 +228,30 @@ Future<Uint8List> buildStatementPdf({
   return doc.save();
 }
 
+// The description of an expense, with its products in small muted text under it.
+// At most 6 product lines are printed, then "…".
+pw.Widget _descriptionCell(StatementExpense e) {
+  final lines = (e.itemsText ?? '')
+      .split('\n')
+      .where((line) => line.trim().isNotEmpty)
+      .toList();
+  final description = pw.Text(
+    e.description ?? '-',
+    style: pw.TextStyle(fontSize: 9, color: _ink),
+  );
+  if (lines.isEmpty) return description;
+  return pw.Column(
+    crossAxisAlignment: pw.CrossAxisAlignment.start,
+    children: [
+      description,
+      for (final line in lines.take(6))
+        pw.Text(line, style: pw.TextStyle(fontSize: 7, color: _muted)),
+      if (lines.length > 6)
+        pw.Text('…', style: pw.TextStyle(fontSize: 7, color: _muted)),
+    ],
+  );
+}
+
 // A section title above a table.
 pw.Widget _heading(String text) {
   return pw.Padding(
@@ -251,7 +275,7 @@ pw.Widget _note(String text) {
 // A table with a shaded header row. Tables split over pages on their own.
 pw.Widget _table({
   required List<String> headers,
-  required List<List<String>> rows,
+  required List<List<Object>> rows,
   Set<int> rightAligned = const {},
   Map<int, pw.TableColumnWidth> widths = const {},
 }) {

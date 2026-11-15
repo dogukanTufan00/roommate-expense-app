@@ -1899,4 +1899,47 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get themeSystem => 'Sistem';
+
+  @override
+  String get receiptFillButton => 'Fişten doldur';
+
+  @override
+  String get receiptSourceCamera => 'Kamera';
+
+  @override
+  String get receiptSourceGallery => 'Galeri';
+
+  @override
+  String get receiptReading => 'Fiş okunuyor…';
+
+  @override
+  String get receiptResultTitle => 'Fişten okunanlar';
+
+  @override
+  String get receiptStore => 'Mağaza';
+
+  @override
+  String get itemsTextLabel => 'Ürünler';
+
+  @override
+  String get itemsTextHint => 'Her satıra bir ürün';
+
+  @override
+  String get receiptApply => 'Uygula';
+
+  @override
+  String get receiptNothingFound =>
+      'Fişten bilgi okunamadı, bilgileri elle girebilirsin.';
+
+  @override
+  String get historyFieldItems => 'Ürünler';
+
+  @override
+  String historyLineCount(int count) {
+    return '$count satır';
+  }
+
+  @override
+  String get receiptAccuracyNote =>
+      'Fiş okuma her zaman doğru sonuç vermeyebilir. Uygulamadan önce bilgileri kontrol et.';
 }

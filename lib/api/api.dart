@@ -47,6 +47,8 @@ class ExpenseInput {
   // Days before the due date that payers get a reminder: 0 is off, otherwise 1, 3 or 7.
   // Always sent. It only matters when the expense repeats.
   final int reminderDaysBefore;
+  // The products of a receipt, one per line. Null when blank.
+  final String? itemsText;
 
   ExpenseInput({
     required this.paidByUserId,
@@ -58,6 +60,7 @@ class ExpenseInput {
     required this.splitType,
     required this.shares,
     this.reminderDaysBefore = 3,
+    this.itemsText,
   });
 
   Map<String, dynamic> toJson() {
@@ -69,6 +72,7 @@ class ExpenseInput {
       'recurring': recurring,
       'expenseDate': _apiDateFormat.format(expenseDate),
       'reminderDaysBefore': reminderDaysBefore,
+      'itemsText': itemsText,
     };
     // Sending neither splitType nor shares tells the API to keep the stored split.
     if (splitType != null) json['splitType'] = splitType;

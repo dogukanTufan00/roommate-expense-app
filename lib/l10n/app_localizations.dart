@@ -3175,6 +3175,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'System'**
   String get themeSystem;
+
+  /// No description provided for @receiptFillButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill from receipt'**
+  String get receiptFillButton;
+
+  /// No description provided for @receiptSourceCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get receiptSourceCamera;
+
+  /// No description provided for @receiptSourceGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery'**
+  String get receiptSourceGallery;
+
+  /// No description provided for @receiptReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading the receipt…'**
+  String get receiptReading;
+
+  /// No description provided for @receiptResultTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Found on the receipt'**
+  String get receiptResultTitle;
+
+  /// No description provided for @receiptStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Store'**
+  String get receiptStore;
+
+  /// No description provided for @itemsTextLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Products'**
+  String get itemsTextLabel;
+
+  /// No description provided for @itemsTextHint.
+  ///
+  /// In en, this message translates to:
+  /// **'One product per line'**
+  String get itemsTextHint;
+
+  /// No description provided for @receiptApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get receiptApply;
+
+  /// No description provided for @receiptNothingFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t read the receipt, please enter the details by hand.'**
+  String get receiptNothingFound;
+
+  /// No description provided for @historyFieldItems.
+  ///
+  /// In en, this message translates to:
+  /// **'Products'**
+  String get historyFieldItems;
+
+  /// No description provided for @historyLineCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} lines'**
+  String historyLineCount(int count);
+
+  /// No description provided for @receiptAccuracyNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Receipt reading isn\'t always accurate. Check the details before applying.'**
+  String get receiptAccuracyNote;
 }
 
 class _AppLocalizationsDelegate
