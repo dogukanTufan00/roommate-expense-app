@@ -10,25 +10,28 @@ The backend lives in [dogukanTufan00/shared-expense-tracking-system](https://git
 - **Warm, bilingual UI.** Turkish and English. The app follows the phone's language by default, and you can switch languages inside the app. The choice is saved.
 - **Login and sign up.** You stay logged in after closing the app. The saved token's expiry is checked at start-up, and an expired session asks you to log in again.
 - **Homes and invitations.** A list of your homes, with invitation cards you can accept or decline. A notification bell in the top bar shows an unread badge.
-- **Household screen with four tabs:**
-  - **Expenses:** expenses grouped by month, with filters. Badges mark expenses with a receipt (paperclip), recurring expenses, and automatically generated ones.
-  - **Balances:** your own status, and who pays whom. Copy the recipient's IBAN with one tap, and record a payment with a suggested amount (the app warns you about overpayment). A payment details sheet shows the receipts.
+- **Household screen with five tabs:**
+  - **Expenses:** a shopping list card at the top, with the number of items still to buy. Tap it to open the shared list: tick items as they are bought, then save the bought items together as one expense ("checkout"). Below it, an "Upcoming payments" card lists the next bills (up to three, then "+N more"). Expenses are grouped by month, with filters and a search box. Search checks the description, category, payer, share names and amount, and ignores Turkish letter differences (so "irmak" also finds "Irmak"). Badges mark expenses with a receipt (paperclip), recurring expenses, and automatically generated ones.
+  - **Balances:** who pays whom, with one line per debt between two people. Only the payer or the receiver can mark a payment as paid (an admin can do it only when one of them has left the home). Copy the recipient's IBAN with one tap, show it as a QR code, and record a payment with a suggested amount (the app warns you about overpayment). Share a single payment, or the whole summary, to WhatsApp or any other app. The person who is owed can tap "Remind" to send the debtor a gentle reminder, once every 24 hours. A payment details sheet shows the receipts.
+  - **Chores:** household chores (for example trash or dishes) with a rotation. Tick the people who take part and drag them into the turn order. The turn moves on when a chore is marked done, and you can remind the person whose turn it is. Each chore keeps its own history.
   - **Statement:** pick a month or a custom date range to see per-person bars, the dominant payer insight, a category breakdown, and a 6-month chart. The statement can be exported as PDF and shared.
-  - **Members:** founder and admin icons (with tooltips), invite members by email, change roles, transfer ownership, remove members (with a warning if they still have open debts), and leave the home.
-- **Expense form.** Choose the members involved and a split: Equal, Percent or Amount. Default split ratios can be saved and reused. Expenses can be set to recur, and receipts can be attached from the camera, the gallery, or as PDF files.
+  - **Members:** founder and admin icons (with tooltips), invite members by email, change roles, transfer ownership, remove members (with a warning if they still have open debts), and leave the home. The deposit card shows the home's deposit and what each person holds; admins can undo a deposit transfer. Leaving the home, or removing a member, opens the move-out screen: hand the person's deposit share to the others, settle their open debts, and then leave.
+- **Expense form.** Choose the members involved and a split: Equal, Percent or Amount. Default split ratios can be saved and reused. Expenses can be set to recur, and receipts can be attached from the camera, the gallery, or as PDF files. For recurring expenses, you can also choose a bill reminder (none, or 1, 3 or 7 days before the due date); everyone with a share gets a notification.
 - **Recurring expenses.** A screen to review and manage recurring expenses.
 - **Default ratios.** A screen to set the default split ratios for each home.
-- **Profile.** Change your name, set your IBAN (validated), and change your password.
-- **Notifications.** A full notifications screen with invitations, new expenses, recorded payments and recurring expenses.
+- **Profile.** Change your name, set your IBAN (validated) and show it as a QR code, change your password, and choose the appearance: Light, Dark or System. The choice is saved on the device.
+- **Account deletion.** Delete your account from the profile. The first screen explains what happens. Homes where you are the only member are deleted with their expenses and payments. If you are the founder of a home that still has other members, or the last admin of one, you must transfer ownership or make another member an admin first; the delete button stays disabled until then. Open balances are shown as a warning, because deleting your account does not clear them. You type your password and confirm that this cannot be undone. Expenses and payments you shared stay in your roommates' balances, under a placeholder name ("Silinmiş kullanıcı").
+- **Notifications.** A full notifications screen with invitations, new expenses, recorded payments, recurring expenses, chore turns and payment or chore reminders.
 - **Push notifications.** Firebase Cloud Messaging works while the app is open, in the background, and after the app was closed. Tapping a notification opens its home.
+- **Activity history.** The clock icon in a home's top bar opens its history: every addition, edit and deletion of expenses, payments and members, newest first, with who did it, when, and what changed.
 
 ## Tech Stack
 
 | Concern | Technology |
 |---|---|
 | Framework / language | Flutter / Dart (Dart SDK `^3.13.5`, see `pubspec.yaml`) |
-| UI | Material 3 with a custom warm theme (`lib/theme.dart`): terracotta, sage, mustard and cream palette, Nunito font, illustrations made with Gemini |
-| State management | `setState`, with a few shared `ValueNotifier`s (for example the language). No state-management library, on purpose: the app is small, and plain `setState` is easier to read and maintain. |
+| UI | Material 3 with a custom warm theme (`lib/theme.dart`): terracotta, sage, mustard and cream palette for light mode, and a warm coffee-brown palette for dark mode (`AppPalette`), Nunito font, illustrations made with Gemini |
+| State management | `setState`, with a few shared `ValueNotifier`s (for example the language and the theme). No state-management library, on purpose: the app is small, and plain `setState` is easier to read and maintain. |
 | Backend | REST API (Spring Boot), see the [backend repository](https://github.com/dogukanTufan00/shared-expense-tracking-system) |
 
 ### Packages
@@ -48,6 +51,8 @@ The backend lives in [dogukanTufan00/shared-expense-tracking-system](https://git
 | `firebase_core` | ^5.1.0 | Starts Firebase in the app |
 | `firebase_messaging` | ^17.0.1 | Receives push notifications and gives the device's FCM token |
 | `flutter_local_notifications` | ^23.0.1 | Shows push notifications while the app is open, and handles taps on them |
+| `share_plus` | ^13.3.1 | Shares the balance summary and single payments with other apps (for example WhatsApp), and shares the IBAN QR code |
+| `qr_flutter` | ^4.1.0 | Draws the IBAN as a QR code that a banking app can scan |
 | `flutter_launcher_icons` (dev) | ^0.14.4 | Generates the Android app icon in every size |
 | `flutter_native_splash` (dev) | ^2.4.8 | Generates the cream launch screen with the app icon |
 
@@ -64,16 +69,26 @@ lib/
 ├── screens/
 │   ├── login_screen.dart, register_screen.dart
 │   ├── households_screen.dart        # Home list, invitation cards, notification bell
-│   ├── household_screen.dart         # Home details with the four tabs
-│   ├── expenses_tab.dart, balances_tab.dart, statement_tab.dart, members_tab.dart
+│   ├── household_screen.dart         # Home details with the five tabs
+│   ├── expenses_tab.dart, balances_tab.dart, chores_tab.dart, statement_tab.dart, members_tab.dart
 │   ├── expense_form_screen.dart      # Add or edit an expense
+│   ├── shopping_list_screen.dart     # Shared shopping list, checkout into one expense
+│   ├── chore_form_screen.dart        # Add or edit a chore and its rotation order
+│   ├── deposit_form_screen.dart      # Set the home deposit and each person's share
+│   ├── move_out_screen.dart          # Deposit handover, settling debts, leaving or removing a member
+│   ├── history_screen.dart           # Activity history of one home
 │   ├── recurring_expenses_screen.dart
 │   ├── split_defaults_screen.dart    # Default split ratios
-│   ├── profile_screen.dart           # Name, IBAN, password
+│   ├── profile_screen.dart           # Name, IBAN, password, appearance
+│   ├── delete_account_screen.dart    # Account deletion, with the blockers and open balances
 │   └── notifications_screen.dart
 ├── utils/
 │   ├── avatar.dart, category.dart    # Member avatars, category codes, labels and icons
 │   ├── split.dart, iban.dart         # Split calculations, IBAN validation
+│   ├── bill_reminder.dart            # Reminder choices and days until a due date
+│   ├── search.dart                   # Expense search text folding (Turkish letters)
+│   ├── summary_text.dart             # Text of the shareable balance summary
+│   ├── activity_text.dart            # Sentences and change lines of the history
 │   ├── errors.dart                   # Maps API errors to localized messages
 │   ├── format.dart                   # Money and date formatting for the current language
 │   ├── notification_text.dart        # Builds notification sentences from server data
@@ -81,12 +96,16 @@ lib/
 ├── widgets/
 │   ├── language_menu_button.dart     # Language switch in the app bar
 │   ├── attachments_section.dart      # Receipt list and viewer
-│   └── illustration.dart             # Illustrations used on the warm screens
+│   ├── deposit_card.dart             # Deposit card on the Members tab
+│   ├── iban_qr_sheet.dart            # IBAN as a QR code, with share
+│   └── illustration.dart             # Illustrations, with dark versions in dark mode
 ├── config.dart            # API base URL (can be set with --dart-define)
 ├── models.dart            # Data classes with fromJson factories
-├── session.dart           # Saved token, logged in user's email, language choice, JWT expiry check
-├── theme.dart             # Colors, typography and component themes
+├── session.dart           # Saved token, logged in user's email, language and theme choice, JWT expiry check
+├── theme.dart             # Light and dark colors (AppColors, AppPalette), typography and component themes
 └── main.dart              # App start, theme and routing between login and homes
+test/
+└── summary_text_test.dart # Unit test for the balance summary text
 ```
 
 ## Running the App
@@ -148,6 +167,10 @@ Push notifications use Firebase Cloud Messaging (`firebase_core`, `firebase_mess
 - **The server sends data, the app writes the text.** The API returns only facts (who did what, how much, which home). The app builds the notification sentences in the current language (`lib/utils/notification_text.dart`), so the wording stays consistent in Turkish and English.
 - **Attachments come from the server.** Receipts are fetched from the API when they are opened. The downloaded bytes are kept in memory only (RAM), not on disk, so they are cleared when the app closes.
 - **PDFs are generated on the device.** The statement PDF is built on the phone with the `pdf` package and the embedded Nunito font, so Turkish characters (ç, ğ, ı, ö, ş, ü) and the ₺ sign print correctly.
+- **Dark mode uses the theme, not fixed colors.** The app has Light, Dark and System modes. Screens read their colors with `context.palette` (for example `context.palette.muted`), which returns the light or dark set of the `AppPalette` theme extension in `lib/theme.dart`.
+- **Dark illustrations.** Each illustration has a dark version next to it (for example `empty-homes-dark.png`), and the illustrations have transparent backgrounds. If a dark version is missing, the light file is used.
+
+> **Developer note:** new UI code must take its colors from `context.palette`, not from the light-only `AppColors` constants. Using `AppColors` directly makes the screen look wrong in dark mode.
 
 ## Roadmap
 
