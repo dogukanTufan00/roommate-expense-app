@@ -1524,5 +1524,13 @@
       "count": {"type": "int"}
     }
   },
-  "receiptAccuracyNote": "Receipt reading isn't always accurate. Check the details before applying."
+  "receiptAccuracyNote": "Receipt reading isn't always accurate. Check the details before applying.",
+  "categoryCleaning": "Cleaning",
+  "categoryEatingOut": "Eating out",
+  "categorySubscriptions": "Subscriptions",
+  "categoryHomeRepair": "Home & repairs",
+  "categoryPets": "Pets",
+  "categoryEntertainment": "Entertainment",
+  "categoryTransport": "Transport",
+  "categoryHealthBeauty": "Health & beauty"
 }

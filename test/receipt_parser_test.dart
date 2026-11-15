@@ -188,7 +188,7 @@ void main() {
     test('date', () => expect(r.date, DateTime(2026, 11, 15)));
     test('store is the first row; a chain name later in a row does not count', () {
       expect(r.storeName, 'Kırmızı Pide');
-      expect(r.category, isNull);
+      expect(r.category, 'EATING_OUT'); // restaurant words (pide, lahmacun)
     });
     test('products with a leading quantity of 1; rows without a price are skipped', () {
       expect(r.items.map((i) => i.name).toList(), [

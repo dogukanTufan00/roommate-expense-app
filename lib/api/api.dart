@@ -35,7 +35,7 @@ class ShareInput {
 class ExpenseInput {
   final int paidByUserId;
   final double amount;
-  // One of: RENT, UTILITIES, GROCERIES, OTHER
+  // One of the codes in expenseCategories (see utils/category.dart)
   final String category;
   final String? description;
   final bool recurring;

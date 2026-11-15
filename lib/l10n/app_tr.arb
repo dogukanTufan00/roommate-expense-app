@@ -1425,5 +1425,13 @@
       "count": {"type": "int"}
     }
   },
-  "receiptAccuracyNote": "Fiş okuma her zaman doğru sonuç vermeyebilir. Uygulamadan önce bilgileri kontrol et."
+  "receiptAccuracyNote": "Fiş okuma her zaman doğru sonuç vermeyebilir. Uygulamadan önce bilgileri kontrol et.",
+  "categoryCleaning": "Temizlik",
+  "categoryEatingOut": "Yemek",
+  "categorySubscriptions": "Abonelikler",
+  "categoryHomeRepair": "Eşya ve tamir",
+  "categoryPets": "Evcil hayvan",
+  "categoryEntertainment": "Eğlence",
+  "categoryTransport": "Ulaşım",
+  "categoryHealthBeauty": "Sağlık ve kozmetik"
 }

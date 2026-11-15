@@ -138,7 +138,7 @@ class Expense {
   final int paidByUserId;
   final String paidByName;
   final double amount;
-  // One of: RENT, UTILITIES, GROCERIES, OTHER
+  // One of the codes in expenseCategories (see utils/category.dart)
   final String category;
   final String? description;
   final bool recurring;
@@ -515,7 +515,7 @@ class DominantPayer {
 
 // The total of one category in the period.
 class StatementCategory {
-  // One of: RENT, UTILITIES, GROCERIES, OTHER
+  // One of the codes in expenseCategories (see utils/category.dart)
   final String category;
   final double total;
   final int count;
@@ -597,7 +597,7 @@ class StatementExpense {
   final int id;
   final DateTime date;
   final String? description;
-  // One of: RENT, UTILITIES, GROCERIES, OTHER
+  // One of the codes in expenseCategories (see utils/category.dart)
   final String category;
   final double amount;
   final String paidByName;

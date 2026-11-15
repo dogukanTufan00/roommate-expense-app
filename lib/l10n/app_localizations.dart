@@ -3253,6 +3253,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Receipt reading isn\'t always accurate. Check the details before applying.'**
   String get receiptAccuracyNote;
+
+  /// No description provided for @categoryCleaning.
+  ///
+  /// In en, this message translates to:
+  /// **'Cleaning'**
+  String get categoryCleaning;
+
+  /// No description provided for @categoryEatingOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Eating out'**
+  String get categoryEatingOut;
+
+  /// No description provided for @categorySubscriptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscriptions'**
+  String get categorySubscriptions;
+
+  /// No description provided for @categoryHomeRepair.
+  ///
+  /// In en, this message translates to:
+  /// **'Home & repairs'**
+  String get categoryHomeRepair;
+
+  /// No description provided for @categoryPets.
+  ///
+  /// In en, this message translates to:
+  /// **'Pets'**
+  String get categoryPets;
+
+  /// No description provided for @categoryEntertainment.
+  ///
+  /// In en, this message translates to:
+  /// **'Entertainment'**
+  String get categoryEntertainment;
+
+  /// No description provided for @categoryTransport.
+  ///
+  /// In en, this message translates to:
+  /// **'Transport'**
+  String get categoryTransport;
+
+  /// No description provided for @categoryHealthBeauty.
+  ///
+  /// In en, this message translates to:
+  /// **'Health & beauty'**
+  String get categoryHealthBeauty;
 }
 
 class _AppLocalizationsDelegate

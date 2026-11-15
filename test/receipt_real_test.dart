@@ -85,7 +85,7 @@ void main() {
     });
     test('store without the OCR accent noise', () {
       expect(normalizeForSearch(r.storeName ?? ''), 'kirmizi pide');
-      expect(r.category, isNull);
+      expect(r.category, 'EATING_OUT'); // restaurant words (pide, lahmacun)
     });
     test('garbled date "15.11206" is not used', () => expect(r.date, isNull));
     test('rows without prices are not products', () => expect(r.items, isEmpty));

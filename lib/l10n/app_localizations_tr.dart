@@ -1942,4 +1942,28 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get receiptAccuracyNote =>
       'Fiş okuma her zaman doğru sonuç vermeyebilir. Uygulamadan önce bilgileri kontrol et.';
+
+  @override
+  String get categoryCleaning => 'Temizlik';
+
+  @override
+  String get categoryEatingOut => 'Yemek';
+
+  @override
+  String get categorySubscriptions => 'Abonelikler';
+
+  @override
+  String get categoryHomeRepair => 'Eşya ve tamir';
+
+  @override
+  String get categoryPets => 'Evcil hayvan';
+
+  @override
+  String get categoryEntertainment => 'Eğlence';
+
+  @override
+  String get categoryTransport => 'Ulaşım';
+
+  @override
+  String get categoryHealthBeauty => 'Sağlık ve kozmetik';
 }

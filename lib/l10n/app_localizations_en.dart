@@ -1966,4 +1966,28 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get receiptAccuracyNote =>
       'Receipt reading isn\'t always accurate. Check the details before applying.';
+
+  @override
+  String get categoryCleaning => 'Cleaning';
+
+  @override
+  String get categoryEatingOut => 'Eating out';
+
+  @override
+  String get categorySubscriptions => 'Subscriptions';
+
+  @override
+  String get categoryHomeRepair => 'Home & repairs';
+
+  @override
+  String get categoryPets => 'Pets';
+
+  @override
+  String get categoryEntertainment => 'Entertainment';
+
+  @override
+  String get categoryTransport => 'Transport';
+
+  @override
+  String get categoryHealthBeauty => 'Health & beauty';
 }

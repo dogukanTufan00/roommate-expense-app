@@ -38,7 +38,8 @@ ReceiptData parseReceipt(List<String> rows) {
       .where((row) => row.isNotEmpty)
       .toList();
   final store = _findKnownStore(lines);
-  final category = store?.category;
+  // A known chain decides the category. Only when none matched, the words guess it.
+  final category = store?.category ?? _categoryFromKeywords(lines);
   return ReceiptData(
     total: _findTotal(lines),
     date: _findDate(lines),
@@ -289,6 +290,16 @@ const List<_KnownStore> _knownStores = [
   _KnownStore('turkcell', 'Turkcell', 'UTILITIES'),
   _KnownStore('vodafone', 'Vodafone', 'UTILITIES'),
   _KnownStore('superonline', 'Superonline', 'UTILITIES'),
+  // Health and beauty.
+  _KnownStore('gratis', 'Gratis', 'HEALTH_BEAUTY'),
+  _KnownStore('watsons', 'Watsons', 'HEALTH_BEAUTY'),
+  _KnownStore('rossmann', 'Rossmann', 'HEALTH_BEAUTY'),
+  _KnownStore('eve', 'Eve', 'HEALTH_BEAUTY'),
+  // Home and repairs.
+  _KnownStore('koctas', 'Koçtaş', 'HOME_REPAIR'),
+  _KnownStore('ikea', 'IKEA', 'HOME_REPAIR'),
+  _KnownStore('bauhaus', 'Bauhaus', 'HOME_REPAIR'),
+  _KnownStore('tekzen', 'Tekzen', 'HOME_REPAIR'),
 ];
 
 // Finds a known chain: its name must be the FIRST word of one of the first 6 rows.
@@ -310,6 +321,31 @@ bool _startsWithWords(List<String> words, List<String> keyWords) {
     if (words[i] != keyWords[i]) return false;
   }
   return true;
+}
+
+// Words that point to a category when no known chain was found.
+// They are matched as whole words, so "pide" does not match inside another word.
+const List<String> _restaurantWords = [
+  'lahmacun', 'pide', 'kebap', 'doner', 'durum', 'restoran', 'restaurant', 'lokanta',
+  'cafe', 'kafe', 'burger', 'pizza', 'yemeksepeti', 'afiyet',
+  // Turkish shop names: "Kebapçı Mehmet", "Pideci", "Dönerci", "... Lokantası", "Börekçi".
+  'kebapci', 'pideci', 'donerci', 'lokantasi', 'borekci', 'kofteci',
+];
+const List<String> _petWords = ['mama', 'petshop', 'veteriner', 'kum'];
+const List<String> _pharmacyWords = ['eczane'];
+
+// Guesses the category from the words of all rows. Only used when no chain matched.
+// The order is the priority: restaurant words first, then pets, then pharmacy.
+String? _categoryFromKeywords(List<String> lines) {
+  // Every word of every row, folded, so "KIRMIZI PIDE" gives "pide".
+  final allWords = <String>{};
+  for (final line in lines) {
+    allWords.addAll(_words(_fold(line)));
+  }
+  if (_restaurantWords.any(allWords.contains)) return 'EATING_OUT';
+  if (_petWords.any(allWords.contains)) return 'PETS';
+  if (_pharmacyWords.any(allWords.contains)) return 'HEALTH_BEAUTY';
+  return null;
 }
 
 // Rows that are headers on a receipt, not the store name.
