@@ -1099,12 +1099,8 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String notificationReminderBody(
-    String actor,
-    String amount,
-    String household,
-  ) {
-    return '$actor nazikçe hatırlatıyor: $household evinde ona $amount borcun var.';
+  String notificationReminderBody(String actor, String amount) {
+    return '$actor nazikçe hatırlatıyor: ona $amount borcun var.';
   }
 
   @override

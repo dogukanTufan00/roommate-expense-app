@@ -1943,12 +1943,8 @@ abstract class AppLocalizations {
   /// No description provided for @notificationReminderBody.
   ///
   /// In en, this message translates to:
-  /// **'{actor} is gently reminding you that you owe them {amount} in {household}.'**
-  String notificationReminderBody(
-    String actor,
-    String amount,
-    String household,
-  );
+  /// **'{actor} is gently reminding you that you owe them {amount}.'**
+  String notificationReminderBody(String actor, String amount);
 
   /// No description provided for @notificationReminderNote.
   ///

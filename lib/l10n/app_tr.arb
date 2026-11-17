@@ -613,16 +613,13 @@
       }
     }
   },
-  "notificationReminderBody": "{actor} nazikçe hatırlatıyor: {household} evinde ona {amount} borcun var.",
+  "notificationReminderBody": "{actor} nazikçe hatırlatıyor: ona {amount} borcun var.",
   "@notificationReminderBody": {
     "placeholders": {
       "actor": {
         "type": "String"
       },
       "amount": {
-        "type": "String"
-      },
-      "household": {
         "type": "String"
       }
     }

@@ -712,16 +712,13 @@
       }
     }
   },
-  "notificationReminderBody": "{actor} is gently reminding you that you owe them {amount} in {household}.",
+  "notificationReminderBody": "{actor} is gently reminding you that you owe them {amount}.",
   "@notificationReminderBody": {
     "placeholders": {
       "actor": {
         "type": "String"
       },
       "amount": {
-        "type": "String"
-      },
-      "household": {
         "type": "String"
       }
     }

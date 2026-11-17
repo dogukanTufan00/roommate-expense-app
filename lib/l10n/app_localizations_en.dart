@@ -1122,12 +1122,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String notificationReminderBody(
-    String actor,
-    String amount,
-    String household,
-  ) {
-    return '$actor is gently reminding you that you owe them $amount in $household.';
+  String notificationReminderBody(String actor, String amount) {
+    return '$actor is gently reminding you that you owe them $amount.';
   }
 
   @override

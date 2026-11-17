@@ -69,7 +69,7 @@ NotificationText notificationText(
       );
     case NotificationType.paymentReminder:
       // The optional note from the creditor goes on its own line.
-      final sentence = l10n.notificationReminderBody(actor, household, amount);
+      final sentence = l10n.notificationReminderBody(actor, amount);
       return NotificationText(
         title: l10n.notificationReminderTitle(household),
         body: detail == null
